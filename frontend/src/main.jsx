@@ -4,6 +4,9 @@ import { HashRouter } from "react-router-dom";
 import App from "./App.jsx";
 import "./index.css";
 
+// Debug: Show we're loading
+console.log("✅ main.jsx loading...");
+
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -33,9 +36,12 @@ class ErrorBoundary extends React.Component {
           padding: "20px",
         }}>
           <h1>⚠️ Something went wrong</h1>
-          <p style={{ color: "rgba(255,255,255,0.6)", marginTop: "10px" }}>
-            {this.state.error?.message}
+          <p style={{ color: "rgba(255,255,255,0.6)", marginTop: "10px", maxWidth: "400px", wordBreak: "break-word" }}>
+            {this.state.error?.message || "Unknown error"}
           </p>
+          <pre style={{ background: "rgba(0,0,0,0.5)", padding: "10px", borderRadius: "4px", fontSize: "12px", color: "#ff6b6b", maxWidth: "500px", overflow: "auto" }}>
+            {this.state.error?.stack}
+          </pre>
           <button
             onClick={() => window.location.reload()}
             style={{
@@ -59,12 +65,25 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <ErrorBoundary>
-      <HashRouter>
-        <App />
-      </HashRouter>
-    </ErrorBoundary>
-  </React.StrictMode>
-);
+const root = document.getElementById("root");
+console.log("✅ Root element found:", !!root);
+
+try {
+  console.log("✅ Creating React root...");
+  ReactDOM.createRoot(root).render(
+    <React.StrictMode>
+      <ErrorBoundary>
+        <HashRouter>
+          <App />
+        </HashRouter>
+      </ErrorBoundary>
+    </React.StrictMode>
+  );
+  console.log("✅ React app rendered successfully");
+} catch (err) {
+  console.error("❌ Failed to render app:", err);
+  root.innerHTML = `<div style="color: red; padding: 20px; font-family: monospace;">
+    Error rendering app: ${err.message}
+    <pre>${err.stack}</pre>
+  </div>`;
+}
