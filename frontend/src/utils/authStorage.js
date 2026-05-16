@@ -2,32 +2,43 @@ const USER_KEY = "userInfo";
 const TOKEN_KEY = "token";
 const TAB_PREFIX = "ims-tab:";
 
-const createId = () =>
-  crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+const createId = () => {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+};
 
 const getTabId = () => {
-  if (!window.name?.startsWith(TAB_PREFIX)) {
-    window.name = `${TAB_PREFIX}${createId()}`;
+  try {
+    if (!window.name?.startsWith(TAB_PREFIX)) {
+      window.name = `${TAB_PREFIX}${createId()}`;
+    }
+    return window.name.slice(TAB_PREFIX.length);
+  } catch {
+    return "default-tab";
   }
-
-  return window.name.slice(TAB_PREFIX.length);
 };
 
 export const saveAuthUser = (userInfo) => {
-  localStorage.removeItem(USER_KEY);
-  localStorage.removeItem(TOKEN_KEY);
-  sessionStorage.removeItem(TOKEN_KEY);
-  sessionStorage.setItem(USER_KEY, JSON.stringify({ ...userInfo, authTabId: getTabId() }));
+  try {
+    localStorage.removeItem(USER_KEY);
+    localStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(TOKEN_KEY);
+    sessionStorage.setItem(USER_KEY, JSON.stringify({ ...userInfo, authTabId: getTabId() }));
+  } catch (err) {
+    console.warn("Failed to save auth user:", err);
+  }
 };
 
 export const getAuthUser = () => {
-  const rawUser = sessionStorage.getItem(USER_KEY);
-
-  if (!rawUser) {
-    return null;
-  }
-
   try {
+    const rawUser = sessionStorage.getItem(USER_KEY);
+
+    if (!rawUser) {
+      return null;
+    }
+
     const user = JSON.parse(rawUser);
 
     if (user.authTabId !== getTabId()) {
@@ -36,15 +47,20 @@ export const getAuthUser = () => {
     }
 
     return user;
-  } catch {
+  } catch (err) {
+    console.warn("Failed to get auth user:", err);
     sessionStorage.removeItem(USER_KEY);
     return null;
   }
 };
 
 export const clearAuthUser = () => {
-  sessionStorage.removeItem(USER_KEY);
-  sessionStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(USER_KEY);
-  localStorage.removeItem(TOKEN_KEY);
+  try {
+    sessionStorage.removeItem(USER_KEY);
+    sessionStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+    localStorage.removeItem(TOKEN_KEY);
+  } catch (err) {
+    console.warn("Failed to clear auth user:", err);
+  }
 };
