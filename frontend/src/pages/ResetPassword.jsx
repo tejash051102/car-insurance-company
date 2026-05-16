@@ -1,4 +1,4 @@
-import { ShieldCheck } from "lucide-react";
+import { ShieldCheck, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../api/axios.js";
@@ -6,6 +6,7 @@ import api from "../api/axios.js";
 const ResetPassword = ({ onAuth }) => {
   const { token } = useParams();
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -48,7 +49,36 @@ const ResetPassword = ({ onAuth }) => {
         <label className="label" htmlFor="password">
           New password
         </label>
-        <input className="field mt-1" id="password" type="password" minLength={8} value={password} onChange={(event) => setPassword(event.target.value)} required />
+        <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+          <input
+            className="field mt-1"
+            id="password"
+            type={showPassword ? "text" : "password"}
+            minLength={8}
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+            style={{ paddingRight: "40px" }}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            style={{
+              position: "absolute",
+              right: "12px",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#666",
+              padding: "6px",
+            }}
+          >
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        </div>
         <p className="mt-1 text-xs text-slate-500">Use 8+ characters with uppercase, lowercase, number, and special character.</p>
 
         <button className="btn-primary mt-6 w-full" type="submit" disabled={loading}>
