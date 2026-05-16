@@ -49,7 +49,7 @@ const ResetPassword = ({ onAuth }) => {
         <label className="label" htmlFor="password">
           New password
         </label>
-        <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+        <div style={{ position: "relative", display: "flex", alignItems: "center", width: "100%" }}>
           <input
             className="field mt-1"
             id="password"
@@ -58,7 +58,7 @@ const ResetPassword = ({ onAuth }) => {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
-            style={{ paddingRight: "40px" }}
+            style={{ paddingRight: "40px", boxSizing: "border-box" }}
           />
           <button
             type="button"
@@ -66,6 +66,8 @@ const ResetPassword = ({ onAuth }) => {
             style={{
               position: "absolute",
               right: "12px",
+              top: "50%",
+              transform: "translateY(-50%)",
               background: "none",
               border: "none",
               cursor: "pointer",
@@ -74,9 +76,10 @@ const ResetPassword = ({ onAuth }) => {
               justifyContent: "center",
               color: "#666",
               padding: "6px",
+              zIndex: 10,
             }}
           >
-            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            {showPassword ? <EyeOff size={18} style={{ pointerEvents: "none" }} /> : <Eye size={18} style={{ pointerEvents: "none" }} />}
           </button>
         </div>
         <p className="mt-1 text-xs text-slate-500">Use 8+ characters with uppercase, lowercase, number, and special character.</p>
