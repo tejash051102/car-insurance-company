@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
+import { encryptedString } from "../utils/fieldCrypto.js";
 
 const customerSchema = new mongoose.Schema(
   {
@@ -20,9 +21,9 @@ const customerSchema = new mongoose.Schema(
       lowercase: true,
       trim: true
     },
-    phone: {
+    phone: encryptedString({ required: true }),
+    avatarUrl: {
       type: String,
-      required: true,
       trim: true
     },
     password: {
@@ -34,10 +35,10 @@ const customerSchema = new mongoose.Schema(
       type: Date
     },
     address: {
-      street: String,
-      city: String,
-      state: String,
-      zipCode: String,
+      street: encryptedString(),
+      city: encryptedString(),
+      state: encryptedString(),
+      zipCode: encryptedString(),
       country: {
         type: String,
         default: "India"
@@ -63,6 +64,14 @@ const customerSchema = new mongoose.Schema(
       type: Date,
       select: false
     },
+    passwordChangeOtpHash: {
+      type: String,
+      select: false
+    },
+    passwordChangeOtpExpires: {
+      type: Date,
+      select: false
+    },
     documents: [
       {
         label: {
@@ -82,12 +91,34 @@ const customerSchema = new mongoose.Schema(
         uploadedAt: {
           type: Date,
           default: Date.now
+        },
+        scanStatus: {
+          type: String,
+          enum: ["scanned", "safe", "blocked"],
+          default: "scanned"
+        },
+        scanMessage: {
+          type: String,
+          default: "Document queued for malware scan simulation"
         }
       }
     ],
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
+    },
+    failedLoginAttempts: {
+      type: Number,
+      default: 0
+    },
+    lockUntil: {
+      type: Date
+    },
+    lastLoginAt: {
+      type: Date
+    },
+    lastLoginIp: {
+      type: String
     }
   },
   { timestamps: true }
@@ -115,11 +146,13 @@ const hidePrivateFields = (_doc, ret) => {
   delete ret.password;
   delete ret.contactVerificationOtpHash;
   delete ret.contactVerificationExpires;
+  delete ret.passwordChangeOtpHash;
+  delete ret.passwordChangeOtpExpires;
   return ret;
 };
 
-customerSchema.set("toJSON", { virtuals: true, transform: hidePrivateFields });
-customerSchema.set("toObject", { virtuals: true, transform: hidePrivateFields });
+customerSchema.set("toJSON", { virtuals: true, getters: true, transform: hidePrivateFields });
+customerSchema.set("toObject", { virtuals: true, getters: true, transform: hidePrivateFields });
 
 const Customer = mongoose.model("Customer", customerSchema);
 

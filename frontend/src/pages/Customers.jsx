@@ -2,6 +2,7 @@ import { CheckCircle2, Download, Edit3, Eye, EyeOff, FileText, KeyRound, Plus, S
 import { useEffect, useState } from "react";
 import api, { getAssetUrl } from "../api/axios.js";
 import Pagination from "../components/Pagination.jsx";
+import PasswordStrengthMeter from "../components/PasswordStrengthMeter.jsx";
 import { getItems, getMeta } from "../utils/apiData.js";
 import { canManageRecords } from "../utils/auth.js";
 import { downloadReport } from "../utils/download.js";
@@ -279,6 +280,9 @@ const Customers = () => {
               {showPassword ? <EyeOff size={18} strokeWidth={1.8} /> : <Eye size={18} strokeWidth={1.8} />}
             </button>
           </div>
+          <div>
+            <PasswordStrengthMeter password={form.password} />
+          </div>
           <div className="flex gap-2 xl:col-span-2">
             <button className="btn-primary" type="submit" disabled={loading}>
               <Plus size={16} />
@@ -301,6 +305,7 @@ const Customers = () => {
                 <th className="px-4 py-3">Name</th>
                 <th className="px-4 py-3">Contact</th>
                 <th className="px-4 py-3">Location</th>
+                <th className="px-4 py-3">Added By</th>
                 <th className="px-4 py-3">Status</th>
                 <th className="px-4 py-3">Verified</th>
                 <th className="px-4 py-3 text-right">Actions</th>
@@ -315,6 +320,10 @@ const Customers = () => {
                     <p className="text-xs text-slate-500">{customer.phone}</p>
                   </td>
                   <td className="px-4 py-3">{customer.address?.city || "N/A"}</td>
+                  <td className="px-4 py-3">
+                    <p className="font-semibold text-ink">{customer.createdBy?.name || "N/A"}</p>
+                    <p className="text-xs capitalize text-slate-500">{customer.createdBy?.role || ""}</p>
+                  </td>
                   <td className="px-4 py-3 capitalize">{customer.status}</td>
                   <td className="px-4 py-3">
                     <span className={`rounded-full px-2 py-1 text-xs font-bold ${customer.contactVerified ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>
@@ -343,7 +352,7 @@ const Customers = () => {
               ))}
               {!customers.length ? (
                 <tr>
-                  <td colSpan="6" className="px-4 py-8 text-center text-slate-500">
+                  <td colSpan="7" className="px-4 py-8 text-center text-slate-500">
                     No customers found.
                   </td>
                 </tr>
@@ -383,6 +392,16 @@ const Customers = () => {
                   {document.label || "Document"}
                 </span>
                 <span className="mt-1 block truncate text-xs text-slate-500">{document.originalName || document.url}</span>
+                <span className={`mt-2 inline-flex rounded-full px-2 py-1 text-xs font-bold ${
+                  document.scanStatus === "blocked"
+                    ? "bg-red-50 text-red-700"
+                    : document.scanStatus === "safe"
+                      ? "bg-emerald-50 text-emerald-700"
+                      : "bg-cyan-50 text-cyan-700"
+                }`}>
+                  {document.scanStatus || "scanned"}
+                </span>
+                {document.scanMessage ? <span className="mt-1 block text-xs text-slate-500">{document.scanMessage}</span> : null}
               </a>
             ))}
             {!documentCustomer.documents?.length ? <p className="text-sm text-slate-500">No documents uploaded yet.</p> : null}

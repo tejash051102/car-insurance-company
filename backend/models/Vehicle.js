@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { encryptedString } from "../utils/fieldCrypto.js";
 
 const vehicleSchema = new mongoose.Schema(
   {
@@ -38,20 +39,14 @@ const vehicleSchema = new mongoose.Schema(
       enum: ["petrol", "diesel", "electric", "hybrid", "cng"],
       default: "petrol"
     },
-    chassisNumber: {
-      type: String,
-      trim: true
-    },
-    engineNumber: {
-      type: String,
-      trim: true
-    },
+    chassisNumber: encryptedString(),
+    engineNumber: encryptedString(),
     value: {
       type: Number,
       default: 0
     }
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { getters: true }, toObject: { getters: true } }
 );
 
 const Vehicle = mongoose.model("Vehicle", vehicleSchema);

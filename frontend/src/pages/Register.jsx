@@ -2,6 +2,7 @@ import { Eye, EyeOff, ShieldPlus, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/axios.js";
+import PasswordStrengthMeter from "../components/PasswordStrengthMeter.jsx";
 
 /* ─── clamp util ─── */
 const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), hi);
@@ -524,6 +525,7 @@ const Register = ({ onAuth }) => {
               value={form.password} onChange={updateField} required minLength={8}
               hint="8+ chars · uppercase · number · symbol"
             />
+            <PasswordStrengthMeter password={form.password} />
 
             {/* role — full width */}
             <div style={{ gridColumn: "1 / -1" }}>

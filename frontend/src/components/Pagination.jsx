@@ -2,8 +2,8 @@ const Pagination = ({ meta, onPageChange }) => {
   if (!meta || meta.pages <= 1) return null;
 
   return (
-    <div className="flex items-center justify-between border-t border-slate-100 px-4 py-3 text-sm">
-      <span className="text-slate-500">
+    <div className="flex items-center justify-between border-t border-white/10 bg-white/[0.015] px-4 py-3 text-sm">
+      <span className="text-white/42">
         Page {meta.page} of {meta.pages} · {meta.total} records
       </span>
       <div className="flex gap-2">

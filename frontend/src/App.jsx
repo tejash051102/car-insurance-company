@@ -12,18 +12,17 @@ import ForgotPassword from "./pages/ForgotPassword.jsx";
 import Login from "./pages/Login.jsx";
 import Payments from "./pages/Payments.jsx";
 import Policies from "./pages/Policies.jsx";
+import Profile from "./pages/Profile.jsx";
 import Register from "./pages/Register.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
+import RbacReport from "./pages/RbacReport.jsx";
+import SecurityCenter from "./pages/SecurityCenter.jsx";
 import VerifyEmail from "./pages/VerifyEmail.jsx";
 import Vehicles from "./pages/Vehicles.jsx";
 import Activities from "./pages/Activities.jsx";
-import { clearAuthUser, getAuthUser, saveAuthUser } from "./utils/authStorage.js";
+import { clearAuthUser, saveAuthUser } from "./utils/authStorage.js";
 
-const getStoredUser = () => {
-  return getAuthUser();
-};
-
-const AppLayout = ({ user, onLogout }) => {
+const AppLayout = ({ onLogout }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
 
@@ -37,8 +36,8 @@ const AppLayout = ({ user, onLogout }) => {
           onToggleExpand={() => setIsSidebarExpanded((current) => !current)}
         />
         <div className={`relative z-10 transition-[padding] duration-300 ${isSidebarExpanded ? "lg:pl-64" : "lg:pl-[60px]"}`}>
-          <Navbar user={user} onLogout={onLogout} onMenuClick={() => setIsSidebarOpen(true)} />
-          <main className="app-main px-4 py-6 lg:px-8">
+          <Navbar onLogout={onLogout} onMenuClick={() => setIsSidebarOpen(true)} />
+          <main className="app-main mx-auto w-full max-w-[1680px] px-4 py-6 lg:px-8">
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/customers" element={<Customers />} />
@@ -47,6 +46,9 @@ const AppLayout = ({ user, onLogout }) => {
               <Route path="/claims" element={<Claims />} />
               <Route path="/payments" element={<Payments />} />
               <Route path="/activities" element={<Activities />} />
+              <Route path="/security" element={<SecurityCenter />} />
+              <Route path="/rbac-report" element={<RbacReport />} />
+              <Route path="/profile" element={<Profile />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
@@ -58,7 +60,6 @@ const AppLayout = ({ user, onLogout }) => {
 
 const App = () => {
   const navigate = useNavigate();
-  const user = getStoredUser();
 
   const handleAuth = (userInfo) => {
     saveAuthUser(userInfo);
@@ -85,7 +86,7 @@ const App = () => {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword onAuth={handleAuth} />} />
       <Route path="/verify-email/:token" element={<VerifyEmail onAuth={handleAuth} />} />
-      <Route path="/*" element={<AppLayout user={user} onLogout={handleLogout} />} />
+      <Route path="/*" element={<AppLayout onLogout={handleLogout} />} />
     </Routes>
   );
 };

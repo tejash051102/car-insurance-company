@@ -1,9 +1,9 @@
-import { BadgeIndianRupee, ClipboardCheck, Download, LogOut, Plus, ShieldCheck } from "lucide-react";
+import { BadgeIndianRupee, ClipboardCheck, Download, LogOut, Plus, Save, ShieldCheck, Upload, UserCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import api from "../api/axios.js";
+import api, { getAssetUrl } from "../api/axios.js";
 import AnimatedAuthBackground from "../components/AnimatedAuthBackground.jsx";
-import { clearCustomerUser, getCustomerUser } from "../utils/authStorage.js";
+import { clearCustomerUser, getCustomerUser, saveCustomerUser } from "../utils/authStorage.js";
 import { downloadBlob } from "../utils/download.js";
 
 const emptyClaim = {
@@ -36,6 +36,20 @@ const CustomerPortal = () => {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
+  const [profileForm, setProfileForm] = useState({
+    firstName: customer?.firstName || "",
+    lastName: customer?.lastName || "",
+    email: customer?.email || "",
+    phone: customer?.phone || "",
+    street: customer?.address?.street || "",
+    city: customer?.address?.city || "",
+    state: customer?.address?.state || "",
+    zipCode: customer?.address?.zipCode || "",
+    password: "",
+    passwordOtp: "",
+    avatar: null
+  });
+  const [profilePreview, setProfilePreview] = useState(customer?.avatarUrl ? getAssetUrl(customer.avatarUrl) : "");
 
   const loadPortal = async () => {
     setError("");
@@ -71,6 +85,60 @@ const CustomerPortal = () => {
 
   const updateClaim = (event) => {
     setClaimForm((current) => ({ ...current, [event.target.name]: event.target.value }));
+  };
+
+  const updateProfileField = (event) => {
+    const { name, value, files } = event.target;
+
+    if (files) {
+      const file = files[0];
+      setProfileForm((current) => ({ ...current, [name]: file }));
+      setProfilePreview(file ? URL.createObjectURL(file) : "");
+      return;
+    }
+
+    setProfileForm((current) => ({ ...current, [name]: value }));
+  };
+
+  const submitProfile = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    setError("");
+    setNotice("");
+
+    const data = new FormData();
+    Object.entries(profileForm).forEach(([key, value]) => {
+      if (value) data.append(key, value);
+    });
+
+    try {
+      const response = await api.put("/customer-portal/me", data);
+      saveCustomerUser(response.data);
+      setProfileForm((current) => ({ ...current, password: "", passwordOtp: "", avatar: null }));
+      setProfilePreview(response.data.avatarUrl ? getAssetUrl(response.data.avatarUrl) : "");
+      setNotice("Profile updated successfully");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const requestPasswordOtp = async () => {
+    setError("");
+    setNotice("");
+
+    if (!profileForm.password) {
+      setError("Enter a new password before requesting OTP");
+      return;
+    }
+
+    try {
+      const { data } = await api.post("/customer-portal/me/password-otp");
+      setNotice(data.otp ? `${data.message} OTP: ${data.otp}` : data.message);
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const submitClaim = async (event) => {
@@ -150,6 +218,53 @@ const CustomerPortal = () => {
             </p>
           </section>
         </div>
+
+        <section className="panel p-5">
+          <div className="mb-4 flex items-center gap-2">
+            <UserCircle size={20} className="text-cyan-300" />
+            <h2 className="text-lg font-bold text-ink">My Profile</h2>
+          </div>
+          <form onSubmit={submitProfile} className="grid gap-5 xl:grid-cols-[220px_1fr]">
+            <div className="flex flex-col items-center rounded-md border border-white/10 bg-white/5 p-4">
+              <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl border border-cyan-300/20 bg-cyan-400/10 text-cyan-300">
+                {profilePreview ? <img src={profilePreview} alt="Customer profile" className="h-full w-full object-cover" /> : <UserCircle size={54} strokeWidth={1.5} />}
+              </div>
+              <label className="btn-secondary mt-4 cursor-pointer">
+                <Upload size={16} />
+                Upload Image
+                <input className="hidden" name="avatar" type="file" accept=".jpg,.jpeg,.png" onChange={updateProfileField} />
+              </label>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <input className="field" name="firstName" value={profileForm.firstName} onChange={updateProfileField} placeholder="First name" required />
+              <input className="field" name="lastName" value={profileForm.lastName} onChange={updateProfileField} placeholder="Last name" required />
+              <input className="field" name="email" type="email" value={profileForm.email} onChange={updateProfileField} placeholder="Gmail / Email" required />
+              <input className="field" name="phone" value={profileForm.phone} onChange={updateProfileField} placeholder="Mobile number" required />
+              <input className="field" name="street" value={profileForm.street} onChange={updateProfileField} placeholder="Street" />
+              <input className="field" name="city" value={profileForm.city} onChange={updateProfileField} placeholder="City" />
+              <input className="field" name="state" value={profileForm.state} onChange={updateProfileField} placeholder="State" />
+              <input className="field" name="zipCode" value={profileForm.zipCode} onChange={updateProfileField} placeholder="Zip code" />
+              <input className="field" name="password" type="password" value={profileForm.password} onChange={updateProfileField} placeholder="New password (leave blank to keep current)" />
+              {profileForm.password ? (
+                <div>
+                  <div className="flex gap-2">
+                    <input className="field" name="passwordOtp" value={profileForm.passwordOtp} onChange={updateProfileField} placeholder="Password OTP" />
+                    <button className="btn-secondary shrink-0" type="button" onClick={requestPasswordOtp}>
+                      Send OTP
+                    </button>
+                  </div>
+                  <p className="mt-1 text-xs text-slate-500">OTP is sent to your email and registered mobile number when configured.</p>
+                </div>
+              ) : null}
+              <div className="md:col-span-2 flex justify-end">
+                <button className="btn-primary" type="submit" disabled={loading}>
+                  <Save size={16} />
+                  {loading ? "Saving..." : "Save Profile"}
+                </button>
+              </div>
+            </div>
+          </form>
+        </section>
 
         <section className="panel p-5">
           <div className="mb-4 flex items-center gap-2">

@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
+import { encryptedString } from "../utils/fieldCrypto.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -13,6 +14,11 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
       lowercase: true,
+      trim: true
+    },
+    phone: encryptedString(),
+    avatarUrl: {
+      type: String,
       trim: true
     },
     password: {
@@ -56,9 +62,38 @@ const userSchema = new mongoose.Schema(
     passwordResetExpires: {
       type: Date,
       select: false
+    },
+    passwordChangeOtpHash: {
+      type: String,
+      select: false
+    },
+    passwordChangeOtpExpires: {
+      type: Date,
+      select: false
+    },
+    mfaLoginOtpHash: {
+      type: String,
+      select: false
+    },
+    mfaLoginOtpExpires: {
+      type: Date,
+      select: false
+    },
+    failedLoginAttempts: {
+      type: Number,
+      default: 0
+    },
+    lockUntil: {
+      type: Date
+    },
+    lastLoginAt: {
+      type: Date
+    },
+    lastLoginIp: {
+      type: String
     }
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { getters: true }, toObject: { getters: true } }
 );
 
 userSchema.pre("save", async function hashPassword(next) {

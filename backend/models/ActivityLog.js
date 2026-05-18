@@ -24,7 +24,9 @@ const activityLogSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
     },
-    actorName: String
+    actorName: String,
+    ipAddress: String,
+    userAgent: String
   },
   { timestamps: true }
 );

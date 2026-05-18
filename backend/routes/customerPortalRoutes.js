@@ -7,15 +7,20 @@ import {
   getCustomerPayments,
   getCustomerPolicies,
   getCustomerProfile,
-  loginCustomer
+  loginCustomer,
+  sendCustomerPasswordOtp,
+  updateCustomerProfile
 } from "../controllers/customerPortalController.js";
 import { protectCustomer } from "../middleware/customerAuthMiddleware.js";
 import { authRateLimit } from "../middleware/securityMiddleware.js";
+import { upload } from "../middleware/uploadMiddleware.js";
 
 const router = express.Router();
 
 router.post("/login", authRateLimit, loginCustomer);
 router.get("/me", protectCustomer, getCustomerProfile);
+router.put("/me", protectCustomer, upload.single("avatar"), updateCustomerProfile);
+router.post("/me/password-otp", protectCustomer, sendCustomerPasswordOtp);
 router.get("/policies", protectCustomer, getCustomerPolicies);
 router.get("/claims", protectCustomer, getCustomerClaims);
 router.post("/claims", protectCustomer, createCustomerClaim);

@@ -2,12 +2,14 @@ import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import Customer from "../models/Customer.js";
+import User from "../models/User.js";
 import Vehicle from "../models/Vehicle.js";
 import Policy from "../models/Policy.js";
 import { sendEmail } from "../utils/emailService.js";
 import { sendCsv } from "../utils/csvExporter.js";
 import { logActivity } from "../utils/activityLogger.js";
 import { getPagination, sendPaginated } from "../utils/pagination.js";
+import { createSecurityAlert } from "../utils/securityAudit.js";
 
 const CUSTOMER_OTP_EXPIRY_MS = 10 * 60 * 1000;
 
@@ -47,6 +49,41 @@ const createAndSendCustomerOtp = async (customer) => {
   };
 };
 
+const scanDocument = (file) => {
+  const suspiciousPattern = /(virus|malware|trojan|blocked|\.exe$|\.bat$|\.cmd$|\.js$|\.scr$)/i;
+  const blocked = suspiciousPattern.test(file.originalname || "") || suspiciousPattern.test(file.mimetype || "");
+
+  return {
+    scanStatus: blocked ? "blocked" : "safe",
+    scanMessage: blocked
+      ? "Malware scan simulation blocked this file because it matched a risky file pattern"
+      : "Malware scan simulation completed. No risky pattern found."
+  };
+};
+
+const getAccessibleCustomerFilter = async (req, baseFilter = {}) => {
+  if (req.user?.role === "admin") {
+    return baseFilter;
+  }
+
+  if (req.user?.role === "manager") {
+    const agents = await User.find({
+      role: "agent",
+      $or: [{ manager: req.user._id }, { createdBy: req.user._id }]
+    }).select("_id");
+
+    return {
+      ...baseFilter,
+      createdBy: { $in: [req.user._id, ...agents.map((agent) => agent._id)] }
+    };
+  }
+
+  return {
+    ...baseFilter,
+    createdBy: req.user?._id
+  };
+};
+
 export const getCustomers = asyncHandler(async (req, res) => {
   const keyword = req.query.search
     ? {
@@ -58,18 +95,20 @@ export const getCustomers = asyncHandler(async (req, res) => {
         ]
       }
     : {};
+  const filter = await getAccessibleCustomerFilter(req, keyword);
 
   const { page, limit, skip } = getPagination(req.query);
   await sendPaginated(
     res,
-    Customer.find(keyword).sort({ createdAt: -1 }),
-    Customer.countDocuments(keyword),
+    Customer.find(filter).populate("createdBy", "name email role").sort({ createdAt: -1 }),
+    Customer.countDocuments(filter),
     { page, limit, skip }
   );
 });
 
 export const getCustomerById = asyncHandler(async (req, res) => {
-  const customer = await Customer.findById(req.params.id);
+  const filter = await getAccessibleCustomerFilter(req, { _id: req.params.id });
+  const customer = await Customer.findOne(filter).populate("createdBy", "name email role");
 
   if (!customer) {
     res.status(404);
@@ -85,7 +124,15 @@ export const getCustomerById = asyncHandler(async (req, res) => {
 });
 
 export const exportCustomers = asyncHandler(async (req, res) => {
-  const customers = await Customer.find().sort({ createdAt: -1 });
+  const filter = await getAccessibleCustomerFilter(req);
+  const customers = await Customer.find(filter).populate("createdBy", "name email role").sort({ createdAt: -1 });
+
+  await logActivity({
+    req,
+    action: "downloaded",
+    entityType: "Customer",
+    message: `Downloaded customer CSV report with ${customers.length} record(s)`
+  });
 
   sendCsv(
     res,
@@ -96,6 +143,8 @@ export const exportCustomers = asyncHandler(async (req, res) => {
       { label: "Phone", value: (customer) => customer.phone },
       { label: "City", value: (customer) => customer.address?.city },
       { label: "Status", value: (customer) => customer.status },
+      { label: "Added By", value: (customer) => customer.createdBy?.name || "N/A" },
+      { label: "Added By Role", value: (customer) => customer.createdBy?.role || "N/A" },
       { label: "Created", value: (customer) => customer.createdAt?.toISOString() }
     ],
     customers
@@ -118,7 +167,7 @@ export const createCustomer = asyncHandler(async (req, res) => {
   });
 
   res.status(201).json({
-    customer,
+    customer: await customer.populate("createdBy", "name email role"),
     contactOtpSent: otpResult.sent,
     ...(otpResult.otp ? { verificationOtp: otpResult.otp } : {}),
     message: otpResult.sent
@@ -137,10 +186,11 @@ export const updateCustomer = asyncHandler(async (req, res) => {
     delete update.password;
   }
 
-  const customer = await Customer.findByIdAndUpdate(req.params.id, update, {
+  const filter = await getAccessibleCustomerFilter(req, { _id: req.params.id });
+  const customer = await Customer.findOneAndUpdate(filter, update, {
     new: true,
     runValidators: true
-  });
+  }).populate("createdBy", "name email role");
 
   if (!customer) {
     res.status(404);
@@ -159,7 +209,8 @@ export const updateCustomer = asyncHandler(async (req, res) => {
 });
 
 export const uploadCustomerDocuments = asyncHandler(async (req, res) => {
-  const customer = await Customer.findById(req.params.id);
+  const filter = await getAccessibleCustomerFilter(req, { _id: req.params.id });
+  const customer = await Customer.findOne(filter);
 
   if (!customer) {
     res.status(404);
@@ -176,25 +227,39 @@ export const uploadCustomerDocuments = asyncHandler(async (req, res) => {
     label,
     url: `/uploads/${file.filename}`,
     originalName: file.originalname,
-    uploadedBy: req.user?._id
+    uploadedBy: req.user?._id,
+    ...scanDocument(file)
   }));
 
   customer.documents.push(...documents);
   await customer.save();
 
+  const blockedCount = documents.filter((document) => document.scanStatus === "blocked").length;
+  if (blockedCount) {
+    await createSecurityAlert({
+      req,
+      user: req.user,
+      type: "blocked_document_upload",
+      severity: "critical",
+      message: `${blockedCount} uploaded customer document(s) were blocked by malware scan simulation`,
+      metadata: { customerId: customer._id, filenames: documents.map((document) => document.originalName) }
+    });
+  }
+
   await logActivity({
     req,
-    action: "uploaded",
+    action: blockedCount ? "blocked_upload" : "uploaded",
     entityType: "Customer",
     entityId: customer._id,
-    message: `Uploaded ${documents.length} document(s) for ${customer.fullName}`
+    message: `Uploaded ${documents.length} document(s) for ${customer.fullName}; ${blockedCount} blocked by scan simulation`
   });
 
   res.status(201).json(customer);
 });
 
 export const resendCustomerOtp = asyncHandler(async (req, res) => {
-  const customer = await Customer.findById(req.params.id).select("+contactVerificationOtpHash +contactVerificationExpires");
+  const filter = await getAccessibleCustomerFilter(req, { _id: req.params.id });
+  const customer = await Customer.findOne(filter).select("+contactVerificationOtpHash +contactVerificationExpires");
 
   if (!customer) {
     res.status(404);
@@ -226,7 +291,9 @@ export const verifyCustomerOtp = asyncHandler(async (req, res) => {
   }
 
   const hashedOtp = crypto.createHash("sha256").update(String(otp)).digest("hex");
+  const accessFilter = await getAccessibleCustomerFilter(req, { _id: req.params.id });
   const customer = await Customer.findOne({
+    ...accessFilter,
     _id: req.params.id,
     contactVerificationOtpHash: hashedOtp,
     contactVerificationExpires: { $gt: new Date() }
@@ -263,7 +330,8 @@ export const deleteCustomer = asyncHandler(async (req, res) => {
     throw new Error("Cannot delete a customer with linked vehicles or policies");
   }
 
-  const customer = await Customer.findByIdAndDelete(req.params.id);
+  const filter = await getAccessibleCustomerFilter(req, { _id: req.params.id });
+  const customer = await Customer.findOneAndDelete(filter);
 
   if (!customer) {
     res.status(404);

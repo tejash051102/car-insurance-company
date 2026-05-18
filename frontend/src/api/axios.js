@@ -4,7 +4,7 @@ import { getAuthUser, getCustomerUser } from "../utils/authStorage.js";
 const API_PREFIX = "/api";
 const DEFAULT_API_URL = import.meta.env.PROD
   ? "https://car-insurance-backend-bxnz.onrender.com/api"
-  : "http://localhost:5000/api";
+  : "/api";
 
 const getApiBaseUrl = () => {
   const rawUrl = import.meta.env.VITE_API_URL || DEFAULT_API_URL;
@@ -32,7 +32,8 @@ export const getAssetUrl = (path = "") => {
     return path;
   }
 
-  return `${getApiBaseUrl()}${path.startsWith("/") ? path : `/${path}`}`;
+  const baseUrl = getApiBaseUrl();
+  return `${baseUrl}${path.startsWith("/") ? path : `/${path}`}`;
 };
 
 api.interceptors.request.use((config) => {

@@ -4,7 +4,7 @@
 
 :root {
   color: #f8fafc;
-  background: #04080f;
+  background: #0c0521;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -17,24 +17,9 @@ body {
   min-height: 100vh;
   margin: 0;
   background:
-    radial-gradient(circle at 85% 10%, rgba(99, 102, 241, 0.14), transparent 32%),
-    radial-gradient(circle at 15% 36%, rgba(14, 165, 233, 0.13), transparent 34%),
-    #04080f;
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image: url("./assets/hero.png");
-  background-position: right 8vw top 12vh;
-  background-repeat: no-repeat;
-  background-size: clamp(220px, 26vw, 420px);
-  opacity: 0.12;
-  filter: drop-shadow(0 28px 70px rgba(14, 165, 233, 0.32));
-  animation: global-bg-float 11s ease-in-out infinite alternate;
+    radial-gradient(circle at 82% 8%, rgba(120, 35, 255, 0.18), transparent 34%),
+    radial-gradient(circle at 12% 22%, rgba(83, 42, 160, 0.22), transparent 35%),
+    #0c0521;
 }
 
 #root {
@@ -51,27 +36,29 @@ textarea {
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-bold text-white shadow-sm transition focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:cursor-not-allowed disabled:opacity-60;
-    background: linear-gradient(135deg, #0284c7, #4f46e5);
-    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.18);
+    @apply inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-bold text-white shadow-sm transition focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-[#0c0521] disabled:cursor-not-allowed disabled:opacity-60;
+    background: linear-gradient(135deg, #7c3aed, #c026d3);
+    box-shadow: 0 10px 28px rgba(124, 58, 237, 0.24);
   }
 
   .btn-primary:hover {
-    background: linear-gradient(135deg, #0ea5e9, #6366f1);
-    box-shadow: 0 12px 34px rgba(14, 165, 233, 0.32);
+    transform: translateY(-1px);
+    background: linear-gradient(135deg, #8b5cf6, #db2777);
+    box-shadow: 0 16px 38px rgba(124, 58, 237, 0.38);
   }
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 rounded-md border px-3 py-2.5 text-sm font-bold shadow-sm transition;
-    border-color: rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.68);
+    border-color: rgba(255, 255, 255, 0.09);
+    background: rgba(255, 255, 255, 0.035);
+    color: rgba(255, 255, 255, 0.62);
   }
 
   .btn-secondary:hover {
-    border-color: rgba(14, 165, 233, 0.36);
-    background: rgba(14, 165, 233, 0.1);
-    color: #e0f2fe;
+    transform: translateY(-1px);
+    border-color: rgba(168, 85, 247, 0.42);
+    background: rgba(124, 58, 237, 0.14);
+    color: #f5f3ff;
   }
 
   .btn-danger {
@@ -88,10 +75,10 @@ textarea {
 
   .field {
     @apply w-full rounded-md border px-3 py-2.5 text-sm outline-none transition;
-    border-color: rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.09);
+    background: rgba(255, 255, 255, 0.035);
     color: #fff;
-    caret-color: #0ea5e9;
+    caret-color: #a78bfa;
   }
 
   .field::placeholder {
@@ -99,29 +86,33 @@ textarea {
   }
 
   .field:focus {
-    border-color: rgba(14, 165, 233, 0.56);
-    background: rgba(14, 165, 233, 0.08);
-    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+    border-color: rgba(168, 85, 247, 0.62);
+    background: rgba(124, 58, 237, 0.1);
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
   }
 
   select.field option {
-    background: #07111f;
+    background: #1f1545;
     color: #fff;
   }
 
   .label {
     @apply text-xs font-bold uppercase tracking-[0.16em];
-    color: rgba(125, 211, 252, 0.72);
+    color: rgba(196, 181, 253, 0.78);
   }
 
   .panel {
     @apply rounded-lg border shadow-soft backdrop-blur-xl;
     animation: panel-rise 0.56s cubic-bezier(0.22, 1, 0.36, 1) both;
-    background: rgba(255, 255, 255, 0.035);
-    border-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    background: rgba(36, 25, 78, 0.78);
+    border-color: rgba(255, 255, 255, 0.075);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.04);
     position: relative;
     overflow: hidden;
+  }
+
+  .panel:hover {
+    border-color: rgba(139, 92, 246, 0.36);
   }
 
   .panel::before {
@@ -129,7 +120,7 @@ textarea {
     position: absolute;
     inset: 0 0 auto;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.34), rgba(99, 102, 241, 0.24), transparent);
+    background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.34), rgba(236, 72, 153, 0.2), transparent);
     pointer-events: none;
   }
 
@@ -137,11 +128,8 @@ textarea {
     position: relative;
     overflow-x: hidden;
     background:
-      radial-gradient(circle at 82% 12%, rgba(99, 102, 241, 0.16), transparent 32%),
-      radial-gradient(circle at 12% 42%, rgba(14, 165, 233, 0.13), transparent 34%),
-      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.028) 0 1px, transparent 1px 72px),
-      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 72px),
-      #04080f;
+      linear-gradient(180deg, rgba(31, 20, 67, 0.86), rgba(11, 5, 31, 0.98)),
+      #0c0521;
   }
 
   .app-shell::before {
@@ -151,23 +139,10 @@ textarea {
     z-index: 0;
     pointer-events: none;
     background:
-      linear-gradient(115deg, rgba(14, 165, 233, 0.08), transparent 36%),
-      linear-gradient(290deg, rgba(99, 102, 241, 0.09), transparent 34%);
+      radial-gradient(circle at 18% 8%, rgba(124, 58, 237, 0.16), transparent 34%),
+      radial-gradient(circle at 88% 18%, rgba(219, 39, 119, 0.12), transparent 30%),
+      linear-gradient(180deg, transparent, rgba(12, 5, 33, 0.72));
     animation: app-bg-pan 14s ease-in-out infinite alternate;
-  }
-
-  .app-shell::after {
-    content: "";
-    position: fixed;
-    inset: auto 4vw 5vh auto;
-    z-index: 0;
-    width: clamp(180px, 22vw, 360px);
-    aspect-ratio: 329 / 360;
-    pointer-events: none;
-    background: url("./assets/hero.png") center / contain no-repeat;
-    opacity: 0.1;
-    filter: drop-shadow(0 24px 62px rgba(99, 102, 241, 0.28));
-    animation: app-image-drift 13s ease-in-out infinite alternate;
   }
 
   .app-main {
@@ -176,8 +151,166 @@ textarea {
 
   .app-sidebar {
     background:
-      linear-gradient(180deg, rgba(6, 12, 24, 0.98), rgba(7, 17, 31, 0.98)),
-      repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 24px);
+      linear-gradient(180deg, rgba(31, 21, 69, 0.98), rgba(27, 18, 62, 0.98)),
+      radial-gradient(circle at 90% 20%, rgba(124, 58, 237, 0.18), transparent 38%);
+  }
+
+  .reference-dashboard {
+    color: #fff;
+  }
+
+  .reference-panel {
+    @apply rounded-lg border backdrop-blur-xl;
+    animation: panel-rise 0.58s cubic-bezier(0.22, 1, 0.36, 1) both;
+    background: rgba(36, 25, 78, 0.78);
+    border-color: rgba(255, 255, 255, 0.075);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .reference-panel:hover {
+    border-color: rgba(139, 92, 246, 0.36);
+  }
+
+  .reference-metric {
+    @apply relative overflow-hidden rounded-lg border p-5 backdrop-blur-xl transition;
+    min-height: 150px;
+    border-color: rgba(255, 255, 255, 0.09);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.26);
+  }
+
+  .reference-metric:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+
+  .reference-metric::after {
+    content: "";
+    position: absolute;
+    inset: auto -20% -55% auto;
+    width: 170px;
+    height: 170px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .reference-metric-purple {
+    background: linear-gradient(135deg, #7137ff, #8029da);
+  }
+
+  .reference-metric-blue {
+    background: linear-gradient(135deg, #4aa9ff, #0068b8);
+  }
+
+  .reference-metric-violet {
+    background: linear-gradient(135deg, #8e3fd5, #7800c5);
+  }
+
+  .reference-metric-pink {
+    background: linear-gradient(135deg, #d72c96, #b40867);
+  }
+
+  .dashboard-enter > * {
+    animation: panel-rise 0.62s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .dashboard-enter > *:nth-child(2) {
+    animation-delay: 0.04s;
+  }
+
+  .dashboard-enter > *:nth-child(3) {
+    animation-delay: 0.08s;
+  }
+
+  .dashboard-card::after {
+    content: "";
+    position: absolute;
+    inset: auto 16px 12px;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(34, 211, 238, 0.14), rgba(52, 211, 153, 0.55), rgba(236, 72, 153, 0.18));
+  }
+
+  .hero-panel {
+    background:
+      linear-gradient(135deg, rgba(34, 211, 238, 0.16), transparent 36%),
+      linear-gradient(315deg, rgba(52, 211, 153, 0.11), transparent 34%),
+      radial-gradient(circle at 88% 20%, rgba(245, 158, 11, 0.08), transparent 26%),
+      rgba(8, 17, 34, 0.76);
+  }
+
+  .hero-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 58px),
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 58px);
+    mask-image: linear-gradient(90deg, #000, transparent 88%);
+    pointer-events: none;
+  }
+
+  .hero-panel::after {
+    content: "";
+    position: absolute;
+    inset: auto 4% -1px 4%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.58), rgba(52, 211, 153, 0.42), transparent);
+  }
+
+  .hero-stat {
+    @apply flex items-center gap-3 rounded-lg border border-white/10 bg-white/[0.055] p-4 backdrop-blur transition;
+  }
+
+  .hero-stat:hover {
+    transform: translateY(-2px);
+    border-color: rgba(34, 211, 238, 0.26);
+    background: rgba(255, 255, 255, 0.075);
+  }
+
+  .ai-insight-card {
+    @apply relative overflow-hidden rounded-lg border p-4 backdrop-blur-xl transition;
+    animation: panel-rise 0.62s cubic-bezier(0.22, 1, 0.36, 1) both;
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.026)),
+      rgba(8, 17, 34, 0.76);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.24);
+  }
+
+  .ai-insight-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .ai-insight-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(34, 211, 238, 0.28);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3), 0 0 34px rgba(34, 211, 238, 0.08);
+  }
+
+  .ai-insight-cyan::before {
+    background: radial-gradient(circle at 88% 10%, rgba(34, 211, 238, 0.22), transparent 36%);
+  }
+
+  .ai-insight-amber::before {
+    background: radial-gradient(circle at 88% 10%, rgba(245, 158, 11, 0.22), transparent 36%);
+  }
+
+  .ai-insight-emerald::before {
+    background: radial-gradient(circle at 88% 10%, rgba(52, 211, 153, 0.2), transparent 36%);
+  }
+
+  .ai-insight-fuchsia::before {
+    background: radial-gradient(circle at 88% 10%, rgba(217, 70, 239, 0.18), transparent 36%);
+  }
+
+  input[type="range"].field {
+    height: 42px;
+    padding: 0 2px;
+    accent-color: #22d3ee;
   }
 
   .app-main table tbody tr {
@@ -185,7 +318,7 @@ textarea {
   }
 
   .app-main table tbody tr:hover {
-    background: rgba(14, 165, 233, 0.06);
+    background: rgba(124, 58, 237, 0.12);
   }
 
   .app-main thead {
@@ -213,7 +346,7 @@ textarea {
 
   .app-main .bg-slate-100,
   .app-main thead.bg-slate-100 {
-    background: rgba(255, 255, 255, 0.035) !important;
+    background: rgba(255, 255, 255, 0.045) !important;
   }
 
   .app-main .bg-white {
@@ -244,6 +377,49 @@ textarea {
     color: #fdba74 !important;
   }
 
+  .app-main .text-brand,
+  .app-main .text-coral,
+  .app-main .text-mint,
+  .app-main .text-cyan-300,
+  .app-main .text-cyan-100,
+  .app-main .text-cyan-200,
+  .app-main .text-cyan-700 {
+    color: #c4b5fd !important;
+  }
+
+  .app-main .bg-cyan-50,
+  .app-main .bg-cyan-400\/10,
+  .app-main .bg-cyan-400\/15,
+  .app-main .bg-emerald-400\/10 {
+    background: rgba(124, 58, 237, 0.14) !important;
+  }
+
+  .app-main .border-cyan-300\/20,
+  .app-main .border-cyan-300\/25,
+  .app-main .border-cyan-300\/50,
+  .app-main .border-cyan-400\/20,
+  .app-main .border-cyan-400\/25 {
+    border-color: rgba(168, 85, 247, 0.34) !important;
+  }
+
+  .app-main .hover\:bg-cyan-400\/20:hover,
+  .app-main .hover\:bg-cyan-400\/10:hover {
+    background: rgba(124, 58, 237, 0.2) !important;
+  }
+
+  .app-main .hover\:text-cyan-200:hover,
+  .app-main .hover\:text-cyan-100:hover {
+    color: #f5f3ff !important;
+  }
+
+  .app-main .focus\:border-cyan-400\/60:focus {
+    border-color: rgba(168, 85, 247, 0.62) !important;
+  }
+
+  .app-main .focus\:bg-cyan-400\/10:focus {
+    background: rgba(124, 58, 237, 0.12) !important;
+  }
+
   .app-main table {
     color: rgba(255, 255, 255, 0.62);
   }
@@ -263,8 +439,8 @@ textarea {
   }
 
   .app-main a.rounded-md:hover {
-    border-color: rgba(14, 165, 233, 0.36) !important;
-    background: rgba(14, 165, 233, 0.08) !important;
+    border-color: rgba(168, 85, 247, 0.4) !important;
+    background: rgba(124, 58, 237, 0.12) !important;
   }
 
   .app-main ::-webkit-scrollbar {
@@ -277,7 +453,7 @@ textarea {
   }
 
   .app-main ::-webkit-scrollbar-thumb {
-    background: rgba(14, 165, 233, 0.28);
+    background: rgba(168, 85, 247, 0.36);
     border-radius: 999px;
   }
 
@@ -288,10 +464,10 @@ textarea {
 
   .app-main input[type="file"]::file-selector-button {
     margin-right: 12px;
-    border: 1px solid rgba(14, 165, 233, 0.28);
+    border: 1px solid rgba(168, 85, 247, 0.32);
     border-radius: 6px;
-    background: rgba(14, 165, 233, 0.12);
-    color: #bae6fd;
+    background: rgba(124, 58, 237, 0.16);
+    color: #ddd6fe;
     padding: 6px 10px;
     font-weight: 700;
     cursor: pointer;
@@ -306,9 +482,8 @@ textarea {
     position: absolute;
     inset: 0;
     background:
-      url("./assets/hero.png") right 8vw bottom 8vh / clamp(180px, 24vw, 340px) no-repeat,
-      linear-gradient(120deg, rgba(14, 116, 144, 0.45), transparent 38%),
-      linear-gradient(300deg, rgba(249, 115, 22, 0.25), transparent 34%),
+      linear-gradient(120deg, rgba(124, 58, 237, 0.38), transparent 38%),
+      linear-gradient(300deg, rgba(219, 39, 119, 0.22), transparent 34%),
       repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 72px),
       repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 72px);
     animation: auth-grid-drift 16s ease-in-out infinite alternate;
@@ -323,7 +498,7 @@ textarea {
     content: "";
     position: absolute;
     inset: 8%;
-    border: 1px solid rgba(14, 165, 233, 0.12);
+    border: 1px solid rgba(168, 85, 247, 0.14);
     border-radius: 28px;
     transform: rotate(-2deg);
     pointer-events: none;
@@ -331,9 +506,11 @@ textarea {
   }
 
   .auth-card {
-    @apply relative w-full max-w-md rounded-lg border border-white/70 bg-white/95 p-8 backdrop-blur;
+    @apply relative w-full max-w-md rounded-lg border p-8 backdrop-blur;
     animation: auth-card-rise 0.72s cubic-bezier(0.22, 1, 0.36, 1) both;
-    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.22);
+    background: rgba(36, 25, 78, 0.82);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
   }
 
   .metric-tile {
@@ -345,20 +522,6 @@ textarea {
     isolation: isolate;
   }
 
-  .auth-visual-shell::after {
-    content: "";
-    position: fixed;
-    right: clamp(16px, 7vw, 110px);
-    bottom: clamp(18px, 7vh, 90px);
-    z-index: 0;
-    width: clamp(150px, 22vw, 330px);
-    aspect-ratio: 329 / 360;
-    pointer-events: none;
-    background: url("./assets/hero.png") center / contain no-repeat;
-    opacity: 0.14;
-    filter: drop-shadow(0 28px 70px rgba(14, 165, 233, 0.34));
-    animation: app-image-drift 12s ease-in-out infinite alternate;
-  }
 }
 
 @keyframes page-fade {
@@ -385,24 +548,6 @@ textarea {
   }
   to {
     transform: translate3d(1.5%, 1%, 0) scale(1.03);
-  }
-}
-
-@keyframes global-bg-float {
-  from {
-    transform: translate3d(-8px, -10px, 0) rotate(-2deg) scale(0.98);
-  }
-  to {
-    transform: translate3d(14px, 16px, 0) rotate(3deg) scale(1.04);
-  }
-}
-
-@keyframes app-image-drift {
-  from {
-    transform: translate3d(0, 0, 0) rotate(-4deg);
-  }
-  to {
-    transform: translate3d(-24px, -18px, 0) rotate(4deg);
   }
 }
 
