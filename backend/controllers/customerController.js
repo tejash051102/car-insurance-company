@@ -40,13 +40,10 @@ const createAndSendCustomerOtp = async (customer) => {
 
   const result = await sendCustomerOtpEmail(customer, otp.otp);
 
-  if (result.skipped) {
-    customer.contactVerificationOtpHash = undefined;
-    customer.contactVerificationExpires = undefined;
-    await customer.save({ validateBeforeSave: false });
-  }
-
-  return !result.skipped;
+  return {
+    sent: !result.skipped,
+    otp: result.skipped ? otp.otp : undefined
+  };
 };
 
 export const getCustomers = asyncHandler(async (req, res) => {
@@ -109,7 +106,7 @@ export const createCustomer = asyncHandler(async (req, res) => {
     ...req.body,
     createdBy: req.user?._id
   });
-  const contactOtpSent = await createAndSendCustomerOtp(customer);
+  const contactOtp = await createAndSendCustomerOtp(customer);
 
   await logActivity({
     req,
@@ -121,10 +118,11 @@ export const createCustomer = asyncHandler(async (req, res) => {
 
   res.status(201).json({
     customer,
-    contactOtpSent,
-    message: contactOtpSent
+    contactOtpSent: contactOtp.sent,
+    ...(contactOtp.otp ? { otp: contactOtp.otp, otpSkipped: true } : {}),
+    message: contactOtp.sent
       ? "Customer created. Verification code sent to customer email."
-      : "Customer created, but email OTP could not be sent. Configure SMTP to send verification codes."
+      : "Customer created. SMTP is not configured, so use the displayed OTP to verify this customer."
   });
 });
 
@@ -207,14 +205,15 @@ export const resendCustomerOtp = asyncHandler(async (req, res) => {
     return;
   }
 
-  const sent = await createAndSendCustomerOtp(customer);
+  const otp = await createAndSendCustomerOtp(customer);
 
-  if (sent) {
+  if (otp.sent) {
     res.json({ message: "Verification code sent to customer email" });
   } else {
-    res.status(200).json({ 
-      message: "OTP generated. Email configuration issue - check backend SMTP settings.",
-      otpSkipped: true 
+    res.status(200).json({
+      message: "OTP generated. SMTP is not configured, so use the displayed OTP to verify this customer.",
+      otpSkipped: true,
+      otp: otp.otp
     });
   }
 });

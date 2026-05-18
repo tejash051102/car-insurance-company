@@ -178,7 +178,7 @@ export const resendVerification = asyncHandler(async (req, res) => {
     console.error("Verification email error:", emailError.message);
     res.json({
       message: "Verification email sent",
-      verificationUrl: emailResult.verificationUrl
+      verificationUrl: getClientRouteUrl(`/verify-email/${verification.rawToken}`)
     });
   }
 });

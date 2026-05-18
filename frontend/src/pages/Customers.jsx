@@ -33,6 +33,7 @@ const Customers = () => {
   const [documents, setDocuments] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [notice, setNotice] = useState("");
+  const [devOtp, setDevOtp] = useState("");
   const [verificationCustomer, setVerificationCustomer] = useState(null);
   const [customerOtp, setCustomerOtp] = useState("");
   const [verifying, setVerifying] = useState(false);
@@ -70,6 +71,7 @@ const Customers = () => {
     setLoading(true);
     setError("");
     setNotice("");
+    setDevOtp("");
 
     const payload = {
       firstName: form.firstName,
@@ -93,6 +95,7 @@ const Customers = () => {
       } else {
         const { data } = await api.post("/customers", payload);
         setNotice(data.message || "Customer created");
+        setDevOtp(data.otp || "");
         setVerificationCustomer(data.customer || null);
       }
 
@@ -165,6 +168,7 @@ const Customers = () => {
     setVerificationCustomer(customer);
     setCustomerOtp("");
     setNotice("");
+    setDevOtp("");
     setError("");
   };
 
@@ -174,10 +178,12 @@ const Customers = () => {
     setVerifying(true);
     setError("");
     setNotice("");
+    setDevOtp("");
 
     try {
       const { data } = await api.post(`/customers/${verificationCustomer._id}/send-otp`);
       setNotice(data.message || "Verification code sent to customer email");
+      setDevOtp(data.otp || "");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -237,7 +243,12 @@ const Customers = () => {
       </div>
 
       {error ? <div className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
-      {notice ? <div className="rounded-md bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{notice}</div> : null}
+      {notice ? (
+        <div className="rounded-md bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+          <p>{notice}</p>
+          {devOtp ? <p className="mt-1 font-semibold">OTP: {devOtp}</p> : null}
+        </div>
+      ) : null}
 
       <section className="panel p-5">
         <div className="mb-4 flex items-center gap-2">

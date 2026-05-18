@@ -23,6 +23,12 @@ if (typeof window !== "undefined") {
       originalWarn.apply(console, args);
     }
   };
+
+  window.addEventListener("unhandledrejection", (event) => {
+    if (shouldSuppress(event.reason?.message || event.reason)) {
+      event.preventDefault();
+    }
+  });
 }
 
 import React from "react";
