@@ -97,8 +97,20 @@ const startServer = async () => {
 
     const PORT = process.env.PORT || 5000;
 
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
+    });
+
+    server.on("error", (error) => {
+      if (error.code === "EADDRINUSE") {
+        console.error(`Port ${PORT} is already in use. The backend may already be running.`);
+        console.error(`Open http://127.0.0.1:${PORT} to check it, or stop the existing Node process before starting another one.`);
+        process.exit(1);
+      }
+
+      console.error("SERVER LISTEN FAILED");
+      console.error(error);
+      process.exit(1);
     });
   } catch (error) {
     console.error("SERVER START FAILED");

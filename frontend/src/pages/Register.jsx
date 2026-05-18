@@ -394,7 +394,7 @@ const Register = ({ onAuth }) => {
   };
 
   return (
-    <div style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "32px 16px", fontFamily: "Inter, system-ui, sans-serif", overflowX: "hidden" }}>
+    <div className="auth-visual-shell" style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "32px 16px", fontFamily: "Inter, system-ui, sans-serif", overflowX: "hidden" }}>
       <AnimatedBackground />
 
       {/* ── top logo mark ── */}

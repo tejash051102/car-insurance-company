@@ -22,6 +22,26 @@ body {
     #04080f;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("./assets/hero.png");
+  background-position: right 8vw top 12vh;
+  background-repeat: no-repeat;
+  background-size: clamp(220px, 26vw, 420px);
+  opacity: 0.12;
+  filter: drop-shadow(0 28px 70px rgba(14, 165, 233, 0.32));
+  animation: global-bg-float 11s ease-in-out infinite alternate;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
 button,
 input,
 select,
@@ -134,6 +154,20 @@ textarea {
       linear-gradient(115deg, rgba(14, 165, 233, 0.08), transparent 36%),
       linear-gradient(290deg, rgba(99, 102, 241, 0.09), transparent 34%);
     animation: app-bg-pan 14s ease-in-out infinite alternate;
+  }
+
+  .app-shell::after {
+    content: "";
+    position: fixed;
+    inset: auto 4vw 5vh auto;
+    z-index: 0;
+    width: clamp(180px, 22vw, 360px);
+    aspect-ratio: 329 / 360;
+    pointer-events: none;
+    background: url("./assets/hero.png") center / contain no-repeat;
+    opacity: 0.1;
+    filter: drop-shadow(0 24px 62px rgba(99, 102, 241, 0.28));
+    animation: app-image-drift 13s ease-in-out infinite alternate;
   }
 
   .app-main {
@@ -272,11 +306,17 @@ textarea {
     position: absolute;
     inset: 0;
     background:
+      url("./assets/hero.png") right 8vw bottom 8vh / clamp(180px, 24vw, 340px) no-repeat,
       linear-gradient(120deg, rgba(14, 116, 144, 0.45), transparent 38%),
       linear-gradient(300deg, rgba(249, 115, 22, 0.25), transparent 34%),
       repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 72px),
       repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 72px);
     animation: auth-grid-drift 16s ease-in-out infinite alternate;
+  }
+
+  .auth-shell > * {
+    position: relative;
+    z-index: 1;
   }
 
   .auth-shell::after {
@@ -298,6 +338,26 @@ textarea {
 
   .metric-tile {
     @apply rounded-md border border-white/15 bg-white/10 p-4 text-white backdrop-blur;
+  }
+
+  .auth-visual-shell {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .auth-visual-shell::after {
+    content: "";
+    position: fixed;
+    right: clamp(16px, 7vw, 110px);
+    bottom: clamp(18px, 7vh, 90px);
+    z-index: 0;
+    width: clamp(150px, 22vw, 330px);
+    aspect-ratio: 329 / 360;
+    pointer-events: none;
+    background: url("./assets/hero.png") center / contain no-repeat;
+    opacity: 0.14;
+    filter: drop-shadow(0 28px 70px rgba(14, 165, 233, 0.34));
+    animation: app-image-drift 12s ease-in-out infinite alternate;
   }
 }
 
@@ -325,6 +385,24 @@ textarea {
   }
   to {
     transform: translate3d(1.5%, 1%, 0) scale(1.03);
+  }
+}
+
+@keyframes global-bg-float {
+  from {
+    transform: translate3d(-8px, -10px, 0) rotate(-2deg) scale(0.98);
+  }
+  to {
+    transform: translate3d(14px, 16px, 0) rotate(3deg) scale(1.04);
+  }
+}
+
+@keyframes app-image-drift {
+  from {
+    transform: translate3d(0, 0, 0) rotate(-4deg);
+  }
+  to {
+    transform: translate3d(-24px, -18px, 0) rotate(4deg);
   }
 }
 

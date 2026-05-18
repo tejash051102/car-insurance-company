@@ -113,7 +113,7 @@ const CustomerPortal = () => {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden text-white">
+    <div className="auth-visual-shell relative min-h-screen overflow-hidden text-white">
       <AnimatedAuthBackground />
       <main className="app-main relative z-10 mx-auto max-w-7xl space-y-6 px-4 py-6 lg:px-8">
         <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">

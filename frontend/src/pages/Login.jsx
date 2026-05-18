@@ -337,7 +337,7 @@ const Login = ({ onAuth }) => {
   const needsVerification = error.toLowerCase().includes("verify your email");
 
   return (
-    <div style={{ position: "relative", minHeight: "100vh", display: "flex", overflow: "hidden", fontFamily: "Inter, system-ui, sans-serif" }}>
+    <div className="auth-visual-shell" style={{ position: "relative", minHeight: "100vh", display: "flex", overflow: "hidden", fontFamily: "Inter, system-ui, sans-serif" }}>
       <AnimatedBackground />
 
       {/* ─── LEFT PANEL ─── */}

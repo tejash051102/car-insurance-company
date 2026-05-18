@@ -34,7 +34,7 @@ const CustomerLogin = () => {
   };
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-8 text-white">
+    <div className="auth-visual-shell relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-8 text-white">
       <AnimatedAuthBackground />
 
       <div className="relative z-10 mb-7 flex flex-col items-center gap-3 text-center">

@@ -26,6 +26,14 @@ const userSchema = new mongoose.Schema(
       enum: ["admin", "agent", "manager"],
       default: "agent"
     },
+    manager: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    },
     isEmailVerified: {
       type: Boolean,
       default: false
