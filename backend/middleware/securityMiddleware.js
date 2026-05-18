@@ -32,7 +32,7 @@ export const authRateLimit = (req, res, next) => {
 
   if (current.count > maxAttempts) {
     res.status(429);
-    throw new Error("Too many attempts. Please try again later.");
+    return next(new Error("Too many attempts. Please try again later."));
   }
 
   next();

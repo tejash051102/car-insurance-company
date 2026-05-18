@@ -20,27 +20,40 @@ export const sendEmail = async ({ to, subject, text }) => {
     return { skipped: true, reason: "SMTP not configured" };
   }
 
-  const nodemailer = await import("nodemailer");
-  const transporter = nodemailer.default.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT),
-    secure: process.env.SMTP_SECURE === "true",
-    family: 4,
-    connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 8000),
-    greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT || 8000),
-    socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT || 10000),
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
-    }
-  });
+  try {
+    const nodemailer = await import("nodemailer");
+    const transporter = nodemailer.default.createTransport({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT),
+      secure: process.env.SMTP_SECURE === "true",
+      family: 4,
+      connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 5000),
+      greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT || 5000),
+      socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT || 5000),
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+      }
+    });
 
-  return transporter.sendMail({
-    from: process.env.SMTP_FROM || process.env.SMTP_USER,
-    to,
-    subject,
-    text
-  });
+    // Set a 10 second timeout for the send operation
+    const sendPromise = transporter.sendMail({
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      to,
+      subject,
+      text
+    });
+
+    return await Promise.race([
+      sendPromise,
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("SMTP timeout")), 10000)
+      )
+    ]);
+  } catch (error) {
+    console.error(`[email:error] Failed to send email: ${error.message}`);
+    return { skipped: true, reason: `SMTP error: ${error.message}` };
+  }
 };
 
 export const buildPolicyExpiryMessage = (policy) => {

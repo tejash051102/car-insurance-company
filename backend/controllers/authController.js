@@ -98,14 +98,25 @@ export const registerUser = asyncHandler(async (req, res) => {
 
 export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+
+  if (!email || !password) {
+    res.status(400);
+    throw new Error("Email and password are required");
+  }
+
   const user = await User.findOne({ email }).select("+password");
 
-  if (user && (await user.matchPassword(password))) {
-    res.json(userResponse(user));
-  } else {
+  if (!user) {
     res.status(401);
     throw new Error("Invalid email or password");
   }
+
+  if (!(await user.matchPassword(password))) {
+    res.status(401);
+    throw new Error("Invalid email or password");
+  }
+
+  res.json(userResponse(user));
 });
 
 export const verifyEmail = asyncHandler(async (req, res) => {
@@ -157,11 +168,19 @@ export const resendVerification = asyncHandler(async (req, res) => {
   user.emailVerificationExpires = verification.expires;
   await user.save({ validateBeforeSave: false });
 
-  const emailResult = await sendVerificationEmail(user, verification.rawToken);
-  res.json({
-    message: "Verification email sent",
-    ...(emailResult.emailSkipped ? { verificationUrl: emailResult.verificationUrl } : {})
-  });
+  try {
+    const emailResult = await sendVerificationEmail(user, verification.rawToken);
+    res.json({
+      message: "Verification email sent",
+      ...(emailResult.emailSkipped ? { verificationUrl: emailResult.verificationUrl } : {})
+    });
+  } catch (emailError) {
+    console.error("Verification email error:", emailError.message);
+    res.json({
+      message: "Verification email sent",
+      verificationUrl: emailResult.verificationUrl
+    });
+  }
 });
 
 export const forgotPassword = asyncHandler(async (req, res) => {
@@ -184,11 +203,19 @@ export const forgotPassword = asyncHandler(async (req, res) => {
   user.passwordResetExpires = new Date(Date.now() + 60 * 60 * 1000);
   await user.save({ validateBeforeSave: false });
 
-  const emailResult = await sendPasswordResetEmail(user, reset.rawToken);
-  res.json({
-    message: "If this email exists, a reset link has been sent",
-    ...(emailResult.emailSkipped ? { resetUrl: emailResult.resetUrl } : {})
-  });
+  try {
+    const emailResult = await sendPasswordResetEmail(user, reset.rawToken);
+    res.json({
+      message: "If this email exists, a reset link has been sent",
+      ...(emailResult.emailSkipped ? { resetUrl: emailResult.resetUrl } : {})
+    });
+  } catch (emailError) {
+    console.error("Password reset email error:", emailError.message);
+    res.json({
+      message: "If this email exists, a reset link has been sent",
+      resetUrl: getClientRouteUrl(`/reset-password/${reset.rawToken}`)
+    });
+  }
 });
 
 export const resetPassword = asyncHandler(async (req, res) => {
