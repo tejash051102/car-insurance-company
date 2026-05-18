@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#050a14"/>
+      <stop offset="50%" stop-color="#06111f"/>
+      <stop offset="100%" stop-color="#04080f"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f2740"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#67e8f9"/>
+    </marker>
+    <style>
+      .title { fill: #ffffff; font: 700 34px Arial, sans-serif; }
+      .subtitle { fill: #93c5fd; font: 600 16px Arial, sans-serif; letter-spacing: 2px; }
+      .section { fill: #67e8f9; font: 700 20px Arial, sans-serif; }
+      .box { fill: url(#card); stroke: rgba(103,232,249,0.55); stroke-width: 2; filter: url(#shadow); }
+      .box2 { fill: #111827; stroke: rgba(251,146,60,0.7); stroke-width: 2; filter: url(#shadow); }
+      .box3 { fill: #0f172a; stroke: rgba(110,231,183,0.7); stroke-width: 2; filter: url(#shadow); }
+      .text { fill: #f8fafc; font: 700 16px Arial, sans-serif; }
+      .small { fill: #cbd5e1; font: 500 13px Arial, sans-serif; }
+      .line { stroke: #67e8f9; stroke-width: 2.5; fill: none; marker-end: url(#arrow); }
+      .mutedline { stroke: #38bdf8; stroke-width: 2; fill: none; marker-end: url(#arrow); opacity: 0.75; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1100" fill="url(#bg)"/>
+  <circle cx="1350" cy="120" r="230" fill="#312e81" opacity="0.18"/>
+  <circle cx="160" cy="420" r="260" fill="#0e7490" opacity="0.16"/>
+  <circle cx="780" cy="980" r="260" fill="#1d4ed8" opacity="0.13"/>
+
+  <text x="800" y="64" text-anchor="middle" class="title">Car Insurance Management System Flowchart</text>
+  <text x="800" y="96" text-anchor="middle" class="subtitle">FEATURES ADDED AND USER FLOW</text>
+
+  <text x="130" y="155" class="section">Staff/Admin Flow</text>
+  <text x="930" y="155" class="section">Customer Portal Flow</text>
+  <text x="610" y="785" class="section">UI and System Improvements</text>
+
+  <!-- Staff flow -->
+  <rect x="90" y="185" width="230" height="70" rx="10" class="box"/>
+  <text x="205" y="214" text-anchor="middle" class="text">Staff/Admin Login</text>
+  <text x="205" y="237" text-anchor="middle" class="small">Admin, Manager, Agent</text>
+
+  <rect x="90" y="315" width="230" height="70" rx="10" class="box"/>
+  <text x="205" y="355" text-anchor="middle" class="text">Dashboard</text>
+
+  <path class="line" d="M205 255 L205 310"/>
+
+  <rect x="390" y="185" width="250" height="70" rx="10" class="box"/>
+  <text x="515" y="214" text-anchor="middle" class="text">Customers</text>
+  <text x="515" y="237" text-anchor="middle" class="small">Password, OTP, documents</text>
+
+  <rect x="390" y="295" width="250" height="70" rx="10" class="box"/>
+  <text x="515" y="324" text-anchor="middle" class="text">Vehicles</text>
+  <text x="515" y="347" text-anchor="middle" class="small">Car, Bike, SUV, Truck, Van</text>
+
+  <rect x="390" y="405" width="250" height="70" rx="10" class="box"/>
+  <text x="515" y="434" text-anchor="middle" class="text">Policies</text>
+  <text x="515" y="457" text-anchor="middle" class="small">PDF, CSV, expiry reminders</text>
+
+  <rect x="390" y="515" width="250" height="70" rx="10" class="box"/>
+  <text x="515" y="544" text-anchor="middle" class="text">Claims</text>
+  <text x="515" y="567" text-anchor="middle" class="small">Submitted to settled tracking</text>
+
+  <rect x="390" y="625" width="250" height="70" rx="10" class="box"/>
+  <text x="515" y="654" text-anchor="middle" class="text">Payments</text>
+  <text x="515" y="677" text-anchor="middle" class="small">Invoice PDF and CSV export</text>
+
+  <path class="mutedline" d="M320 350 C350 350, 350 220, 385 220"/>
+  <path class="mutedline" d="M320 350 C350 350, 350 330, 385 330"/>
+  <path class="mutedline" d="M320 350 C350 350, 350 440, 385 440"/>
+  <path class="mutedline" d="M320 350 C350 350, 350 550, 385 550"/>
+  <path class="mutedline" d="M320 350 C350 350, 350 660, 385 660"/>
+
+  <!-- Customer flow -->
+  <rect x="900" y="185" width="250" height="70" rx="10" class="box2"/>
+  <text x="1025" y="214" text-anchor="middle" class="text">Customer Portal Option</text>
+  <text x="1025" y="237" text-anchor="middle" class="small">Sidebar and login link</text>
+
+  <rect x="900" y="315" width="250" height="70" rx="10" class="box2"/>
+  <text x="1025" y="344" text-anchor="middle" class="text">Customer Login</text>
+  <text x="1025" y="367" text-anchor="middle" class="small">Email and portal password</text>
+
+  <rect x="900" y="445" width="250" height="70" rx="10" class="box2"/>
+  <text x="1025" y="474" text-anchor="middle" class="text">Customer Portal</text>
+  <text x="1025" y="497" text-anchor="middle" class="small">Self-service dashboard</text>
+
+  <path class="line" d="M1025 255 L1025 310"/>
+  <path class="line" d="M1025 385 L1025 440"/>
+
+  <rect x="1230" y="245" width="250" height="70" rx="10" class="box2"/>
+  <text x="1355" y="274" text-anchor="middle" class="text">View My Policies</text>
+  <text x="1355" y="297" text-anchor="middle" class="small">Download policy PDF</text>
+
+  <rect x="1230" y="365" width="250" height="70" rx="10" class="box2"/>
+  <text x="1355" y="394" text-anchor="middle" class="text">Submit Claim</text>
+  <text x="1355" y="417" text-anchor="middle" class="small">Create customer claim</text>
+
+  <rect x="1230" y="485" width="250" height="70" rx="10" class="box2"/>
+  <text x="1355" y="514" text-anchor="middle" class="text">Track My Claims</text>
+  <text x="1355" y="537" text-anchor="middle" class="small">Status updates</text>
+
+  <rect x="1230" y="605" width="250" height="70" rx="10" class="box2"/>
+  <text x="1355" y="634" text-anchor="middle" class="text">View Payments</text>
+  <text x="1355" y="657" text-anchor="middle" class="small">Download receipt PDF</text>
+
+  <path class="mutedline" d="M1150 480 C1195 480, 1195 280, 1225 280"/>
+  <path class="mutedline" d="M1150 480 C1195 480, 1195 400, 1225 400"/>
+  <path class="mutedline" d="M1150 480 C1195 480, 1195 520, 1225 520"/>
+  <path class="mutedline" d="M1150 480 C1195 480, 1195 640, 1225 640"/>
+
+  <!-- Link staff to customer portal -->
+  <path class="line" d="M640 220 C735 220, 790 220, 895 220"/>
+  <text x="770" y="205" text-anchor="middle" class="small">Create customer portal access</text>
+
+  <!-- Improvements -->
+  <rect x="130" y="825" width="280" height="80" rx="10" class="box3"/>
+  <text x="270" y="856" text-anchor="middle" class="text">Show/Hide Password</text>
+  <text x="270" y="880" text-anchor="middle" class="small">Login, register, reset, customer</text>
+
+  <rect x="470" y="825" width="280" height="80" rx="10" class="box3"/>
+  <text x="610" y="856" text-anchor="middle" class="text">Black Screenshot Fix</text>
+  <text x="610" y="880" text-anchor="middle" class="small">Content visible on first paint</text>
+
+  <rect x="810" y="825" width="280" height="80" rx="10" class="box3"/>
+  <text x="950" y="856" text-anchor="middle" class="text">Styled Customer Pages</text>
+  <text x="950" y="880" text-anchor="middle" class="small">Login/register style and image</text>
+
+  <rect x="1150" y="825" width="280" height="80" rx="10" class="box3"/>
+  <text x="1290" y="856" text-anchor="middle" class="text">Reports and Downloads</text>
+  <text x="1290" y="880" text-anchor="middle" class="small">CSV, policy PDF, receipts</text>
+
+  <path class="mutedline" d="M270 825 C270 755, 515 755, 515 700"/>
+  <path class="mutedline" d="M610 825 C610 755, 205 755, 205 390"/>
+  <path class="mutedline" d="M950 825 C950 735, 1025 735, 1025 520"/>
+  <path class="mutedline" d="M1290 825 C1290 750, 1355 750, 1355 680"/>
+
+  <rect x="420" y="970" width="760" height="58" rx="12" fill="#020617" stroke="rgba(103,232,249,0.35)" stroke-width="1.5"/>
+  <text x="800" y="1005" text-anchor="middle" class="small">
+    Customer accounts are created by staff, then customers log in to view policies, submit claims, and download documents.
+  </text>
+</svg>
