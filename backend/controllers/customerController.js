@@ -40,13 +40,11 @@ const createAndSendCustomerOtp = async (customer) => {
 
   const result = await sendCustomerOtpEmail(customer, otp.otp);
 
-  if (result.skipped) {
-    customer.contactVerificationOtpHash = undefined;
-    customer.contactVerificationExpires = undefined;
-    await customer.save({ validateBeforeSave: false });
-  }
-
-  return !result.skipped;
+  return {
+    sent: !result.skipped,
+    otp: result.skipped ? otp.otp : undefined,
+    skippedReason: result.reason
+  };
 };
 
 export const getCustomers = asyncHandler(async (req, res) => {
@@ -109,7 +107,7 @@ export const createCustomer = asyncHandler(async (req, res) => {
     ...req.body,
     createdBy: req.user?._id
   });
-  const contactOtpSent = await createAndSendCustomerOtp(customer);
+  const otpResult = await createAndSendCustomerOtp(customer);
 
   await logActivity({
     req,
@@ -121,10 +119,11 @@ export const createCustomer = asyncHandler(async (req, res) => {
 
   res.status(201).json({
     customer,
-    contactOtpSent,
-    message: contactOtpSent
+    contactOtpSent: otpResult.sent,
+    ...(otpResult.otp ? { verificationOtp: otpResult.otp } : {}),
+    message: otpResult.sent
       ? "Customer created. Verification code sent to customer email."
-      : "Customer created, but email OTP could not be sent. Configure SMTP to send verification codes."
+      : "Customer created. SMTP is not configured, so use the verification OTP shown in the app."
   });
 });
 
@@ -207,14 +206,15 @@ export const resendCustomerOtp = asyncHandler(async (req, res) => {
     return;
   }
 
-  const sent = await createAndSendCustomerOtp(customer);
+  const otpResult = await createAndSendCustomerOtp(customer);
 
-  if (!sent) {
-    res.status(503);
-    throw new Error("Customer OTP email could not be sent. Configure SMTP in backend .env.");
-  }
-
-  res.json({ message: "Verification code sent to customer email" });
+  res.json({
+    message: otpResult.sent
+      ? "Verification code sent to customer email"
+      : "SMTP is not configured, so use the verification OTP shown in the app.",
+    contactOtpSent: otpResult.sent,
+    ...(otpResult.otp ? { verificationOtp: otpResult.otp } : {})
+  });
 });
 
 export const verifyCustomerOtp = asyncHandler(async (req, res) => {

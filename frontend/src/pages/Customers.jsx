@@ -92,7 +92,7 @@ const Customers = () => {
         await api.put(`/customers/${editingId}`, payload);
       } else {
         const { data } = await api.post("/customers", payload);
-        setNotice(data.message || "Customer created");
+        setNotice(data.verificationOtp ? `${data.message} OTP: ${data.verificationOtp}` : data.message || "Customer created");
         setVerificationCustomer(data.customer || null);
       }
 
@@ -177,7 +177,7 @@ const Customers = () => {
 
     try {
       const { data } = await api.post(`/customers/${verificationCustomer._id}/send-otp`);
-      setNotice(data.message || "Verification code sent to customer email");
+      setNotice(data.verificationOtp ? `${data.message} OTP: ${data.verificationOtp}` : data.message || "Verification code sent to customer email");
     } catch (err) {
       setError(err.message);
     } finally {
