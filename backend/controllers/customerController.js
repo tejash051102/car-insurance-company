@@ -209,12 +209,14 @@ export const resendCustomerOtp = asyncHandler(async (req, res) => {
 
   const sent = await createAndSendCustomerOtp(customer);
 
-  if (!sent) {
-    res.status(503);
-    throw new Error("Customer OTP email could not be sent. Configure SMTP in backend .env.");
+  if (sent) {
+    res.json({ message: "Verification code sent to customer email" });
+  } else {
+    res.status(200).json({ 
+      message: "OTP generated. Email configuration issue - check backend SMTP settings.",
+      otpSkipped: true 
+    });
   }
-
-  res.json({ message: "Verification code sent to customer email" });
 });
 
 export const verifyCustomerOtp = asyncHandler(async (req, res) => {

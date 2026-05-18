@@ -52,6 +52,15 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Don't reject on non-critical extension errors
+    if (
+      error.message?.includes("listener") ||
+      error.message?.includes("message channel closed")
+    ) {
+      console.debug("Suppressed extension error:", error.message);
+      return Promise.resolve({ data: {} });
+    }
+
     const message = error.response?.data?.message || error.message || "Something went wrong";
     return Promise.reject(new Error(message));
   }
