@@ -68,6 +68,8 @@ const getAccessibleCustomerFilter = async (req, baseFilter = {}) => {
 
   const withBaseFilter = (accessFilter) =>
     Object.keys(baseFilter).length ? { $and: [baseFilter, accessFilter] } : accessFilter;
+  const admins = await User.find({ role: "admin" }).select("_id");
+  const adminIds = admins.map((admin) => admin._id);
 
   if (req.user?.role === "manager") {
     const agents = await User.find({
@@ -77,7 +79,7 @@ const getAccessibleCustomerFilter = async (req, baseFilter = {}) => {
 
     return withBaseFilter({
       $or: [
-        { createdBy: { $in: [req.user._id, ...agents.map((agent) => agent._id)] } },
+        { createdBy: { $in: [req.user._id, ...agents.map((agent) => agent._id), ...adminIds] } },
         { createdBy: { $exists: false } },
         { createdBy: null }
       ]
@@ -87,6 +89,7 @@ const getAccessibleCustomerFilter = async (req, baseFilter = {}) => {
   return withBaseFilter({
     $or: [
       { createdBy: req.user?._id },
+      { createdBy: { $in: adminIds } },
       { createdBy: { $exists: false } },
       { createdBy: null }
     ]
