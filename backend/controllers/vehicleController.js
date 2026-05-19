@@ -1,6 +1,10 @@
 import asyncHandler from "express-async-handler";
 import Vehicle from "../models/Vehicle.js";
 import Policy from "../models/Policy.js";
+<<<<<<< HEAD
+=======
+import { sendCsv } from "../utils/csvExporter.js";
+>>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
 import { getPagination, sendPaginated } from "../utils/pagination.js";
 
 export const getVehicles = asyncHandler(async (req, res) => {
@@ -32,6 +36,25 @@ export const getVehicleById = asyncHandler(async (req, res) => {
   }
 
   res.json(vehicle);
+});
+
+export const exportVehicles = asyncHandler(async (req, res) => {
+  const vehicles = await Vehicle.find().populate("customer").sort({ createdAt: -1 });
+
+  sendCsv(
+    res,
+    "vehicles.csv",
+    [
+      { label: "Registration", value: (vehicle) => vehicle.registrationNumber },
+      { label: "Make", value: (vehicle) => vehicle.make },
+      { label: "Model", value: (vehicle) => vehicle.model },
+      { label: "Year", value: (vehicle) => vehicle.year },
+      { label: "Owner", value: (vehicle) => vehicle.customer?.fullName },
+      { label: "Fuel", value: (vehicle) => vehicle.fuelType },
+      { label: "Value", value: (vehicle) => vehicle.value }
+    ],
+    vehicles
+  );
 });
 
 export const createVehicle = asyncHandler(async (req, res) => {

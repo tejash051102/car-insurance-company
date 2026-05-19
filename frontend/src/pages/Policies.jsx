@@ -3,7 +3,12 @@ import { useEffect, useState } from "react";
 import api from "../api/axios.js";
 import Pagination from "../components/Pagination.jsx";
 import { getItems, getMeta } from "../utils/apiData.js";
+<<<<<<< HEAD
 import { isAdminUser } from "../utils/auth.js";
+=======
+import { canManageRecords } from "../utils/auth.js";
+import { downloadBlob, downloadReport } from "../utils/download.js";
+>>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
 
 const emptyForm = {
   customer: "",
@@ -36,7 +41,11 @@ const Policies = () => {
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+<<<<<<< HEAD
   const isAdmin = isAdminUser();
+=======
+  const canManage = canManageRecords();
+>>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
 
   const loadData = async (page = 1, term = search) => {
     setError("");
@@ -126,12 +135,18 @@ const Policies = () => {
   const downloadPdf = async (policy) => {
     try {
       const response = await api.get(`/policies/${policy._id}/pdf`, { responseType: "blob" });
-      const url = URL.createObjectURL(response.data);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${policy.policyNumber}.pdf`;
-      link.click();
-      URL.revokeObjectURL(url);
+      downloadBlob(response.data, `${policy.policyNumber}.pdf`);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const sendExpiryReminders = async () => {
+    setError("");
+    setNotice("");
+    try {
+      const { data } = await api.post("/policies/expiry-reminders", { days: 30 });
+      setNotice(`${data.message}: ${data.count} policies checked`);
     } catch (err) {
       setError(err.message);
     }
@@ -172,11 +187,25 @@ const Policies = () => {
               <Search size={16} />
             </button>
           </form>
+<<<<<<< HEAD
           {isAdmin ? (
             <button className="btn-secondary" type="button" onClick={sendExpiryReminders}>
               <Bell size={16} />
               Reminders
             </button>
+=======
+          {canManage ? (
+            <>
+              <button className="btn-secondary" type="button" onClick={() => downloadReport("/policies/export/csv", "policies.csv")}>
+                <Download size={16} />
+                Export
+              </button>
+              <button className="btn-secondary" type="button" onClick={sendExpiryReminders}>
+                <Bell size={16} />
+                Reminders
+              </button>
+            </>
+>>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
           ) : null}
         </div>
       </div>
@@ -270,7 +299,11 @@ const Policies = () => {
                       <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => editPolicy(policy)} aria-label="Edit policy">
                         <Edit3 size={15} />
                       </button>
+<<<<<<< HEAD
                       {isAdmin ? (
+=======
+                      {canManage ? (
+>>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
                         <button className="btn-danger h-9 w-9 px-0" type="button" onClick={() => deletePolicy(policy._id)} aria-label="Delete policy">
                           <Trash2 size={15} />
                         </button>

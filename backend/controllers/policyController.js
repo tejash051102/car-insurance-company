@@ -3,6 +3,10 @@ import Policy from "../models/Policy.js";
 import Claim from "../models/Claim.js";
 import Payment from "../models/Payment.js";
 import { buildPolicyExpiryMessage, sendEmail } from "../utils/emailService.js";
+<<<<<<< HEAD
+=======
+import { sendCsv } from "../utils/csvExporter.js";
+>>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
 import { getPagination, sendPaginated } from "../utils/pagination.js";
 import { createPolicyPdf } from "../utils/pdfGenerator.js";
 
@@ -82,14 +86,69 @@ export const getPolicyById = asyncHandler(async (req, res) => {
   res.json(policy);
 });
 
+export const exportPolicies = asyncHandler(async (req, res) => {
+  const policies = await Policy.find().populate("customer").populate("vehicle").sort({ createdAt: -1 });
+
+  sendCsv(
+    res,
+    "policies.csv",
+    [
+      { label: "Policy Number", value: (policy) => policy.policyNumber },
+      { label: "Customer", value: (policy) => policy.customer?.fullName },
+      { label: "Vehicle", value: (policy) => policy.vehicle?.registrationNumber },
+      { label: "Type", value: (policy) => policy.type },
+      { label: "Premium", value: (policy) => policy.premiumAmount },
+      { label: "Coverage", value: (policy) => policy.coverageAmount },
+      { label: "Start Date", value: (policy) => policy.startDate?.toISOString().slice(0, 10) },
+      { label: "End Date", value: (policy) => policy.endDate?.toISOString().slice(0, 10) },
+      { label: "Status", value: (policy) => policy.status }
+    ],
+    policies
+  );
+});
+
 export const createPolicy = asyncHandler(async (req, res) => {
   const policy = await Policy.create({
     ...req.body,
-    policyNumber: req.body.policyNumber || generatePolicyNumber()
+    policyNumber: req.body.policyNumber || generatePolicyNumber(),
+    approvalStatus: req.user?.role === "admin" ? "approved" : "pending",
+    approvedBy: req.user?.role === "admin" ? req.user._id : undefined,
+    approvedAt: req.user?.role === "admin" ? new Date() : undefined
   });
 
   const populatedPolicy = await policy.populate(["customer", "vehicle"]);
   res.status(201).json(populatedPolicy);
+});
+
+export const approvePolicy = asyncHandler(async (req, res) => {
+  const { approvalStatus, approvalNote } = req.body;
+
+  if (!["approved", "rejected", "pending"].includes(approvalStatus)) {
+    res.status(400);
+    throw new Error("Invalid policy approval status");
+  }
+
+  const policy = await Policy.findByIdAndUpdate(
+    req.params.id,
+    {
+      approvalStatus,
+      approvalNote,
+      approvedBy: req.user?._id,
+      approvedAt: new Date(),
+      ...(approvalStatus === "approved" ? { status: "active" } : {})
+    },
+    { new: true, runValidators: true }
+  )
+    .populate("customer")
+    .populate("vehicle")
+    .populate("approvedBy", "name email role");
+
+  if (!policy) {
+    res.status(404);
+    throw new Error("Policy not found");
+  }
+
+  res.json(policy);
 });
 
 export const updatePolicy = asyncHandler(async (req, res) => {

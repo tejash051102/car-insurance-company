@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { encryptedString } from "../utils/fieldCrypto.js";
 
 const policySchema = new mongoose.Schema(
   {
@@ -46,9 +47,20 @@ const policySchema = new mongoose.Schema(
       enum: ["active", "expired", "cancelled", "pending"],
       default: "pending"
     },
-    notes: String
+    approvalStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending"
+    },
+    approvalNote: String,
+    approvedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    },
+    approvedAt: Date,
+    notes: encryptedString()
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { getters: true }, toObject: { getters: true } }
 );
 
 const Policy = mongoose.model("Policy", policySchema);

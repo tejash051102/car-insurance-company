@@ -1,5 +1,18 @@
+<<<<<<< HEAD
 const hasSmtpConfig = () =>
   process.env.SMTP_HOST && process.env.SMTP_PORT && process.env.SMTP_USER && process.env.SMTP_PASS;
+=======
+const isPlaceholder = (value = "") =>
+  ["yourgmail@gmail.com", "your_google_app_password", "your-email@gmail.com"].includes(value.trim().toLowerCase());
+
+const hasSmtpConfig = () =>
+  process.env.SMTP_HOST &&
+  process.env.SMTP_PORT &&
+  process.env.SMTP_USER &&
+  process.env.SMTP_PASS &&
+  !isPlaceholder(process.env.SMTP_USER) &&
+  !isPlaceholder(process.env.SMTP_PASS);
+>>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
 
 export const sendEmail = async ({ to, subject, text }) => {
   if (!to) {
@@ -17,6 +30,13 @@ export const sendEmail = async ({ to, subject, text }) => {
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT),
     secure: process.env.SMTP_SECURE === "true",
+<<<<<<< HEAD
+=======
+    family: 4,
+    connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 8000),
+    greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT || 8000),
+    socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT || 10000),
+>>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS

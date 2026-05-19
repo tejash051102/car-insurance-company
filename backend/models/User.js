@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
+import { encryptedString } from "../utils/fieldCrypto.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -15,6 +16,11 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true
     },
+    phone: encryptedString(),
+    avatarUrl: {
+      type: String,
+      trim: true
+    },
     password: {
       type: String,
       required: true,
@@ -25,9 +31,69 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["admin", "agent", "manager"],
       default: "agent"
+    },
+    manager: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    },
+    isEmailVerified: {
+      type: Boolean,
+      default: false
+    },
+    emailVerificationToken: {
+      type: String,
+      select: false
+    },
+    emailVerificationExpires: {
+      type: Date,
+      select: false
+    },
+    emailVerifiedAt: {
+      type: Date
+    },
+    passwordResetToken: {
+      type: String,
+      select: false
+    },
+    passwordResetExpires: {
+      type: Date,
+      select: false
+    },
+    passwordChangeOtpHash: {
+      type: String,
+      select: false
+    },
+    passwordChangeOtpExpires: {
+      type: Date,
+      select: false
+    },
+    mfaLoginOtpHash: {
+      type: String,
+      select: false
+    },
+    mfaLoginOtpExpires: {
+      type: Date,
+      select: false
+    },
+    failedLoginAttempts: {
+      type: Number,
+      default: 0
+    },
+    lockUntil: {
+      type: Date
+    },
+    lastLoginAt: {
+      type: Date
+    },
+    lastLoginIp: {
+      type: String
     }
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { getters: true }, toObject: { getters: true } }
 );
 
 userSchema.pre("save", async function hashPassword(next) {

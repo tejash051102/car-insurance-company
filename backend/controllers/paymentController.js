@@ -1,6 +1,10 @@
 import asyncHandler from "express-async-handler";
 import Payment from "../models/Payment.js";
 import Policy from "../models/Policy.js";
+<<<<<<< HEAD
+=======
+import { sendCsv } from "../utils/csvExporter.js";
+>>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
 import { createInvoicePdf } from "../utils/invoiceGenerator.js";
 import { getPagination, sendPaginated } from "../utils/pagination.js";
 
@@ -39,6 +43,26 @@ export const getPaymentById = asyncHandler(async (req, res) => {
   }
 
   res.json(payment);
+});
+
+export const exportPayments = asyncHandler(async (req, res) => {
+  const payments = await Payment.find().populate("customer").populate("policy").sort({ paymentDate: -1 });
+
+  sendCsv(
+    res,
+    "payments.csv",
+    [
+      { label: "Payment Number", value: (payment) => payment.paymentNumber },
+      { label: "Policy", value: (payment) => payment.policy?.policyNumber },
+      { label: "Customer", value: (payment) => payment.customer?.fullName },
+      { label: "Amount", value: (payment) => payment.amount },
+      { label: "Method", value: (payment) => payment.method },
+      { label: "Status", value: (payment) => payment.status },
+      { label: "Payment Date", value: (payment) => payment.paymentDate?.toISOString().slice(0, 10) },
+      { label: "Transaction ID", value: (payment) => payment.transactionId }
+    ],
+    payments
+  );
 });
 
 export const createPayment = asyncHandler(async (req, res) => {

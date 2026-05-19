@@ -45,6 +45,12 @@ const claimSchema = new mongoose.Schema(
       type: String,
       required: true
     },
+    decisionNote: String,
+    decidedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    },
+    decidedAt: Date,
     documentUrl: String
   },
   { timestamps: true }
