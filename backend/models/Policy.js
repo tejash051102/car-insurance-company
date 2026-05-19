@@ -47,6 +47,17 @@ const policySchema = new mongoose.Schema(
       enum: ["active", "expired", "cancelled", "pending"],
       default: "pending"
     },
+    approvalStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending"
+    },
+    approvalNote: String,
+    approvedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    },
+    approvedAt: Date,
     notes: encryptedString()
   },
   { timestamps: true, toJSON: { getters: true }, toObject: { getters: true } }

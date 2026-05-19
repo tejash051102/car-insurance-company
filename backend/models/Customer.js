@@ -100,7 +100,18 @@ const customerSchema = new mongoose.Schema(
         scanMessage: {
           type: String,
           default: "Document queued for malware scan simulation"
-        }
+        },
+        verificationStatus: {
+          type: String,
+          enum: ["pending", "verified", "rejected", "needs-reupload"],
+          default: "pending"
+        },
+        verificationNote: String,
+        verifiedBy: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User"
+        },
+        verifiedAt: Date
       }
     ],
     createdBy: {

@@ -7,6 +7,7 @@ import {
   getCustomers,
   resendCustomerOtp,
   updateCustomer,
+  updateDocumentVerification,
   uploadCustomerDocuments,
   verifyCustomerOtp
 } from "../controllers/customerController.js";
@@ -18,6 +19,7 @@ const router = express.Router();
 router.route("/").get(protect, getCustomers).post(protect, createCustomer);
 router.get("/export/csv", protect, authorize("admin", "manager"), exportCustomers);
 router.post("/:id/documents", protect, upload.array("documents", 5), uploadCustomerDocuments);
+router.patch("/:id/documents/:documentId/verification", protect, authorize("admin", "manager"), updateDocumentVerification);
 router.post("/:id/send-otp", protect, resendCustomerOtp);
 router.post("/:id/verify-otp", protect, verifyCustomerOtp);
 router

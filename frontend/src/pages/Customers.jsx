@@ -162,6 +162,22 @@ const Customers = () => {
     }
   };
 
+  const updateDocumentVerification = async (documentId, status) => {
+    if (!documentCustomer) return;
+
+    setError("");
+    try {
+      const { data } = await api.patch(`/customers/${documentCustomer._id}/documents/${documentId}/verification`, {
+        status,
+        note: `Marked ${status} from customer document review`
+      });
+      setDocumentCustomer(data);
+      await loadCustomers();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   const openVerification = (customer) => {
     setVerificationCustomer(customer);
     setCustomerOtp("");
@@ -386,7 +402,8 @@ const Customers = () => {
 
           <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
             {(documentCustomer.documents || []).map((document) => (
-              <a key={document._id || document.url} className="rounded-md border border-slate-200 bg-white px-3 py-3 text-sm hover:border-brand" href={getAssetUrl(document.url)} target="_blank" rel="noreferrer">
+              <article key={document._id || document.url} className="rounded-md border border-white/10 bg-white/5 px-3 py-3 text-sm">
+                <a href={getAssetUrl(document.url)} target="_blank" rel="noreferrer">
                 <span className="flex items-center gap-2 font-semibold text-ink">
                   <FileText size={16} />
                   {document.label || "Document"}
@@ -401,8 +418,23 @@ const Customers = () => {
                 }`}>
                   {document.scanStatus || "scanned"}
                 </span>
+                <span className="ml-2 mt-2 inline-flex rounded-full bg-purple-500/15 px-2 py-1 text-xs font-bold text-purple-200">
+                  {document.verificationStatus || "pending"}
+                </span>
                 {document.scanMessage ? <span className="mt-1 block text-xs text-slate-500">{document.scanMessage}</span> : null}
-              </a>
+                </a>
+                {canManage ? (
+                  <select
+                    className="field mt-3"
+                    value={document.verificationStatus || "pending"}
+                    onChange={(event) => updateDocumentVerification(document._id, event.target.value)}
+                  >
+                    {["pending", "verified", "rejected", "needs-reupload"].map((status) => (
+                      <option key={status} value={status}>{status}</option>
+                    ))}
+                  </select>
+                ) : null}
+              </article>
             ))}
             {!documentCustomer.documents?.length ? <p className="text-sm text-slate-500">No documents uploaded yet.</p> : null}
           </div>

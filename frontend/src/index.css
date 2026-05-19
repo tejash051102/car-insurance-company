@@ -251,6 +251,36 @@ textarea {
     --page-art: url("/module-art/security.svg");
   }
 
+  .page-intelligence {
+    --page-accent: 34, 211, 238;
+    --page-accent-2: 168, 85, 247;
+    --page-art: url("/module-art/claims.svg");
+  }
+
+  .page-tickets {
+    --page-accent: 20, 184, 166;
+    --page-accent-2: 59, 130, 246;
+    --page-art: url("/module-art/customers.svg");
+  }
+
+  .page-notifications {
+    --page-accent: 251, 191, 36;
+    --page-accent-2: 236, 72, 153;
+    --page-art: url("/module-art/activities.svg");
+  }
+
+  .page-reports {
+    --page-accent: 96, 165, 250;
+    --page-accent-2: 52, 211, 153;
+    --page-art: url("/module-art/rbac.svg");
+  }
+
+  .page-backups {
+    --page-accent: 248, 113, 113;
+    --page-accent-2: 129, 140, 248;
+    --page-art: url("/module-art/security.svg");
+  }
+
   .page-rbac {
     --page-accent: 59, 130, 246;
     --page-accent-2: 168, 85, 247;

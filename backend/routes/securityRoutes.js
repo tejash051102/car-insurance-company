@@ -3,7 +3,8 @@ import {
   getLoginHistory,
   getRbacReport,
   getSecurityAlerts,
-  getSecurityOverview
+  getSecurityOverview,
+  getSecurityScores
 } from "../controllers/securityController.js";
 import { authorize, protect } from "../middleware/authMiddleware.js";
 
@@ -13,5 +14,6 @@ router.get("/overview", protect, authorize("admin", "manager"), getSecurityOverv
 router.get("/login-history", protect, authorize("admin", "manager"), getLoginHistory);
 router.get("/alerts", protect, authorize("admin", "manager"), getSecurityAlerts);
 router.get("/rbac-report", protect, authorize("admin", "manager"), getRbacReport);
+router.get("/scores", protect, authorize("admin", "manager"), getSecurityScores);
 
 export default router;

@@ -11,6 +11,11 @@ import {
   sendCustomerPasswordOtp,
   updateCustomerProfile
 } from "../controllers/customerPortalController.js";
+import {
+  createCustomerTicket,
+  getCustomerTickets,
+  replyCustomerTicket
+} from "../controllers/ticketController.js";
 import { protectCustomer } from "../middleware/customerAuthMiddleware.js";
 import { authRateLimit } from "../middleware/securityMiddleware.js";
 import { upload } from "../middleware/uploadMiddleware.js";
@@ -25,6 +30,8 @@ router.get("/policies", protectCustomer, getCustomerPolicies);
 router.get("/claims", protectCustomer, getCustomerClaims);
 router.post("/claims", protectCustomer, createCustomerClaim);
 router.get("/payments", protectCustomer, getCustomerPayments);
+router.route("/tickets").get(protectCustomer, getCustomerTickets).post(protectCustomer, createCustomerTicket);
+router.patch("/tickets/:id/reply", protectCustomer, replyCustomerTicket);
 router.get("/policies/:id/pdf", protectCustomer, downloadCustomerPolicyPdf);
 router.get("/payments/:id/invoice", protectCustomer, downloadCustomerPaymentInvoice);
 

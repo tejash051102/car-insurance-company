@@ -13,14 +13,19 @@ const cardMeta = [
 
 const SecurityCenter = () => {
   const [overview, setOverview] = useState(null);
+  const [scores, setScores] = useState(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
     const loadOverview = async () => {
       setError("");
       try {
-        const { data } = await api.get("/security/overview");
-        setOverview(data);
+        const [overviewResponse, scoreResponse] = await Promise.all([
+          api.get("/security/overview"),
+          api.get("/security/scores")
+        ]);
+        setOverview(overviewResponse.data);
+        setScores(scoreResponse.data);
       } catch (err) {
         setError(err.message);
       }
@@ -99,6 +104,39 @@ const SecurityCenter = () => {
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="panel p-5">
+        <div className="mb-4 flex items-center gap-2">
+          <ShieldCheck size={18} className="text-brand" />
+          <h3 className="font-bold text-ink">Cyber Security Score</h3>
+        </div>
+        <div className="mb-4 grid gap-3 md:grid-cols-2">
+          <div className="rounded-md border border-white/10 bg-white/5 p-4">
+            <p className="text-3xl font-bold text-ink">{scores?.average ?? 100}%</p>
+            <p className="text-sm text-slate-500">Average score</p>
+          </div>
+          <div className="rounded-md border border-white/10 bg-white/5 p-4">
+            <p className="text-3xl font-bold text-ink">{scores?.risky ?? 0}</p>
+            <p className="text-sm text-slate-500">Risk accounts</p>
+          </div>
+        </div>
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+          {(scores?.scores || []).slice(0, 9).map((item) => (
+            <article key={`${item.model}-${item._id}`} className="rounded-md border border-white/10 bg-white/5 p-4">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="font-semibold text-ink">{item.name}</p>
+                  <p className="text-xs text-slate-500">{item.role} • {item.email}</p>
+                </div>
+                <span className={`rounded-full px-2 py-1 text-xs font-bold ${item.score < 55 ? "bg-red-500/15 text-red-200" : item.score < 80 ? "bg-amber-500/15 text-amber-200" : "bg-emerald-500/15 text-emerald-200"}`}>
+                  {item.score}%
+                </span>
+              </div>
+              <p className="mt-2 text-xs text-slate-500">Failed {item.failed} • Suspicious {item.suspicious} • Alerts {item.criticalAlerts}</p>
+            </article>
+          ))}
         </div>
       </section>
 

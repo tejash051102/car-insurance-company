@@ -107,11 +107,45 @@ export const exportPolicies = asyncHandler(async (req, res) => {
 export const createPolicy = asyncHandler(async (req, res) => {
   const policy = await Policy.create({
     ...req.body,
-    policyNumber: req.body.policyNumber || generatePolicyNumber()
+    policyNumber: req.body.policyNumber || generatePolicyNumber(),
+    approvalStatus: req.user?.role === "admin" ? "approved" : "pending",
+    approvedBy: req.user?.role === "admin" ? req.user._id : undefined,
+    approvedAt: req.user?.role === "admin" ? new Date() : undefined
   });
 
   const populatedPolicy = await policy.populate(["customer", "vehicle"]);
   res.status(201).json(populatedPolicy);
+});
+
+export const approvePolicy = asyncHandler(async (req, res) => {
+  const { approvalStatus, approvalNote } = req.body;
+
+  if (!["approved", "rejected", "pending"].includes(approvalStatus)) {
+    res.status(400);
+    throw new Error("Invalid policy approval status");
+  }
+
+  const policy = await Policy.findByIdAndUpdate(
+    req.params.id,
+    {
+      approvalStatus,
+      approvalNote,
+      approvedBy: req.user?._id,
+      approvedAt: new Date(),
+      ...(approvalStatus === "approved" ? { status: "active" } : {})
+    },
+    { new: true, runValidators: true }
+  )
+    .populate("customer")
+    .populate("vehicle")
+    .populate("approvedBy", "name email role");
+
+  if (!policy) {
+    res.status(404);
+    throw new Error("Policy not found");
+  }
+
+  res.json(policy);
 });
 
 export const updatePolicy = asyncHandler(async (req, res) => {

@@ -87,3 +87,54 @@ export const getRbacReport = asyncHandler(async (_req, res) => {
     ]
   });
 });
+
+export const getSecurityScores = asyncHandler(async (_req, res) => {
+  const [users, customers, histories, alerts] = await Promise.all([
+    User.find().select("name email role failedLoginAttempts lockUntil isEmailVerified lastLoginAt").sort({ role: 1, name: 1 }),
+    Customer.find().select("firstName lastName email failedLoginAttempts lockUntil contactVerified lastLoginAt").sort({ firstName: 1 }),
+    LoginHistory.find().sort({ createdAt: -1 }).limit(500),
+    SecurityAlert.find({ resolved: false }).sort({ createdAt: -1 }).limit(500)
+  ]);
+
+  const scoreUser = (entity, model) => {
+    const entityHistories = histories.filter((history) => String(history.user) === String(entity._id) && history.userModel === model);
+    const entityAlerts = alerts.filter((alert) => String(alert.user) === String(entity._id) && alert.userModel === model);
+    const failed = entityHistories.filter((history) => ["failed", "locked"].includes(history.status)).length;
+    const suspicious = entityHistories.filter((history) => history.suspicious).length;
+    const criticalAlerts = entityAlerts.filter((alert) => ["high", "critical"].includes(alert.severity)).length;
+
+    let score = 100;
+    score -= Math.min(failed * 5, 25);
+    score -= Math.min(suspicious * 8, 24);
+    score -= Math.min(criticalAlerts * 12, 36);
+    if (entity.lockUntil && entity.lockUntil > new Date()) score -= 25;
+    if (model === "User" && !entity.isEmailVerified) score -= 8;
+    if (model === "Customer" && !entity.contactVerified) score -= 8;
+
+    const finalScore = Math.max(score, 0);
+    return {
+      _id: entity._id,
+      name: entity.name || entity.fullName,
+      email: entity.email,
+      role: entity.role || "customer",
+      model,
+      score: finalScore,
+      grade: finalScore >= 80 ? "Strong" : finalScore >= 55 ? "Watch" : "Risk",
+      failed,
+      suspicious,
+      criticalAlerts,
+      locked: Boolean(entity.lockUntil && entity.lockUntil > new Date())
+    };
+  };
+
+  const scores = [
+    ...users.map((user) => scoreUser(user, "User")),
+    ...customers.map((customer) => scoreUser(customer, "Customer"))
+  ].sort((a, b) => a.score - b.score);
+
+  res.json({
+    average: scores.length ? Math.round(scores.reduce((sum, item) => sum + item.score, 0) / scores.length) : 100,
+    risky: scores.filter((item) => item.score < 55).length,
+    scores
+  });
+});

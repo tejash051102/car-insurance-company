@@ -1,10 +1,15 @@
 import {
   BadgeIndianRupee,
+  Bell,
+  BrainCircuit,
   ClipboardCheck,
+  DatabaseBackup,
   Gauge,
   History,
   LockKeyhole,
   FileCheck2,
+  FileText,
+  MessageSquare,
   ShieldCheck,
   Users,
   UserRound,
@@ -14,7 +19,7 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import { canManageRecords } from "../utils/auth.js";
+import { canManageRecords, getCurrentUser } from "../utils/auth.js";
 
 const items = [
   { label: "AI Dashboard", to: "/", icon: Gauge },
@@ -24,9 +29,14 @@ const items = [
   { label: "Policies", to: "/policies", icon: ShieldCheck },
   { label: "Claims", to: "/claims", icon: ClipboardCheck },
   { label: "Payments", to: "/payments", icon: BadgeIndianRupee },
+  { label: "AI & Fraud", to: "/intelligence", icon: BrainCircuit, managerOnly: true },
+  { label: "Tickets", to: "/tickets", icon: MessageSquare },
+  { label: "Notifications", to: "/notifications", icon: Bell },
+  { label: "Reports", to: "/reports", icon: FileText, managerOnly: true },
   { label: "Audit Logs", to: "/activities", icon: History, managerOnly: true },
   { label: "Security", to: "/security", icon: LockKeyhole, managerOnly: true },
   { label: "RBAC Report", to: "/rbac-report", icon: FileCheck2, managerOnly: true },
+  { label: "Backups", to: "/backups", icon: DatabaseBackup, adminOnly: true },
 ];
 
 const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
@@ -64,7 +74,7 @@ const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
     {/* Nav */}
     <nav className={`flex-1 space-y-0.5 overflow-y-auto py-4 ${isExpanded ? "px-3" : "px-2"}`}>
       {items
-        .filter((item) => !item.managerOnly || canManageRecords())
+        .filter((item) => (!item.managerOnly || canManageRecords()) && (!item.adminOnly || getCurrentUser()?.role === "admin"))
         .map((item) => (
           <NavLink
             key={item.to}

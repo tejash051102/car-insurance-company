@@ -20,6 +20,11 @@ import SecurityCenter from "./pages/SecurityCenter.jsx";
 import VerifyEmail from "./pages/VerifyEmail.jsx";
 import Vehicles from "./pages/Vehicles.jsx";
 import Activities from "./pages/Activities.jsx";
+import BackupCenter from "./pages/BackupCenter.jsx";
+import Intelligence from "./pages/Intelligence.jsx";
+import Notifications from "./pages/Notifications.jsx";
+import Reports from "./pages/Reports.jsx";
+import Tickets from "./pages/Tickets.jsx";
 import { clearAuthUser, saveAuthUser } from "./utils/authStorage.js";
 
 const moduleMeta = {
@@ -46,6 +51,21 @@ const moduleMeta = {
   },
   "/security": {
     className: "page-security"
+  },
+  "/intelligence": {
+    className: "page-intelligence"
+  },
+  "/tickets": {
+    className: "page-tickets"
+  },
+  "/notifications": {
+    className: "page-notifications"
+  },
+  "/reports": {
+    className: "page-reports"
+  },
+  "/backups": {
+    className: "page-backups"
   },
   "/rbac-report": {
     className: "page-rbac"
@@ -84,6 +104,11 @@ const AppLayout = ({ onLogout }) => {
               <Route path="/payments" element={<Payments />} />
               <Route path="/activities" element={<Activities />} />
               <Route path="/security" element={<SecurityCenter />} />
+              <Route path="/intelligence" element={<Intelligence />} />
+              <Route path="/tickets" element={<Tickets />} />
+              <Route path="/notifications" element={<Notifications />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/backups" element={<BackupCenter />} />
               <Route path="/rbac-report" element={<RbacReport />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="*" element={<Navigate to="/" replace />} />

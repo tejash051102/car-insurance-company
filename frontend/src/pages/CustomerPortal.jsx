@@ -32,7 +32,9 @@ const CustomerPortal = () => {
   const [policies, setPolicies] = useState([]);
   const [claims, setClaims] = useState([]);
   const [payments, setPayments] = useState([]);
+  const [tickets, setTickets] = useState([]);
   const [claimForm, setClaimForm] = useState(emptyClaim);
+  const [ticketForm, setTicketForm] = useState({ subject: "", category: "general", priority: "medium", message: "" });
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
@@ -55,14 +57,16 @@ const CustomerPortal = () => {
     setError("");
 
     try {
-      const [policiesResponse, claimsResponse, paymentsResponse] = await Promise.all([
+      const [policiesResponse, claimsResponse, paymentsResponse, ticketResponse] = await Promise.all([
         api.get("/customer-portal/policies"),
         api.get("/customer-portal/claims"),
-        api.get("/customer-portal/payments")
+        api.get("/customer-portal/payments"),
+        api.get("/customer-portal/tickets")
       ]);
       setPolicies(policiesResponse.data || []);
       setClaims(claimsResponse.data || []);
       setPayments(paymentsResponse.data || []);
+      setTickets(ticketResponse.data || []);
     } catch (err) {
       setError(err.message);
     }
@@ -154,6 +158,24 @@ const CustomerPortal = () => {
       });
       setClaimForm(emptyClaim);
       setNotice("Claim submitted successfully");
+      await loadPortal();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const submitTicket = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    setError("");
+    setNotice("");
+
+    try {
+      await api.post("/customer-portal/tickets", ticketForm);
+      setTicketForm({ subject: "", category: "general", priority: "medium", message: "" });
+      setNotice("Support ticket created successfully");
       await loadPortal();
     } catch (err) {
       setError(err.message);
@@ -336,6 +358,27 @@ const CustomerPortal = () => {
           </form>
         </section>
 
+        <section className="panel p-5">
+          <div className="mb-4 flex items-center gap-2">
+            <Plus size={20} className="text-cyan-300" />
+            <h2 className="text-lg font-bold text-ink">Support Ticket</h2>
+          </div>
+          <form onSubmit={submitTicket} className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <input className="field xl:col-span-2" value={ticketForm.subject} onChange={(event) => setTicketForm((current) => ({ ...current, subject: event.target.value }))} placeholder="Ticket subject" required />
+            <select className="field" value={ticketForm.category} onChange={(event) => setTicketForm((current) => ({ ...current, category: event.target.value }))}>
+              {["policy", "claim", "payment", "document", "security", "general"].map((item) => <option key={item} value={item}>{item}</option>)}
+            </select>
+            <select className="field" value={ticketForm.priority} onChange={(event) => setTicketForm((current) => ({ ...current, priority: event.target.value }))}>
+              {["low", "medium", "high", "urgent"].map((item) => <option key={item} value={item}>{item}</option>)}
+            </select>
+            <textarea className="field md:col-span-2 xl:col-span-4" value={ticketForm.message} onChange={(event) => setTicketForm((current) => ({ ...current, message: event.target.value }))} placeholder="Write your request" rows="3" required />
+            <button className="btn-primary" type="submit" disabled={loading}>
+              <Plus size={16} />
+              {loading ? "Creating..." : "Create ticket"}
+            </button>
+          </form>
+        </section>
+
         <div className="grid gap-6 xl:grid-cols-2">
           <section className="panel p-5">
             <div className="mb-4 flex items-center gap-2">
@@ -356,6 +399,28 @@ const CustomerPortal = () => {
                 </div>
               ))}
               {!claims.length ? <p className="text-sm text-slate-500">No claims submitted yet.</p> : null}
+            </div>
+          </section>
+
+          <section className="panel p-5">
+            <div className="mb-4 flex items-center gap-2">
+              <ClipboardCheck size={20} className="text-cyan-300" />
+              <h2 className="text-lg font-bold text-ink">My Tickets</h2>
+            </div>
+            <div className="space-y-3">
+              {tickets.map((ticket) => (
+                <div key={ticket._id} className="rounded-md border border-slate-200 p-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="font-semibold text-ink">{ticket.ticketNumber}</p>
+                      <p className="text-xs text-slate-500">{ticket.subject} · {ticket.category}</p>
+                    </div>
+                    <span className={`rounded-full px-2 py-1 text-xs font-bold capitalize ${statusClass(ticket.status)}`}>{ticket.status}</span>
+                  </div>
+                  <p className="mt-2 text-sm text-slate-500">{ticket.messages?.at(-1)?.message}</p>
+                </div>
+              ))}
+              {!tickets.length ? <p className="text-sm text-slate-500">No support tickets yet.</p> : null}
             </div>
           </section>
 

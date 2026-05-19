@@ -18,6 +18,11 @@ import dashboardRoutes from "./routes/dashboardRoutes.js";
 import activityRoutes from "./routes/activityRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import securityRoutes from "./routes/securityRoutes.js";
+import intelligenceRoutes from "./routes/intelligenceRoutes.js";
+import ticketRoutes from "./routes/ticketRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js";
+import reportRoutes from "./routes/reportRoutes.js";
+import backupRoutes from "./routes/backupRoutes.js";
 
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import { authRateLimit, securityHeaders } from "./middleware/securityMiddleware.js";
@@ -84,6 +89,11 @@ const startServer = async () => {
     app.use("/api/activities", activityRoutes);
     app.use("/api/users", userRoutes);
     app.use("/api/security", securityRoutes);
+    app.use("/api/intelligence", intelligenceRoutes);
+    app.use("/api/tickets", ticketRoutes);
+    app.use("/api/notifications", notificationRoutes);
+    app.use("/api/reports", reportRoutes);
+    app.use("/api/backups", backupRoutes);
 
     // Backward-compatible aliases for clients configured without the /api prefix.
     app.use("/auth", authRateLimit, authRoutes);
@@ -97,6 +107,11 @@ const startServer = async () => {
     app.use("/activities", activityRoutes);
     app.use("/users", userRoutes);
     app.use("/security", securityRoutes);
+    app.use("/intelligence", intelligenceRoutes);
+    app.use("/tickets", ticketRoutes);
+    app.use("/notifications", notificationRoutes);
+    app.use("/reports", reportRoutes);
+    app.use("/backups", backupRoutes);
 
     app.use(notFound);
     app.use(errorHandler);

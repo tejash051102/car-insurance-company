@@ -257,6 +257,47 @@ export const uploadCustomerDocuments = asyncHandler(async (req, res) => {
   res.status(201).json(customer);
 });
 
+export const updateDocumentVerification = asyncHandler(async (req, res) => {
+  const allowedStatuses = ["pending", "verified", "rejected", "needs-reupload"];
+  const { status, note } = req.body;
+
+  if (!allowedStatuses.includes(status)) {
+    res.status(400);
+    throw new Error("Invalid document verification status");
+  }
+
+  const filter = await getAccessibleCustomerFilter(req, { _id: req.params.id });
+  const customer = await Customer.findOne(filter);
+
+  if (!customer) {
+    res.status(404);
+    throw new Error("Customer not found");
+  }
+
+  const document = customer.documents.id(req.params.documentId);
+
+  if (!document) {
+    res.status(404);
+    throw new Error("Document not found");
+  }
+
+  document.verificationStatus = status;
+  document.verificationNote = note;
+  document.verifiedBy = req.user?._id;
+  document.verifiedAt = new Date();
+  await customer.save();
+
+  await logActivity({
+    req,
+    action: "verified",
+    entityType: "CustomerDocument",
+    entityId: customer._id,
+    message: `Marked ${document.originalName || document.label} as ${status}`
+  });
+
+  res.json(customer);
+});
+
 export const resendCustomerOtp = asyncHandler(async (req, res) => {
   const filter = await getAccessibleCustomerFilter(req, { _id: req.params.id });
   const customer = await Customer.findOne(filter).select("+contactVerificationOtpHash +contactVerificationExpires");
