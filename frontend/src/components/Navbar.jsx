@@ -1,4 +1,4 @@
-import { LogOut, Menu, Search, UserCircle } from "lucide-react";
+import { Bell, LogOut, Menu, Search, UserCircle, UserRound } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Navbar = ({ onLogout, onMenuClick }) => {
@@ -24,6 +24,23 @@ const Navbar = ({ onLogout, onMenuClick }) => {
       </div>
 
       <div className="flex items-center gap-3">
+        <Link
+          to="/customer-login"
+          className="flex h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/5 text-purple-200 shadow-sm transition hover:border-purple-300/40 hover:bg-purple-400/10 hover:text-white"
+          aria-label="Open customer portal login"
+          title="Customer Portal"
+        >
+          <UserRound size={18} className="text-purple-200" />
+        </Link>
+        <Link
+          to="/notifications"
+          className="relative flex h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/5 text-purple-200 shadow-sm transition hover:border-purple-300/40 hover:bg-purple-400/10 hover:text-white"
+          aria-label="Open notifications"
+          title="Notifications"
+        >
+          <Bell size={18} className="text-purple-200" />
+          <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-amber-300 shadow-[0_0_12px_rgba(251,191,36,0.75)]" />
+        </Link>
         <Link
           to="/profile"
           className="flex h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/5 text-purple-200 shadow-sm transition hover:border-purple-300/40 hover:bg-purple-400/10 hover:text-white"
