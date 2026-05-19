@@ -1,6 +1,9 @@
-import { BadgeIndianRupee, Edit3, Plus, Trash2 } from "lucide-react";
+import { BadgeIndianRupee, Download, Edit3, Plus, Search, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import api from "../api/axios.js";
+import Pagination from "../components/Pagination.jsx";
+import { getItems, getMeta } from "../utils/apiData.js";
+import { isAdminUser } from "../utils/auth.js";
 
 const emptyForm = {
   policy: "",
@@ -24,18 +27,22 @@ const Payments = () => {
   const [policies, setPolicies] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState("");
+  const [search, setSearch] = useState("");
+  const [meta, setMeta] = useState({ page: 1, pages: 1, total: 0 });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const isAdmin = isAdminUser();
 
-  const loadData = async () => {
+  const loadData = async (page = 1, term = search) => {
     setError("");
     try {
       const [paymentsResponse, policiesResponse] = await Promise.all([
-        api.get("/payments"),
-        api.get("/policies")
+        api.get("/payments", { params: { page, limit: 10, ...(term ? { search: term } : {}) } }),
+        api.get("/policies", { params: { limit: 100 } })
       ]);
-      setPayments(paymentsResponse.data);
-      setPolicies(policiesResponse.data);
+      setPayments(getItems(paymentsResponse.data));
+      setMeta(getMeta(paymentsResponse.data));
+      setPolicies(getItems(policiesResponse.data));
     } catch (err) {
       setError(err.message);
     }
@@ -105,11 +112,39 @@ const Payments = () => {
     }
   };
 
+  const downloadInvoice = async (payment) => {
+    try {
+      const response = await api.get(`/payments/${payment._id}/invoice`, { responseType: "blob" });
+      const url = URL.createObjectURL(response.data);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${payment.paymentNumber}-invoice.pdf`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <div>
-        <p className="label">Premium collection</p>
-        <h2 className="mt-1 text-2xl font-bold text-ink">Payments</h2>
+      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+        <div>
+          <p className="label">Premium collection</p>
+          <h2 className="mt-1 text-2xl font-bold text-ink">Payments</h2>
+        </div>
+        <form
+          className="flex w-full gap-2 sm:w-auto"
+          onSubmit={(event) => {
+            event.preventDefault();
+            loadData(1, search);
+          }}
+        >
+          <input className="field" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search payment" />
+          <button className="btn-secondary" type="submit" aria-label="Search payments">
+            <Search size={16} />
+          </button>
+        </form>
       </div>
 
       {error ? <div className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
@@ -190,9 +225,14 @@ const Payments = () => {
                       <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => editPayment(payment)} aria-label="Edit payment">
                         <Edit3 size={15} />
                       </button>
-                      <button className="btn-danger h-9 w-9 px-0" type="button" onClick={() => deletePayment(payment._id)} aria-label="Delete payment">
-                        <Trash2 size={15} />
+                      <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => downloadInvoice(payment)} aria-label="Download invoice">
+                        <Download size={15} />
                       </button>
+                      {isAdmin ? (
+                        <button className="btn-danger h-9 w-9 px-0" type="button" onClick={() => deletePayment(payment._id)} aria-label="Delete payment">
+                          <Trash2 size={15} />
+                        </button>
+                      ) : null}
                     </div>
                   </td>
                 </tr>
@@ -207,6 +247,7 @@ const Payments = () => {
             </tbody>
           </table>
         </div>
+        <Pagination meta={meta} onPageChange={(page) => loadData(page, search)} />
       </section>
     </div>
   );

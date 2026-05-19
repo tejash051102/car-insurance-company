@@ -1,6 +1,9 @@
-import { Download, Edit3, Plus, ShieldCheck, Trash2 } from "lucide-react";
+import { Bell, Download, Edit3, Plus, Search, ShieldCheck, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import api from "../api/axios.js";
+import Pagination from "../components/Pagination.jsx";
+import { getItems, getMeta } from "../utils/apiData.js";
+import { isAdminUser } from "../utils/auth.js";
 
 const emptyForm = {
   customer: "",
@@ -28,20 +31,25 @@ const Policies = () => {
   const [vehicles, setVehicles] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState("");
+  const [search, setSearch] = useState("");
+  const [meta, setMeta] = useState({ page: 1, pages: 1, total: 0 });
+  const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const isAdmin = isAdminUser();
 
-  const loadData = async () => {
+  const loadData = async (page = 1, term = search) => {
     setError("");
     try {
       const [policiesResponse, customersResponse, vehiclesResponse] = await Promise.all([
-        api.get("/policies"),
-        api.get("/customers"),
-        api.get("/vehicles")
+        api.get("/policies", { params: { page, limit: 10, ...(term ? { search: term } : {}) } }),
+        api.get("/customers", { params: { limit: 100 } }),
+        api.get("/vehicles", { params: { limit: 100 } })
       ]);
-      setPolicies(policiesResponse.data);
-      setCustomers(customersResponse.data);
-      setVehicles(vehiclesResponse.data);
+      setPolicies(getItems(policiesResponse.data));
+      setMeta(getMeta(policiesResponse.data));
+      setCustomers(getItems(customersResponse.data));
+      setVehicles(getItems(vehiclesResponse.data));
     } catch (err) {
       setError(err.message);
     }
@@ -129,18 +137,52 @@ const Policies = () => {
     }
   };
 
+  const sendExpiryReminders = async () => {
+    setError("");
+    setNotice("");
+    try {
+      const { data } = await api.post("/policies/expiry-reminders", { days: 30 });
+      setNotice(`${data.message}: ${data.count} policies checked`);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   const filteredVehicles = form.customer
     ? vehicles.filter((vehicle) => vehicle.customer?._id === form.customer)
     : vehicles;
 
   return (
     <div className="space-y-6">
-      <div>
-        <p className="label">Policy administration</p>
-        <h2 className="mt-1 text-2xl font-bold text-ink">Policies</h2>
+      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+        <div>
+          <p className="label">Policy administration</p>
+          <h2 className="mt-1 text-2xl font-bold text-ink">Policies</h2>
+        </div>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <form
+            className="flex gap-2"
+            onSubmit={(event) => {
+              event.preventDefault();
+              loadData(1, search);
+            }}
+          >
+            <input className="field" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search policy" />
+            <button className="btn-secondary" type="submit" aria-label="Search policies">
+              <Search size={16} />
+            </button>
+          </form>
+          {isAdmin ? (
+            <button className="btn-secondary" type="button" onClick={sendExpiryReminders}>
+              <Bell size={16} />
+              Reminders
+            </button>
+          ) : null}
+        </div>
       </div>
 
       {error ? <div className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
+      {notice ? <div className="rounded-md bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{notice}</div> : null}
 
       <section className="panel p-5">
         <div className="mb-4 flex items-center gap-2">
@@ -228,9 +270,11 @@ const Policies = () => {
                       <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => editPolicy(policy)} aria-label="Edit policy">
                         <Edit3 size={15} />
                       </button>
-                      <button className="btn-danger h-9 w-9 px-0" type="button" onClick={() => deletePolicy(policy._id)} aria-label="Delete policy">
-                        <Trash2 size={15} />
-                      </button>
+                      {isAdmin ? (
+                        <button className="btn-danger h-9 w-9 px-0" type="button" onClick={() => deletePolicy(policy._id)} aria-label="Delete policy">
+                          <Trash2 size={15} />
+                        </button>
+                      ) : null}
                     </div>
                   </td>
                 </tr>
@@ -245,6 +289,7 @@ const Policies = () => {
             </tbody>
           </table>
         </div>
+        <Pagination meta={meta} onPageChange={(page) => loadData(page, search)} />
       </section>
     </div>
   );

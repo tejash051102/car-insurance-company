@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Vehicle from "../models/Vehicle.js";
 import Policy from "../models/Policy.js";
+import { getPagination, sendPaginated } from "../utils/pagination.js";
 
 export const getVehicles = asyncHandler(async (req, res) => {
   const keyword = req.query.search
@@ -13,8 +14,13 @@ export const getVehicles = asyncHandler(async (req, res) => {
       }
     : {};
 
-  const vehicles = await Vehicle.find(keyword).populate("customer").sort({ createdAt: -1 });
-  res.json(vehicles);
+  const { page, limit, skip } = getPagination(req.query);
+  await sendPaginated(
+    res,
+    Vehicle.find(keyword).populate("customer").sort({ createdAt: -1 }),
+    Vehicle.countDocuments(keyword),
+    { page, limit, skip }
+  );
 });
 
 export const getVehicleById = asyncHandler(async (req, res) => {

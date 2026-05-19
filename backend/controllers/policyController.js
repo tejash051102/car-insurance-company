@@ -2,18 +2,73 @@ import asyncHandler from "express-async-handler";
 import Policy from "../models/Policy.js";
 import Claim from "../models/Claim.js";
 import Payment from "../models/Payment.js";
+import { buildPolicyExpiryMessage, sendEmail } from "../utils/emailService.js";
+import { getPagination, sendPaginated } from "../utils/pagination.js";
 import { createPolicyPdf } from "../utils/pdfGenerator.js";
 
 const generatePolicyNumber = () => `POL-${Date.now().toString().slice(-8)}`;
 
 export const getPolicies = asyncHandler(async (req, res) => {
-  const filter = req.query.status ? { status: req.query.status } : {};
-  const policies = await Policy.find(filter)
+  const filter = {
+    ...(req.query.status ? { status: req.query.status } : {}),
+    ...(req.query.search
+      ? {
+          $or: [
+            { policyNumber: { $regex: req.query.search, $options: "i" } },
+            { type: { $regex: req.query.search, $options: "i" } },
+            { status: { $regex: req.query.search, $options: "i" } }
+          ]
+        }
+      : {})
+  };
+  const { page, limit, skip } = getPagination(req.query);
+
+  await sendPaginated(
+    res,
+    Policy.find(filter).populate("customer").populate("vehicle").sort({ createdAt: -1 }),
+    Policy.countDocuments(filter),
+    { page, limit, skip }
+  );
+});
+
+export const getExpiringPolicies = asyncHandler(async (req, res) => {
+  const days = Math.min(Math.max(Number(req.query.days) || 30, 1), 365);
+  const now = new Date();
+  const until = new Date();
+  until.setDate(now.getDate() + days);
+
+  const policies = await Policy.find({
+    status: { $in: ["active", "pending"] },
+    endDate: { $gte: now, $lte: until }
+  })
     .populate("customer")
     .populate("vehicle")
-    .sort({ createdAt: -1 });
+    .sort({ endDate: 1 });
 
   res.json(policies);
+});
+
+export const sendPolicyExpiryReminders = asyncHandler(async (req, res) => {
+  const days = Math.min(Math.max(Number(req.body.days || req.query.days) || 30, 1), 365);
+  const now = new Date();
+  const until = new Date();
+  until.setDate(now.getDate() + days);
+
+  const policies = await Policy.find({
+    status: { $in: ["active", "pending"] },
+    endDate: { $gte: now, $lte: until }
+  }).populate("customer");
+
+  const results = await Promise.all(
+    policies.map((policy) => sendEmail(buildPolicyExpiryMessage(policy)))
+  );
+
+  res.json({
+    message: "Policy expiry reminders processed",
+    count: policies.length,
+    sent: results.filter((result) => !result?.skipped).length,
+    skipped: results.filter((result) => result?.skipped).length
+  });
 });
 
 export const getPolicyById = asyncHandler(async (req, res) => {

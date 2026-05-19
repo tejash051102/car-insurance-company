@@ -1,6 +1,9 @@
-import { ClipboardCheck, Edit3, Plus, Trash2 } from "lucide-react";
+import { CheckCircle2, ClipboardCheck, Edit3, Plus, Search, ShieldAlert, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import api from "../api/axios.js";
+import Pagination from "../components/Pagination.jsx";
+import { getItems, getMeta } from "../utils/apiData.js";
+import { isAdminUser } from "../utils/auth.js";
 
 const emptyForm = {
   policy: "",
@@ -19,23 +22,41 @@ const formatCurrency = (amount = 0) =>
     maximumFractionDigits: 0
   }).format(amount);
 
+const nextActions = {
+  submitted: [
+    { label: "Review", status: "under-review", icon: ShieldAlert },
+    { label: "Reject", status: "rejected", danger: true }
+  ],
+  "under-review": [
+    { label: "Approve", status: "approved", icon: CheckCircle2 },
+    { label: "Reject", status: "rejected", danger: true }
+  ],
+  approved: [{ label: "Settle", status: "settled", icon: CheckCircle2 }],
+  rejected: [],
+  settled: []
+};
+
 const Claims = () => {
   const [claims, setClaims] = useState([]);
   const [policies, setPolicies] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState("");
+  const [search, setSearch] = useState("");
+  const [meta, setMeta] = useState({ page: 1, pages: 1, total: 0 });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const isAdmin = isAdminUser();
 
-  const loadData = async () => {
+  const loadData = async (page = 1, term = search) => {
     setError("");
     try {
       const [claimsResponse, policiesResponse] = await Promise.all([
-        api.get("/claims"),
-        api.get("/policies")
+        api.get("/claims", { params: { page, limit: 10, ...(term ? { search: term } : {}) } }),
+        api.get("/policies", { params: { limit: 100 } })
       ]);
-      setClaims(claimsResponse.data);
-      setPolicies(policiesResponse.data);
+      setClaims(getItems(claimsResponse.data));
+      setMeta(getMeta(claimsResponse.data));
+      setPolicies(getItems(policiesResponse.data));
     } catch (err) {
       setError(err.message);
     }
@@ -112,11 +133,43 @@ const Claims = () => {
     }
   };
 
+  const moveClaim = async (claim, status) => {
+    setError("");
+
+    const payload = { status };
+    if (status === "approved") {
+      const approvedAmount = window.prompt("Approved amount", claim.approvedAmount || claim.claimAmount || 0);
+      if (approvedAmount === null) return;
+      payload.approvedAmount = Number(approvedAmount);
+    }
+
+    try {
+      await api.patch(`/claims/${claim._id}/status`, payload);
+      await loadData(meta.page, search);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <div>
-        <p className="label">Claims workflow</p>
-        <h2 className="mt-1 text-2xl font-bold text-ink">Claims</h2>
+      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+        <div>
+          <p className="label">Claims workflow</p>
+          <h2 className="mt-1 text-2xl font-bold text-ink">Claims</h2>
+        </div>
+        <form
+          className="flex w-full gap-2 sm:w-auto"
+          onSubmit={(event) => {
+            event.preventDefault();
+            loadData(1, search);
+          }}
+        >
+          <input className="field" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search claim" />
+          <button className="btn-secondary" type="submit" aria-label="Search claims">
+            <Search size={16} />
+          </button>
+        </form>
       </div>
 
       {error ? <div className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
@@ -184,15 +237,37 @@ const Claims = () => {
                   <td className="px-4 py-3">{claim.policy?.policyNumber || "N/A"}</td>
                   <td className="px-4 py-3">{claim.customer?.fullName || "N/A"}</td>
                   <td className="px-4 py-3">{formatCurrency(claim.claimAmount)}</td>
-                  <td className="px-4 py-3 capitalize">{claim.status}</td>
+                  <td className="px-4 py-3">
+                    <p className="capitalize">{claim.status}</p>
+                    {claim.approvedAmount ? (
+                      <p className="text-xs text-slate-500">Approved {formatCurrency(claim.approvedAmount)}</p>
+                    ) : null}
+                  </td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
+                      {(nextActions[claim.status] || []).map((action) => {
+                        const Icon = action.icon;
+
+                        return (
+                          <button
+                            key={action.status}
+                            className={`${action.danger ? "btn-danger" : "btn-secondary"} h-9 px-3`}
+                            type="button"
+                            onClick={() => moveClaim(claim, action.status)}
+                          >
+                            {Icon ? <Icon size={15} /> : null}
+                            <span className="hidden xl:inline">{action.label}</span>
+                          </button>
+                        );
+                      })}
                       <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => editClaim(claim)} aria-label="Edit claim">
                         <Edit3 size={15} />
                       </button>
-                      <button className="btn-danger h-9 w-9 px-0" type="button" onClick={() => deleteClaim(claim._id)} aria-label="Delete claim">
-                        <Trash2 size={15} />
-                      </button>
+                      {isAdmin ? (
+                        <button className="btn-danger h-9 w-9 px-0" type="button" onClick={() => deleteClaim(claim._id)} aria-label="Delete claim">
+                          <Trash2 size={15} />
+                        </button>
+                      ) : null}
                     </div>
                   </td>
                 </tr>
@@ -207,6 +282,7 @@ const Claims = () => {
             </tbody>
           </table>
         </div>
+        <Pagination meta={meta} onPageChange={(page) => loadData(page, search)} />
       </section>
     </div>
   );
