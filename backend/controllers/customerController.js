@@ -66,22 +66,31 @@ const getAccessibleCustomerFilter = async (req, baseFilter = {}) => {
     return baseFilter;
   }
 
+  const withBaseFilter = (accessFilter) =>
+    Object.keys(baseFilter).length ? { $and: [baseFilter, accessFilter] } : accessFilter;
+
   if (req.user?.role === "manager") {
     const agents = await User.find({
       role: "agent",
       $or: [{ manager: req.user._id }, { createdBy: req.user._id }]
     }).select("_id");
 
-    return {
-      ...baseFilter,
-      createdBy: { $in: [req.user._id, ...agents.map((agent) => agent._id)] }
-    };
+    return withBaseFilter({
+      $or: [
+        { createdBy: { $in: [req.user._id, ...agents.map((agent) => agent._id)] } },
+        { createdBy: { $exists: false } },
+        { createdBy: null }
+      ]
+    });
   }
 
-  return {
-    ...baseFilter,
-    createdBy: req.user?._id
-  };
+  return withBaseFilter({
+    $or: [
+      { createdBy: req.user?._id },
+      { createdBy: { $exists: false } },
+      { createdBy: null }
+    ]
+  });
 };
 
 export const getCustomers = asyncHandler(async (req, res) => {
