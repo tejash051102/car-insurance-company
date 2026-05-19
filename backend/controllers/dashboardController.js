@@ -119,12 +119,8 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     policyStatus,
     claimStatus,
     monthlyRevenue,
-<<<<<<< HEAD
-    expiringPolicies
-=======
     expiringPolicies,
     hierarchy
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
   ] = await Promise.all([
     Customer.countDocuments(),
     Vehicle.countDocuments(),
@@ -157,12 +153,8 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     })
       .populate("customer")
       .sort({ endDate: 1 })
-<<<<<<< HEAD
-      .limit(5)
-=======
       .limit(5),
     getHierarchyStats(req.user)
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
   ]);
 
   res.json({
@@ -180,11 +172,7 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     policyStatus,
     claimStatus,
     monthlyRevenue,
-<<<<<<< HEAD
-    expiringPolicies
-=======
     expiringPolicies,
     hierarchy
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
   });
 });

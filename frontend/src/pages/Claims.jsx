@@ -1,18 +1,10 @@
-<<<<<<< HEAD
-import { CheckCircle2, ClipboardCheck, Edit3, Plus, Search, ShieldAlert, Trash2 } from "lucide-react";
-=======
 import { ClipboardCheck, Download, Edit3, Plus, Search, Stamp, Trash2 } from "lucide-react";
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
 import { useEffect, useState } from "react";
 import api from "../api/axios.js";
 import Pagination from "../components/Pagination.jsx";
 import { getItems, getMeta } from "../utils/apiData.js";
-<<<<<<< HEAD
-import { isAdminUser } from "../utils/auth.js";
-=======
 import { canManageRecords } from "../utils/auth.js";
 import { downloadReport } from "../utils/download.js";
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
 
 const emptyForm = {
   policy: "",
@@ -31,20 +23,6 @@ const formatCurrency = (amount = 0) =>
     maximumFractionDigits: 0
   }).format(amount);
 
-const nextActions = {
-  submitted: [
-    { label: "Review", status: "under-review", icon: ShieldAlert },
-    { label: "Reject", status: "rejected", danger: true }
-  ],
-  "under-review": [
-    { label: "Approve", status: "approved", icon: CheckCircle2 },
-    { label: "Reject", status: "rejected", danger: true }
-  ],
-  approved: [{ label: "Settle", status: "settled", icon: CheckCircle2 }],
-  rejected: [],
-  settled: []
-};
-
 const Claims = () => {
   const [claims, setClaims] = useState([]);
   const [policies, setPolicies] = useState([]);
@@ -54,14 +32,10 @@ const Claims = () => {
   const [meta, setMeta] = useState({ page: 1, pages: 1, total: 0 });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-<<<<<<< HEAD
-  const isAdmin = isAdminUser();
-=======
   const [decisionClaim, setDecisionClaim] = useState(null);
   const [decision, setDecision] = useState({ status: "approved", approvedAmount: "", decisionNote: "" });
   const [deciding, setDeciding] = useState(false);
   const canManage = canManageRecords();
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
 
   const loadData = async (page = 1, term = search) => {
     setError("");
@@ -149,23 +123,6 @@ const Claims = () => {
     }
   };
 
-<<<<<<< HEAD
-  const moveClaim = async (claim, status) => {
-    setError("");
-
-    const payload = { status };
-    if (status === "approved") {
-      const approvedAmount = window.prompt("Approved amount", claim.approvedAmount || claim.claimAmount || 0);
-      if (approvedAmount === null) return;
-      payload.approvedAmount = Number(approvedAmount);
-    }
-
-    try {
-      await api.patch(`/claims/${claim._id}/status`, payload);
-      await loadData(meta.page, search);
-    } catch (err) {
-      setError(err.message);
-=======
   const openDecision = (claim) => {
     setDecisionClaim(claim);
     setDecision({
@@ -194,7 +151,6 @@ const Claims = () => {
       setError(err.message);
     } finally {
       setDeciding(false);
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
     }
   };
 
@@ -205,32 +161,26 @@ const Claims = () => {
           <p className="label">Claims workflow</p>
           <h2 className="mt-1 text-2xl font-bold text-ink">Claims</h2>
         </div>
-<<<<<<< HEAD
-=======
         <div className="flex flex-col gap-2 sm:flex-row">
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
-        <form
-          className="flex w-full gap-2 sm:w-auto"
-          onSubmit={(event) => {
-            event.preventDefault();
-            loadData(1, search);
-          }}
-        >
-          <input className="field" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search claim" />
-          <button className="btn-secondary" type="submit" aria-label="Search claims">
-            <Search size={16} />
-          </button>
-        </form>
-<<<<<<< HEAD
-=======
-        {canManage ? (
-          <button className="btn-secondary" type="button" onClick={() => downloadReport("/claims/export/csv", "claims.csv")}>
-            <Download size={16} />
-            Export
-          </button>
-        ) : null}
+          <form
+            className="flex w-full gap-2 sm:w-auto"
+            onSubmit={(event) => {
+              event.preventDefault();
+              loadData(1, search);
+            }}
+          >
+            <input className="field" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search claim" />
+            <button className="btn-secondary" type="submit" aria-label="Search claims">
+              <Search size={16} />
+            </button>
+          </form>
+          {canManage ? (
+            <button className="btn-secondary" type="button" onClick={() => downloadReport("/claims/export/csv", "claims.csv")}>
+              <Download size={16} />
+              Export
+            </button>
+          ) : null}
         </div>
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
       </div>
 
       {error ? <div className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
@@ -306,27 +256,6 @@ const Claims = () => {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
-<<<<<<< HEAD
-                      {(nextActions[claim.status] || []).map((action) => {
-                        const Icon = action.icon;
-
-                        return (
-                          <button
-                            key={action.status}
-                            className={`${action.danger ? "btn-danger" : "btn-secondary"} h-9 px-3`}
-                            type="button"
-                            onClick={() => moveClaim(claim, action.status)}
-                          >
-                            {Icon ? <Icon size={15} /> : null}
-                            <span className="hidden xl:inline">{action.label}</span>
-                          </button>
-                        );
-                      })}
-                      <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => editClaim(claim)} aria-label="Edit claim">
-                        <Edit3 size={15} />
-                      </button>
-                      {isAdmin ? (
-=======
                       {canManage ? (
                         <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => openDecision(claim)} aria-label="Decide claim">
                           <Stamp size={15} />
@@ -336,7 +265,6 @@ const Claims = () => {
                         <Edit3 size={15} />
                       </button>
                       {canManage ? (
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
                         <button className="btn-danger h-9 w-9 px-0" type="button" onClick={() => deleteClaim(claim._id)} aria-label="Delete claim">
                           <Trash2 size={15} />
                         </button>

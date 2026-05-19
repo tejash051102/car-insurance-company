@@ -1,10 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Vehicle from "../models/Vehicle.js";
 import Policy from "../models/Policy.js";
-<<<<<<< HEAD
-=======
 import { sendCsv } from "../utils/csvExporter.js";
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
 import { getPagination, sendPaginated } from "../utils/pagination.js";
 
 export const getVehicles = asyncHandler(async (req, res) => {

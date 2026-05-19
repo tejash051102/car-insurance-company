@@ -1,18 +1,11 @@
 import { CheckCircle2, Download, Edit3, Eye, EyeOff, FileText, KeyRound, Plus, Search, Trash2, Upload, Users } from "lucide-react";
 import { useEffect, useState } from "react";
-<<<<<<< HEAD
-import api from "../api/axios.js";
-import Pagination from "../components/Pagination.jsx";
-import { getItems, getMeta } from "../utils/apiData.js";
-import { isAdminUser } from "../utils/auth.js";
-=======
 import api, { getAssetUrl } from "../api/axios.js";
 import Pagination from "../components/Pagination.jsx";
 import PasswordStrengthMeter from "../components/PasswordStrengthMeter.jsx";
 import { getItems, getMeta } from "../utils/apiData.js";
 import { canManageRecords } from "../utils/auth.js";
 import { downloadReport } from "../utils/download.js";
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
 
 const emptyForm = {
   firstName: "",
@@ -36,9 +29,6 @@ const Customers = () => {
   const [meta, setMeta] = useState({ page: 1, pages: 1, total: 0 });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-<<<<<<< HEAD
-  const isAdmin = isAdminUser();
-=======
   const [documentCustomer, setDocumentCustomer] = useState(null);
   const [documentLabel, setDocumentLabel] = useState("");
   const [documents, setDocuments] = useState([]);
@@ -49,7 +39,6 @@ const Customers = () => {
   const [verifying, setVerifying] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const canManage = canManageRecords();
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
 
   const loadCustomers = async (term = search, page = 1) => {
     setError("");
@@ -365,14 +354,10 @@ const Customers = () => {
                       <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => editCustomer(customer)} aria-label="Edit customer">
                         <Edit3 size={15} />
                       </button>
-<<<<<<< HEAD
-                      {isAdmin ? (
-=======
                       <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => setDocumentCustomer(customer)} aria-label="Upload customer documents">
                         <Upload size={15} />
                       </button>
                       {canManage ? (
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
                         <button className="btn-danger h-9 w-9 px-0" type="button" onClick={() => deleteCustomer(customer._id)} aria-label="Delete customer">
                           <Trash2 size={15} />
                         </button>

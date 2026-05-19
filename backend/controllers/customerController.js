@@ -5,9 +5,6 @@ import Customer from "../models/Customer.js";
 import User from "../models/User.js";
 import Vehicle from "../models/Vehicle.js";
 import Policy from "../models/Policy.js";
-<<<<<<< HEAD
-import { getPagination, sendPaginated } from "../utils/pagination.js";
-=======
 import { sendEmail } from "../utils/emailService.js";
 import { sendCsv } from "../utils/csvExporter.js";
 import { logActivity } from "../utils/activityLogger.js";
@@ -86,7 +83,6 @@ const getAccessibleCustomerFilter = async (req, baseFilter = {}) => {
     createdBy: req.user?._id
   };
 };
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
 
 export const getCustomers = asyncHandler(async (req, res) => {
   const keyword = req.query.search
@@ -104,13 +100,8 @@ export const getCustomers = asyncHandler(async (req, res) => {
   const { page, limit, skip } = getPagination(req.query);
   await sendPaginated(
     res,
-<<<<<<< HEAD
-    Customer.find(keyword).sort({ createdAt: -1 }),
-    Customer.countDocuments(keyword),
-=======
     Customer.find(filter).populate("createdBy", "name email role").sort({ createdAt: -1 }),
     Customer.countDocuments(filter),
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
     { page, limit, skip }
   );
 });

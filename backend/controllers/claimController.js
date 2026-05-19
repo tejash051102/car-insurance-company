@@ -1,24 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Claim from "../models/Claim.js";
 import Policy from "../models/Policy.js";
-<<<<<<< HEAD
-=======
-import { sendCsv } from "../utils/csvExporter.js";
-import { logActivity } from "../utils/activityLogger.js";
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
-import { getPagination, sendPaginated } from "../utils/pagination.js";
-
-const generateClaimNumber = () => `CLM-${Date.now().toString().slice(-8)}`;
-
-<<<<<<< HEAD
-const allowedTransitions = {
-  submitted: ["under-review", "rejected"],
-  "under-review": ["approved", "rejected"],
-  approved: ["settled"],
-  rejected: [],
-  settled: []
-};
-
 export const getClaims = asyncHandler(async (req, res) => {
   const filter = {
     ...(req.query.status ? { status: req.query.status } : {}),
@@ -34,23 +16,6 @@ export const getClaims = asyncHandler(async (req, res) => {
   };
   const { page, limit, skip } = getPagination(req.query);
 
-=======
-export const getClaims = asyncHandler(async (req, res) => {
-  const filter = {
-    ...(req.query.status ? { status: req.query.status } : {}),
-    ...(req.query.search
-      ? {
-          $or: [
-            { claimNumber: { $regex: req.query.search, $options: "i" } },
-            { status: { $regex: req.query.search, $options: "i" } },
-            { description: { $regex: req.query.search, $options: "i" } }
-          ]
-        }
-      : {})
-  };
-  const { page, limit, skip } = getPagination(req.query);
-
->>>>>>> 547d24a0daaff7d35c558dbe9c8c3e520c14045b
   await sendPaginated(
     res,
     Claim.find(filter)
