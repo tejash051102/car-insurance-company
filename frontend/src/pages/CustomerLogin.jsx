@@ -2,7 +2,6 @@ import { Eye, EyeOff, ShieldCheck, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/axios.js";
-import heroImage from "../assets/hero.png";
 import AnimatedAuthBackground from "../components/AnimatedAuthBackground.jsx";
 import { saveCustomerUser } from "../utils/authStorage.js";
 
@@ -49,7 +48,7 @@ const CustomerLogin = () => {
       <section className="relative z-10 w-full max-w-xl rounded-2xl border border-white/10 bg-white/[0.035] px-6 py-8 shadow-[0_40px_100px_rgba(0,0,0,0.55)] backdrop-blur-2xl sm:px-8">
         <div className="absolute left-[20%] right-[20%] top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/50 to-transparent" />
         <img
-          src={heroImage}
+          src="/module-art/portal.svg"
           alt="Customer insurance portal"
           className="pointer-events-none absolute -right-6 -top-7 hidden w-32 opacity-75 drop-shadow-[0_20px_50px_rgba(14,165,233,0.25)] sm:block"
         />

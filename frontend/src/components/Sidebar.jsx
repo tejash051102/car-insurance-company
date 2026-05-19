@@ -111,19 +111,6 @@ const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
         ))}
     </nav>
 
-    {isExpanded && (
-      <div className="mx-3 mb-3 rounded-lg border border-purple-300/15 bg-gradient-to-br from-purple-700 to-violet-800 p-4 shadow-lg shadow-purple-950/30">
-        <div className="flex items-center gap-2 text-base font-bold text-white">
-          <ShieldCheck size={15} />
-          Go Pro
-        </div>
-        <p className="mt-3 text-sm leading-6 text-white/70">Stay connected with your insurance team</p>
-        <button className="mt-4 w-full rounded-md border border-white/20 px-4 py-2 text-sm font-semibold text-white/85 transition hover:bg-white/10" type="button">
-          Upgrade Now
-        </button>
-      </div>
-    )}
-
     {/* Expand / Collapse Toggle (desktop only) */}
     <div className={`hidden border-t border-white/10 py-3 lg:flex ${isExpanded ? "px-3" : "justify-center px-2"}`}>
       <button

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Sidebar from "./components/Sidebar.jsx";
@@ -22,13 +22,50 @@ import Vehicles from "./pages/Vehicles.jsx";
 import Activities from "./pages/Activities.jsx";
 import { clearAuthUser, saveAuthUser } from "./utils/authStorage.js";
 
+const moduleMeta = {
+  "/": {
+    className: "page-dashboard"
+  },
+  "/customers": {
+    className: "page-customers"
+  },
+  "/vehicles": {
+    className: "page-vehicles"
+  },
+  "/policies": {
+    className: "page-policies"
+  },
+  "/claims": {
+    className: "page-claims"
+  },
+  "/payments": {
+    className: "page-payments"
+  },
+  "/activities": {
+    className: "page-activities"
+  },
+  "/security": {
+    className: "page-security"
+  },
+  "/rbac-report": {
+    className: "page-rbac"
+  },
+  "/profile": {
+    className: "page-profile"
+  }
+};
+
+const getModuleMeta = (pathname) => moduleMeta[pathname] || moduleMeta["/"];
+
 const AppLayout = ({ onLogout }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+  const location = useLocation();
+  const meta = getModuleMeta(location.pathname);
 
   return (
     <ProtectedRoute>
-      <div className="app-shell min-h-screen">
+      <div className={`app-shell min-h-screen ${meta.className}`}>
         <Sidebar
           isOpen={isSidebarOpen}
           isExpanded={isSidebarExpanded}

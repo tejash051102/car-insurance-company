@@ -209,6 +209,179 @@ textarea {
     background: linear-gradient(135deg, #d72c96, #b40867);
   }
 
+  .page-customers {
+    --page-accent: 99, 102, 241;
+    --page-accent-2: 168, 85, 247;
+    --page-art: url("/module-art/customers.svg");
+  }
+
+  .page-vehicles {
+    --page-accent: 14, 165, 233;
+    --page-accent-2: 34, 211, 238;
+    --page-art: url("/module-art/vehicles.svg");
+  }
+
+  .page-policies {
+    --page-accent: 34, 197, 94;
+    --page-accent-2: 52, 211, 153;
+    --page-art: url("/module-art/policies.svg");
+  }
+
+  .page-claims {
+    --page-accent: 245, 158, 11;
+    --page-accent-2: 236, 72, 153;
+    --page-art: url("/module-art/claims.svg");
+  }
+
+  .page-payments {
+    --page-accent: 16, 185, 129;
+    --page-accent-2: 14, 165, 233;
+    --page-art: url("/module-art/payments.svg");
+  }
+
+  .page-activities {
+    --page-accent: 148, 163, 184;
+    --page-accent-2: 124, 58, 237;
+    --page-art: url("/module-art/activities.svg");
+  }
+
+  .page-security {
+    --page-accent: 239, 68, 68;
+    --page-accent-2: 249, 115, 22;
+    --page-art: url("/module-art/security.svg");
+  }
+
+  .page-rbac {
+    --page-accent: 59, 130, 246;
+    --page-accent-2: 168, 85, 247;
+    --page-art: url("/module-art/rbac.svg");
+  }
+
+  .page-profile {
+    --page-accent: 217, 70, 239;
+    --page-accent-2: 99, 102, 241;
+    --page-art: url("/module-art/profile.svg");
+  }
+
+  .app-shell:not(.page-dashboard)::after {
+    content: "";
+    position: fixed;
+    right: clamp(18px, 5vw, 82px);
+    bottom: clamp(18px, 5vw, 74px);
+    z-index: 0;
+    width: clamp(170px, 20vw, 280px);
+    aspect-ratio: 11 / 8;
+    background-image: var(--page-art);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    filter: drop-shadow(0 28px 58px rgba(0, 0, 0, 0.34));
+    opacity: 0.08;
+    pointer-events: none;
+  }
+
+  .app-shell:not(.page-dashboard) .app-main > .space-y-6 > div:first-child {
+    position: relative;
+    width: fit-content;
+    max-width: 100%;
+    margin-bottom: 0.25rem;
+    padding: 0.25rem 0 0.45rem;
+  }
+
+  .app-shell:not(.page-dashboard) .app-main > .space-y-6 > div:first-child::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: min(180px, 78%);
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgb(var(--page-accent)), rgba(var(--page-accent-2), 0.2));
+  }
+
+  .app-shell:not(.page-dashboard) .panel {
+    border-color: rgba(var(--page-accent), 0.16);
+    background:
+      linear-gradient(135deg, rgba(var(--page-accent), 0.08), transparent 34%),
+      rgba(36, 25, 78, 0.78);
+  }
+
+  .app-shell:not(.page-dashboard) .panel:hover {
+    border-color: rgba(var(--page-accent), 0.38);
+    box-shadow: 0 28px 80px rgba(var(--page-accent), 0.08), 0 24px 70px rgba(0, 0, 0, 0.28);
+  }
+
+  .app-shell:not(.page-dashboard) .label,
+  .app-shell:not(.page-dashboard) .text-cyan-300 {
+    color: rgba(var(--page-accent), 0.92);
+  }
+
+  .app-shell:not(.page-dashboard) .field:focus {
+    border-color: rgba(var(--page-accent), 0.62);
+    box-shadow: 0 0 0 4px rgba(var(--page-accent), 0.12);
+  }
+
+  .app-shell:not(.page-dashboard) table thead {
+    background: rgba(var(--page-accent), 0.13);
+    color: rgba(255, 255, 255, 0.74);
+  }
+
+  .page-customers .panel:first-of-type {
+    border-radius: 22px 8px 22px 8px;
+  }
+
+  .page-vehicles .panel:first-of-type {
+    border-radius: 8px 28px 8px 28px;
+  }
+
+  .page-policies .panel:first-of-type {
+    border-radius: 28px 28px 8px 8px;
+  }
+
+  .page-claims .panel:first-of-type {
+    border-radius: 8px 8px 28px 28px;
+  }
+
+  .page-payments .panel:first-of-type {
+    border-radius: 26px 8px 26px 8px;
+  }
+
+  .page-activities .panel:first-of-type {
+    border-style: dashed;
+  }
+
+  .page-security .panel:first-of-type {
+    box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.1), 0 24px 70px rgba(0, 0, 0, 0.28);
+  }
+
+  .page-rbac .panel:first-of-type {
+    background:
+      linear-gradient(90deg, rgba(59, 130, 246, 0.12), transparent 46%),
+      rgba(36, 25, 78, 0.78);
+  }
+
+  .page-profile .panel:first-of-type {
+    background:
+      linear-gradient(135deg, rgba(217, 70, 239, 0.12), transparent 36%),
+      linear-gradient(315deg, rgba(99, 102, 241, 0.1), transparent 34%),
+      rgba(36, 25, 78, 0.82);
+  }
+
+  .page-claims .panel,
+  .page-claims .reference-panel {
+    box-shadow: 0 24px 70px rgba(245, 158, 11, 0.06), 0 24px 70px rgba(0, 0, 0, 0.26);
+  }
+
+  .page-payments .panel,
+  .page-payments .reference-panel {
+    box-shadow: 0 24px 70px rgba(16, 185, 129, 0.06), 0 24px 70px rgba(0, 0, 0, 0.26);
+  }
+
+  .page-security .panel,
+  .page-security .reference-panel {
+    box-shadow: 0 24px 70px rgba(239, 68, 68, 0.06), 0 24px 70px rgba(0, 0, 0, 0.26);
+  }
+
   .dashboard-enter > * {
     animation: panel-rise 0.62s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
