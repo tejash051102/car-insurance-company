@@ -4,11 +4,15 @@ import {
   Car,
   ChevronDown,
   ClipboardCheck,
+  FileCheck2,
   Mail,
+  ShieldCheck,
   Users
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import api from "../api/axios.js";
+import DashboardCard from "../components/DashboardCard.jsx";
+import { canManageRecords } from "../utils/auth.js";
 
 const formatCurrency = (amount = 0) =>
   new Intl.NumberFormat("en-IN", {
@@ -113,36 +117,6 @@ const RevenueLineChart = ({ stats }) => {
   );
 };
 
-const ReportChart = ({ stats }) => {
-  const values = (stats?.policyStatus || []).length
-    ? stats.policyStatus.map((item) => 30 + (item.count || 0) * 16)
-    : [42, 88, 76, 45, 54, 72, 61, 80];
-  const points = values.map((value, index) => `${26 + index * 38},${140 - value}`).join(" ");
-
-  return (
-    <section className="reference-panel p-5">
-      <h3 className="text-lg font-semibold text-white">Claim trend report</h3>
-      <p className="mt-1 text-sm text-white/38">1 Mar 2026 - 31 Mar 2026</p>
-      <svg className="mt-4 h-48 w-full" viewBox="0 0 320 170" preserveAspectRatio="none">
-        {[0, 1, 2, 3, 4, 5, 6, 7].map((line) => (
-          <line key={line} x1={25 + line * 38} x2={25 + line * 38} y1="12" y2="150" stroke="rgba(255,255,255,0.07)" strokeDasharray="2 5" />
-        ))}
-        <defs>
-          <linearGradient id="reportFill" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#9333ea" stopOpacity="0.75" />
-            <stop offset="100%" stopColor="#9333ea" stopOpacity="0.05" />
-          </linearGradient>
-        </defs>
-        <polyline points={points} fill="none" stroke="#9333ea" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-        <polygon points={`26,150 ${points} 292,150`} fill="url(#reportFill)" />
-      </svg>
-      <div className="grid grid-cols-8 text-center text-xs text-white/38">
-        {["21", "22", "23", "24", "25", "26", "27", "28"].map((day) => <span key={day}>{day}</span>)}
-      </div>
-    </section>
-  );
-};
-
 const IssuesPanel = ({ stats }) => {
   const rows = [
     `Policies expiring soon: ${stats?.expiringPolicies?.length || 0}`,
@@ -156,15 +130,12 @@ const IssuesPanel = ({ stats }) => {
       <h3 className="text-lg font-semibold text-white">Insurance issues</h3>
       <div className="mt-4 space-y-3">
         {rows.map((row) => (
-          <button key={row} className="flex w-full items-center justify-between rounded-full border border-white/10 bg-white/[0.035] px-4 py-3 text-left text-sm font-medium text-white/48 transition hover:border-purple-400/50 hover:text-white">
+          <button key={row} className="flex w-full items-center justify-between rounded-full border border-white/10 bg-white/[0.035] px-4 py-3 text-left text-sm font-medium text-white/48 transition hover:border-purple-400/50 hover:text-white" type="button">
             {row}
             <ChevronDown size={16} />
           </button>
         ))}
       </div>
-      <button className="mx-auto mt-4 flex rounded-full border border-white/10 px-8 py-2 text-sm font-semibold text-white/65 transition hover:bg-white/10" type="button">
-        View more
-      </button>
     </section>
   );
 };
@@ -189,17 +160,11 @@ const SettingsPanel = () => {
               <div>
                 <p className="font-semibold text-white">Smart Notifications</p>
                 <p className="mt-2 text-sm leading-6 text-white/42">{notice}</p>
-                <button className="mt-3 rounded-full border border-white/10 px-4 py-1.5 text-xs font-semibold text-white/58 transition hover:bg-white/10" type="button">
-                  Read more
-                </button>
               </div>
             </div>
           </article>
         ))}
       </div>
-      <button className="mt-4 w-full rounded-full border border-white/10 py-3 text-sm font-semibold text-white/65 transition hover:bg-white/10" type="button">
-        Show more
-      </button>
     </section>
   );
 };
@@ -254,7 +219,9 @@ const PremiumEstimator = () => {
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
+  const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
+  const canManage = canManageRecords();
 
   useEffect(() => {
     const loadStats = async () => {
@@ -274,20 +241,44 @@ const Dashboard = () => {
   const submittedClaims = (stats?.claimStatus || []).find((item) => item._id === "submitted")?.count || 0;
   const revenuePercent = Math.min(Math.round((totals.revenue || 0) / 100000), 98);
 
+  const sendExpiryReminders = async () => {
+    setError("");
+    setNotice("");
+
+    try {
+      const { data } = await api.post("/policies/expiry-reminders", { days: 30 });
+      setNotice(`${data.message}: ${data.sent} sent, ${data.skipped} skipped`);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   return (
-    <div className="reference-dashboard space-y-6">
-      <div className="flex items-center justify-between gap-4">
+    <div className="space-y-6">
+      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
         <div>
-          <h2 className="text-3xl font-semibold text-white">Dashboard</h2>
-          <p className="mt-2 text-sm text-white/38">Car insurance analytics, claims, premiums, and security operations.</p>
+          <p className="label">Overview</p>
+          <h2 className="mt-1 text-2xl font-bold text-ink">Insurance Operations Dashboard</h2>
         </div>
-        <div className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-white/54 md:flex">
-          <Bell size={16} />
-          Live insurance monitoring
-        </div>
+        {canManage ? (
+          <button className="btn-secondary" type="button" onClick={sendExpiryReminders}>
+            <Bell size={16} />
+            Send reminders
+          </button>
+        ) : null}
       </div>
 
-      {error ? <div className="rounded-md bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</div> : null}
+      {error ? <div className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
+      {notice ? <div className="rounded-md bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{notice}</div> : null}
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
+        <DashboardCard title="Customers" value={totals.customers || 0} icon={Users} accent="brand" />
+        <DashboardCard title="Vehicles" value={totals.vehicles || 0} icon={Car} accent="mint" />
+        <DashboardCard title="Policies" value={totals.policies || 0} icon={FileCheck2} accent="brand" />
+        <DashboardCard title="Active Policies" value={totals.activePolicies || 0} icon={ShieldCheck} accent="coral" />
+        <DashboardCard title="Pending Claims" value={totals.pendingClaims || 0} icon={ClipboardCheck} accent="coral" />
+        <DashboardCard title="Revenue" value={formatCurrency(totals.revenue)} icon={BadgeIndianRupee} accent="slate" />
+      </div>
 
       <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard title="Customers" value={String(totals.customers || 0).padStart(2, "0")} total={Math.max(totals.customers || 0, 1)} percent={80} icon={Users} variant="purple" />
@@ -301,7 +292,6 @@ const Dashboard = () => {
         <SettingsPanel />
         <div className="grid gap-6 md:grid-cols-2">
           <IssuesPanel stats={stats} />
-          <ReportChart stats={stats} />
           <PremiumEstimator />
         </div>
       </section>

@@ -130,24 +130,24 @@ const Payments = () => {
           <h2 className="mt-1 text-2xl font-bold text-ink">Payments</h2>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
-        <form
-          className="flex w-full gap-2 sm:w-auto"
-          onSubmit={(event) => {
-            event.preventDefault();
-            loadData(1, search);
-          }}
-        >
-          <input className="field" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search payment" />
-          <button className="btn-secondary" type="submit" aria-label="Search payments">
-            <Search size={16} />
-          </button>
-        </form>
-        {canManage ? (
-          <button className="btn-secondary" type="button" onClick={() => downloadReport("/payments/export/csv", "payments.csv")}>
-            <Download size={16} />
-            Export
-          </button>
-        ) : null}
+          <form
+            className="flex w-full gap-2 sm:w-auto"
+            onSubmit={(event) => {
+              event.preventDefault();
+              loadData(1, search);
+            }}
+          >
+            <input className="field" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search payment" />
+            <button className="btn-secondary" type="submit" aria-label="Search payments">
+              <Search size={16} />
+            </button>
+          </form>
+          {canManage ? (
+            <button className="btn-secondary" type="button" onClick={() => downloadReport("/payments/export/csv", "payments.csv")}>
+              <Download size={16} />
+              Export
+            </button>
+          ) : null}
         </div>
       </div>
 

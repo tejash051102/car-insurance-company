@@ -6,7 +6,8 @@ import {
   exportClaims,
   getClaimById,
   getClaims,
-  updateClaim
+  updateClaim,
+  updateClaimStatus
 } from "../controllers/claimController.js";
 import { authorize, protect } from "../middleware/authMiddleware.js";
 import { upload } from "../middleware/uploadMiddleware.js";

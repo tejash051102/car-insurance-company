@@ -1,12 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Claim from "../models/Claim.js";
 import Policy from "../models/Policy.js";
-import { sendCsv } from "../utils/csvExporter.js";
-import { logActivity } from "../utils/activityLogger.js";
-import { getPagination, sendPaginated } from "../utils/pagination.js";
-
-const generateClaimNumber = () => `CLM-${Date.now().toString().slice(-8)}`;
-
 export const getClaims = asyncHandler(async (req, res) => {
   const filter = {
     ...(req.query.status ? { status: req.query.status } : {}),
@@ -160,6 +154,32 @@ export const decideClaim = asyncHandler(async (req, res) => {
   });
 
   res.json(claim);
+});
+
+export const updateClaimStatus = asyncHandler(async (req, res) => {
+  const { status, approvedAmount } = req.body;
+  const claim = await Claim.findById(req.params.id);
+
+  if (!claim) {
+    res.status(404);
+    throw new Error("Claim not found");
+  }
+
+  if (!allowedTransitions[claim.status]?.includes(status)) {
+    res.status(400);
+    throw new Error(`Cannot move claim from ${claim.status} to ${status}`);
+  }
+
+  claim.status = status;
+
+  if (status === "approved" && approvedAmount !== undefined) {
+    claim.approvedAmount = Number(approvedAmount);
+  }
+
+  const updatedClaim = await claim.save();
+  await updatedClaim.populate(["customer", "policy"]);
+
+  res.json(updatedClaim);
 });
 
 export const deleteClaim = asyncHandler(async (req, res) => {

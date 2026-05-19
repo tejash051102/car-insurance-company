@@ -162,24 +162,24 @@ const Claims = () => {
           <h2 className="mt-1 text-2xl font-bold text-ink">Claims</h2>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
-        <form
-          className="flex w-full gap-2 sm:w-auto"
-          onSubmit={(event) => {
-            event.preventDefault();
-            loadData(1, search);
-          }}
-        >
-          <input className="field" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search claim" />
-          <button className="btn-secondary" type="submit" aria-label="Search claims">
-            <Search size={16} />
-          </button>
-        </form>
-        {canManage ? (
-          <button className="btn-secondary" type="button" onClick={() => downloadReport("/claims/export/csv", "claims.csv")}>
-            <Download size={16} />
-            Export
-          </button>
-        ) : null}
+          <form
+            className="flex w-full gap-2 sm:w-auto"
+            onSubmit={(event) => {
+              event.preventDefault();
+              loadData(1, search);
+            }}
+          >
+            <input className="field" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search claim" />
+            <button className="btn-secondary" type="submit" aria-label="Search claims">
+              <Search size={16} />
+            </button>
+          </form>
+          {canManage ? (
+            <button className="btn-secondary" type="button" onClick={() => downloadReport("/claims/export/csv", "claims.csv")}>
+              <Download size={16} />
+              Export
+            </button>
+          ) : null}
         </div>
       </div>
 
@@ -248,7 +248,12 @@ const Claims = () => {
                   <td className="px-4 py-3">{claim.policy?.policyNumber || "N/A"}</td>
                   <td className="px-4 py-3">{claim.customer?.fullName || "N/A"}</td>
                   <td className="px-4 py-3">{formatCurrency(claim.claimAmount)}</td>
-                  <td className="px-4 py-3 capitalize">{claim.status}</td>
+                  <td className="px-4 py-3">
+                    <p className="capitalize">{claim.status}</p>
+                    {claim.approvedAmount ? (
+                      <p className="text-xs text-slate-500">Approved {formatCurrency(claim.approvedAmount)}</p>
+                    ) : null}
+                  </td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
                       {canManage ? (

@@ -5,7 +5,7 @@ const ProtectedRoute = ({ children }) => {
   const userInfo = getAuthUser();
 
   if (!userInfo) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
   return children;
