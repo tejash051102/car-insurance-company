@@ -43,24 +43,31 @@ const startServer = async () => {
 
     const allowedOrigins = (
       process.env.CLIENT_URL ||
-      "http://localhost:5173,http://127.0.0.1:5173"
+      "http://localhost:5173,http://127.0.0.1:5173,https://car-insurance-frontend-4x9z.onrender.com"
     )
       .split(",")
-      .map((origin) => origin.trim());
+      .map((origin) => origin.trim().replace(/\/+$/, ""))
+      .filter(Boolean);
     const isRenderOrigin = (origin = "") => /^https:\/\/[a-z0-9-]+\.onrender\.com$/i.test(origin);
+    const corsOptions = {
+      origin(origin, callback) {
+        const normalizedOrigin = origin?.replace(/\/+$/, "");
 
-    app.use(
-      cors({
-        origin(origin, callback) {
-          if (!origin || allowedOrigins.includes(origin) || isRenderOrigin(origin)) {
-            callback(null, true);
-          } else {
-            callback(new Error(`CORS blocked origin: ${origin}`));
-          }
-        },
-        credentials: true,
-      })
-    );
+        if (!origin || allowedOrigins.includes(normalizedOrigin) || isRenderOrigin(normalizedOrigin)) {
+          callback(null, true);
+          return;
+        }
+
+        callback(new Error(`CORS blocked origin: ${origin}`));
+      },
+      credentials: true,
+      methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+      optionsSuccessStatus: 204
+    };
+
+    app.use(cors(corsOptions));
+    app.options("*", cors(corsOptions));
 
     app.use(securityHeaders);
     app.use(express.json({ limit: "1mb" }));

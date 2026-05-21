@@ -1,6 +1,7 @@
 import { Bell, LogOut, Menu, Search, UserCircle, UserRound } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import ThemeToggle from "./ThemeToggle.jsx";
 
 const searchTargets = [
   { keywords: ["dashboard", "home", "analytics"], path: "/" },
@@ -71,6 +72,9 @@ const Navbar = ({ onLogout, onMenuClick }) => {
       </div>
 
       <div className="flex items-center gap-3">
+        <ThemeToggle
+          className="flex h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/5 text-purple-200 shadow-sm transition hover:border-purple-300/40 hover:bg-purple-400/10 hover:text-white"
+        />
         <Link
           to="/customer-login"
           className="flex h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/5 text-purple-200 shadow-sm transition hover:border-purple-300/40 hover:bg-purple-400/10 hover:text-white"
