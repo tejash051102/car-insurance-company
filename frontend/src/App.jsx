@@ -3,7 +3,6 @@ import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-
 import Navbar from "./components/Navbar.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Sidebar from "./components/Sidebar.jsx";
-import ThemeToggle from "./components/ThemeToggle.jsx";
 import Claims from "./pages/Claims.jsx";
 import CustomerLogin from "./pages/CustomerLogin.jsx";
 import CustomerPortal from "./pages/CustomerPortal.jsx";
@@ -123,8 +122,6 @@ const AppLayout = ({ onLogout }) => {
 
 const App = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const showPublicThemeToggle = !location.pathname.startsWith("/customer-portal") && !location.pathname.match(/^\/(customers|vehicles|policies|claims|payments|activities|security|intelligence|tickets|notifications|reports|backups|rbac-report|profile)?$/);
 
   const handleAuth = (userInfo) => {
     saveAuthUser(userInfo);
@@ -143,21 +140,16 @@ const App = () => {
   };
 
   return (
-    <>
-      {showPublicThemeToggle && (
-        <ThemeToggle className="fixed right-4 top-4 z-50 flex h-11 w-11 items-center justify-center rounded-md border border-white/10 bg-white/10 text-purple-100 shadow-lg shadow-black/20 backdrop-blur-xl transition hover:border-purple-300/40 hover:bg-purple-400/15 hover:text-white" />
-      )}
-      <Routes>
-        <Route path="/login" element={<Login onAuth={handleAuth} />} />
-        <Route path="/customer-login" element={<CustomerLogin />} />
-        <Route path="/customer-portal" element={<CustomerPortal />} />
-        <Route path="/register" element={<Register onAuth={handleAuth} />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword onAuth={handleAuth} />} />
-        <Route path="/verify-email/:token" element={<VerifyEmail onAuth={handleAuth} />} />
-        <Route path="/*" element={<AppLayout onLogout={handleLogout} />} />
-      </Routes>
-    </>
+    <Routes>
+      <Route path="/login" element={<Login onAuth={handleAuth} />} />
+      <Route path="/customer-login" element={<CustomerLogin />} />
+      <Route path="/customer-portal" element={<CustomerPortal />} />
+      <Route path="/register" element={<Register onAuth={handleAuth} />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword onAuth={handleAuth} />} />
+      <Route path="/verify-email/:token" element={<VerifyEmail onAuth={handleAuth} />} />
+      <Route path="/*" element={<AppLayout onLogout={handleLogout} />} />
+    </Routes>
   );
 };
 
