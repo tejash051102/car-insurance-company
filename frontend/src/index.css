@@ -1018,6 +1018,38 @@ html[data-theme="light"] .app-main ::-webkit-scrollbar-track {
   background: transparent;
 }
 
+html,
+body {
+  scrollbar-color: rgba(255, 255, 255, 0.36) transparent;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.36);
+  background-clip: content-box;
+}
+
+html::-webkit-scrollbar-button,
+body::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+  background: transparent;
+  display: none;
+}
+
 html[data-theme="light"] .app-main ::-webkit-scrollbar-thumb {
   background: rgba(99, 102, 241, 0.34);
 }

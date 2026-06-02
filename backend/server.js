@@ -34,8 +34,6 @@ dotenv.config();
 const startServer = async () => {
   try {
     console.log("Starting server...");
-
-    // Connect MongoDB
     await connectDB();
 
     const app = express();
@@ -106,7 +104,6 @@ const startServer = async () => {
     app.use("/api/garages", garageRoutes);
     app.use("/api/services", serviceRoutes);
 
-    // Backward-compatible aliases for clients configured without the /api prefix.
     app.use("/auth", authRateLimit, authRoutes);
     app.use("/customers", customerRoutes);
     app.use("/customer-portal", customerPortalRoutes);

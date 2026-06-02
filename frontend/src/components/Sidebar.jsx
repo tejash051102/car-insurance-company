@@ -39,7 +39,7 @@ const items = [
 
 const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
   <div className="flex h-full flex-col">
-    {/* Header */}
+
     <div
       className={`flex h-16 shrink-0 items-center border-b border-white/10 transition-all duration-300 ${
         isExpanded ? "justify-between px-4" : "justify-center px-2"
@@ -69,7 +69,6 @@ const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
       )}
     </div>
 
-    {/* Nav */}
     <nav className={`flex-1 space-y-0.5 overflow-y-auto py-4 ${isExpanded ? "px-3" : "px-2"}`}>
       {items
         .filter((item) => (!item.managerOnly || canManageRecords()) && (!item.adminOnly || getCurrentUser()?.role === "admin"))
@@ -91,7 +90,7 @@ const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
           >
             {({ isActive }) => (
               <>
-                {/* Active left bar */}
+
                 {!isExpanded && isActive && (
                   <span className="absolute left-0 h-5 w-0.5 rounded-r bg-purple-300" />
                 )}
@@ -107,7 +106,6 @@ const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
                   <span className="truncate text-sm font-semibold">{item.label}</span>
                 )}
 
-                {/* Tooltip for collapsed state */}
                 {!isExpanded && (
                   <span className="pointer-events-none absolute left-full ml-3 z-50 whitespace-nowrap rounded-md bg-gray-900 px-2.5 py-1.5 text-xs font-semibold text-white opacity-0 shadow-lg ring-1 ring-white/10 transition-opacity group-hover:opacity-100">
                     {item.label}
@@ -119,7 +117,6 @@ const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
         ))}
     </nav>
 
-    {/* Expand / Collapse Toggle (desktop only) */}
     <div className={`hidden border-t border-white/10 py-3 lg:flex ${isExpanded ? "px-3" : "justify-center px-2"}`}>
       <button
         type="button"
@@ -145,7 +142,7 @@ const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
 const Sidebar = ({ isOpen, onClose, isExpanded, onToggleExpand }) => {
   return (
     <>
-      {/* Mobile overlay */}
+
       <div
         className={`fixed inset-0 z-30 bg-slate-950/50 backdrop-blur-sm transition-opacity lg:hidden ${
           isOpen ? "opacity-100" : "pointer-events-none opacity-0"
@@ -154,7 +151,6 @@ const Sidebar = ({ isOpen, onClose, isExpanded, onToggleExpand }) => {
         aria-hidden="true"
       />
 
-      {/* Sidebar panel */}
       <aside
         className={`app-sidebar fixed inset-y-0 left-0 z-40 flex flex-col border-r border-white/10 shadow-xl shadow-black/20 transition-all duration-300 ease-in-out lg:z-30 lg:translate-x-0 ${
           isOpen ? "translate-x-0" : "-translate-x-full"

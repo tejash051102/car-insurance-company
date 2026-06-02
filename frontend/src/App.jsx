@@ -137,13 +137,8 @@ const App = () => {
   };
 
   const handleLogout = () => {
-    // Remove user data
     clearAuthUser();
-
-    // Redirect to login page
     navigate("/login", { replace: true });
-
-    // Optional: refresh app state
     window.location.reload();
   };
 

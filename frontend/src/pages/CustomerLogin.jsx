@@ -47,7 +47,7 @@ const CustomerLogin = () => {
 
       <section className="relative z-10 w-full max-w-xl rounded-2xl border border-white/10 bg-white/[0.035] px-6 py-8 shadow-[0_40px_100px_rgba(0,0,0,0.55)] backdrop-blur-2xl sm:px-8">
         <div className="absolute left-[20%] right-[20%] top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/50 to-transparent" />
-        
+
         <div className="mb-7">
           <div className="mb-4 flex items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-cyan-400/25 bg-cyan-400/15">

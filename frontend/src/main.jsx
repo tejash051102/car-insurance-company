@@ -10,7 +10,6 @@ applyTheme(getStoredTheme());
 try {
   window.history.replaceState(null, "", window.location.href);
 } catch {
-  // Clears stale non-cloneable router state left by older development builds.
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(

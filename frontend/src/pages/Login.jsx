@@ -1,12 +1,10 @@
-import { BadgeIndianRupee, Car, ClipboardCheck, Eye, EyeOff, ShieldCheck } from "lucide-react";
+import { BadgeIndianRupee, Car, ClipboardCheck, Eye, EyeOff } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/axios.js";
 
-/* ─── tiny utility: clamp ─── */
 const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), hi);
 
-/* ─── Animated canvas background ─── */
 function AnimatedBackground() {
   const canvasRef = useRef(null);
 
@@ -16,7 +14,6 @@ function AnimatedBackground() {
     let raf;
     let w, h;
 
-    /* ── Nodes / edges ── */
     const NODE_COUNT = 55;
     const MAX_DIST = 160;
     let nodes = [];
@@ -40,7 +37,6 @@ function AnimatedBackground() {
       nodes = Array.from({ length: NODE_COUNT }, mkNode);
     };
 
-    /* ── Animated rings ── */
     const RINGS = Array.from({ length: 3 }, (_, i) => ({
       phase: (i / 3) * Math.PI * 2,
       speed: 0.004 + i * 0.002,
@@ -51,7 +47,6 @@ function AnimatedBackground() {
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
 
-      /* background gradient */
       const bg = ctx.createLinearGradient(0, 0, w, h);
       bg.addColorStop(0, "#050a14");
       bg.addColorStop(0.5, "#060d1a");
@@ -59,21 +54,18 @@ function AnimatedBackground() {
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, w, h);
 
-      /* soft radial glow — centre */
       const glow = ctx.createRadialGradient(w * 0.35, h * 0.5, 0, w * 0.35, h * 0.5, w * 0.55);
       glow.addColorStop(0, "rgba(14,165,233,0.07)");
       glow.addColorStop(1, "transparent");
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, w, h);
 
-      /* secondary glow */
       const glow2 = ctx.createRadialGradient(w * 0.8, h * 0.3, 0, w * 0.8, h * 0.3, w * 0.4);
       glow2.addColorStop(0, "rgba(99,102,241,0.06)");
       glow2.addColorStop(1, "transparent");
       ctx.fillStyle = glow2;
       ctx.fillRect(0, 0, w, h);
 
-      /* animated rings */
       RINGS.forEach((ring) => {
         const cx = w * 0.35;
         const cy = h * 0.5;
@@ -85,7 +77,6 @@ function AnimatedBackground() {
         ctx.stroke();
       });
 
-      /* edges */
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[i].x - nodes[j].x;
@@ -103,7 +94,6 @@ function AnimatedBackground() {
         }
       }
 
-      /* nodes */
       nodes.forEach((n) => {
         n.pulse += 0.02;
         const pulse = Math.sin(n.pulse) * 0.5 + 0.5;
@@ -112,7 +102,6 @@ function AnimatedBackground() {
         ctx.fillStyle = `rgba(14,165,233,${0.5 + pulse * 0.4})`;
         ctx.fill();
 
-        /* move */
         n.x += n.vx;
         n.y += n.vy;
         if (n.x < 0 || n.x > w) n.vx *= -1;
@@ -121,7 +110,6 @@ function AnimatedBackground() {
         n.y = clamp(n.y, 0, h);
       });
 
-      /* grid overlay — very faint */
       const GRID = 60;
       ctx.strokeStyle = "rgba(14,165,233,0.025)";
       ctx.lineWidth = 0.5;
@@ -161,7 +149,6 @@ function AnimatedBackground() {
   );
 }
 
-/* ─── Floating badge ─── */
 function MetricBadge({ icon: Icon, value, label, color, delay }) {
   const ref = useRef(null);
   useEffect(() => {
@@ -197,7 +184,6 @@ function MetricBadge({ icon: Icon, value, label, color, delay }) {
   );
 }
 
-/* ─── Input field ─── */
 function Field({ label, id, type = "text", name, value, onChange, placeholder, inputMode, maxLength, required, autoFocus }) {
   const [focused, setFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -269,7 +255,6 @@ function Field({ label, id, type = "text", name, value, onChange, placeholder, i
   );
 }
 
-/* ─── Main Login ─── */
 const Login = ({ onAuth }) => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
@@ -281,7 +266,6 @@ const Login = ({ onAuth }) => {
   const cardRef = useRef(null);
   const leftRef = useRef(null);
 
-  /* entrance animation */
   useEffect(() => {
     const card = cardRef.current;
     const left = leftRef.current;
@@ -298,7 +282,6 @@ const Login = ({ onAuth }) => {
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
-  /* tilt on mouse move */
   const handleMouseMove = (e) => {
     const card = cardRef.current;
     const rect = card.getBoundingClientRect();
@@ -340,7 +323,6 @@ const Login = ({ onAuth }) => {
     <div className="auth-visual-shell" style={{ position: "relative", minHeight: "100vh", display: "flex", overflow: "hidden", fontFamily: "Inter, system-ui, sans-serif" }}>
       <AnimatedBackground />
 
-      {/* ─── LEFT PANEL ─── */}
       <div
         ref={leftRef}
         style={{
@@ -355,7 +337,7 @@ const Login = ({ onAuth }) => {
         }}
         className="login-left-panel"
       >
-        {/* logo */}
+
         <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "32px" }}>
           <div style={{
             width: "56px", height: "56px", borderRadius: "14px",
@@ -387,18 +369,15 @@ const Login = ({ onAuth }) => {
           Manage customers, vehicles, policies, claims, and premium payments from one secure operations console.
         </p>
 
-        {/* metric badges */}
         <div style={{ display: "flex", gap: "12px" }}>
           <MetricBadge icon={Car} value="360°" label="Policy view" color="#67e8f9" delay={600} />
           <MetricBadge icon={ClipboardCheck} value="Fast" label="Claim flow" color="#fb923c" delay={750} />
           <MetricBadge icon={BadgeIndianRupee} value="Live" label="Payments" color="#4ade80" delay={900} />
         </div>
 
-        {/* decorative scanning line */}
         <ScanLine />
       </div>
 
-      {/* ─── RIGHT PANEL ─── */}
       <div style={{
         flex: 1,
         display: "flex",
@@ -425,7 +404,7 @@ const Login = ({ onAuth }) => {
             willChange: "transform",
           }}
         >
-          {/* card header */}
+
           <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "32px" }}>
             <div style={{
               width: "44px", height: "44px", borderRadius: "12px",
@@ -450,7 +429,6 @@ const Login = ({ onAuth }) => {
             Access your policies, claims, payments, and reports.
           </p>
 
-          {/* alert — error */}
           {error && (
             <Alert type="error">
               <span>{error}</span>
@@ -467,7 +445,6 @@ const Login = ({ onAuth }) => {
             </Alert>
           )}
 
-          {/* alert — success */}
           {verificationMessage && (
             <Alert type="success">
               <span>{verificationMessage}</span>
@@ -479,16 +456,13 @@ const Login = ({ onAuth }) => {
             </Alert>
           )}
 
-          {/* form */}
           <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
             <Field label="Email address" id="email" type="email" name="email" value={form.email} onChange={updateField} required />
             <Field label="Password" id="password" type="password" name="password" value={form.password} onChange={updateField} required />
 
-            {/* submit button */}
             <SubmitButton loading={loading} label="Sign in" />
           </form>
 
-          {/* footer links */}
           <div style={{ marginTop: "24px", display: "flex", flexDirection: "column", alignItems: "center", gap: "14px" }}>
             <Link
               to="/forgot-password"
@@ -505,14 +479,10 @@ const Login = ({ onAuth }) => {
             <Link to="/customer-login" style={{ fontSize: "13px", fontWeight: 600, color: "#67e8f9", textDecoration: "none" }}>
               Customer sign in
             </Link>
-            <Link to="/portfolio" style={{ fontSize: "13px", fontWeight: 600, color: "#c4b5fd", textDecoration: "none" }}>
-              View project portfolio
-            </Link>
           </div>
         </div>
       </div>
 
-      {/* responsive: show left panel on large screens */}
       <style>{`
         @media (min-width: 900px) {
           .login-left-panel { display: flex !important; }
@@ -531,8 +501,6 @@ const Login = ({ onAuth }) => {
     </div>
   );
 };
-
-/* ─── Sub-components ─── */
 
 function Alert({ type, children }) {
   const isError = type === "error";
