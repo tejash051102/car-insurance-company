@@ -235,7 +235,7 @@ const Dashboard = () => {
       <div className="flex flex-col justify-between gap-3 lg:flex-row lg:items-end">
         <div className="min-w-0">
           <p className="label">Overview</p>
-          <h2 className="mt-1 text-2xl font-bold text-ink sm:text-3xl">Insurance Operations Dashboard</h2>
+          <h2 className="mt-1 text-2xl font-bold text-ink sm:text-3xl">Dashboard</h2>
         </div>
         {canManage ? (
           <button className="btn-secondary w-full sm:w-fit" type="button" onClick={sendExpiryReminders}>

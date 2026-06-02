@@ -1,5 +1,6 @@
 import {
   Activity,
+  ArrowRight,
   BarChart3,
   Bot,
   Car,
@@ -7,10 +8,12 @@ import {
   ClipboardCheck,
   Database,
   FileText,
+  Gauge,
   LockKeyhole,
   MessageSquare,
   Moon,
   ShieldCheck,
+  Sparkles,
   Smartphone,
   UploadCloud,
   Users
@@ -93,6 +96,19 @@ const workflow = [
   "Reports, receipts, notifications, and audit trail complete the cycle"
 ];
 
+const portfolioStats = [
+  ["20+", "Business modules", "Policy, claim, service, security, reports"],
+  ["5", "Role flows", "Admin, manager, agent, surveyor, customer"],
+  ["7", "UI features", "Themes, charts, upload, timeline, assistant"],
+  ["MERN", "Full stack", "React, Node, Express, MongoDB"]
+];
+
+const proofCards = [
+  ["Real Workflow", "Quotation, premium, policy issue, claim settlement, receipt, renewal."],
+  ["Project Depth", "RBAC, audit logs, fraud score, surveyor, garage, EMI, feedback."],
+  ["Viva Friendly", "Clear modules, practical screens, explainable architecture, PDF outputs."]
+];
+
 const uiFeatures = [
   {
     title: "Dark Mode",
@@ -154,10 +170,11 @@ const projectModules = [
   ["Security Center", "RBAC report, audit logs, login monitoring, encrypted fields, and security alerts."]
 ];
 
-const PortfolioMetric = ({ value, label }) => (
-  <div className="rounded-md border border-white/10 bg-white/[0.055] px-5 py-4">
-    <p className="text-2xl font-bold text-white">{value}</p>
-    <p className="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-white/45">{label}</p>
+const PortfolioMetric = ({ value, label, detail }) => (
+  <div className="group rounded-lg border border-white/10 bg-white/[0.065] px-5 py-4 shadow-xl shadow-black/10 backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/30 hover:bg-white/[0.09]">
+    <p className="text-2xl font-black text-white">{value}</p>
+    <p className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-cyan-100/70">{label}</p>
+    {detail ? <p className="mt-2 text-xs leading-5 text-white/42">{detail}</p> : null}
   </div>
 );
 
@@ -167,17 +184,19 @@ const ProjectPortfolio = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0c0521] text-white">
+    <div className="min-h-screen bg-[#070315] text-white">
       <section className="relative overflow-hidden border-b border-white/10">
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(124,58,237,0.22),transparent_44%),linear-gradient(315deg,rgba(14,165,233,0.13),transparent_36%),#0b031d]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_14%_10%,rgba(34,211,238,0.18),transparent_28%),radial-gradient(circle_at_86%_12%,rgba(168,85,247,0.24),transparent_32%),linear-gradient(135deg,#070315_0%,#11062d_48%,#071421_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(180deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:58px_58px] opacity-40" />
+        <div className="absolute left-1/2 top-16 h-72 w-72 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
         <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-5 md:px-8">
           <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-md border border-cyan-300/20 bg-cyan-300/10 text-cyan-100">
-              <ShieldCheck size={16} />
+            <span className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/25 bg-cyan-300/10 shadow-lg shadow-cyan-950/30">
+              <img src="/favicon.svg" alt="DriveSure" className="h-10 w-10 object-contain" />
             </span>
             <div>
-              <p className="text-sm font-black tracking-normal text-white">DriveSure</p>
-              <p className="text-xs font-semibold text-white/42">Insurance Operations Platform</p>
+              <p className="text-base font-black tracking-tight text-white">DriveSure</p>
+              <p className="text-xs font-semibold text-cyan-100/52">Insurance Operations Platform</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -186,42 +205,48 @@ const ProjectPortfolio = () => {
           </div>
         </div>
 
-        <div className="relative mx-auto grid min-h-[calc(100vh-82px)] max-w-7xl gap-10 px-5 pb-12 pt-8 md:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:pb-16">
+        <div className="relative mx-auto grid min-h-[calc(100vh-82px)] max-w-7xl gap-10 px-5 pb-14 pt-8 md:px-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:pb-20">
           <div className="max-w-3xl">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-md border border-purple-300/20 bg-purple-300/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.14em] text-purple-100">
-              Enterprise Insurance Suite
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-cyan-100">
+              <Sparkles size={14} />
+              Full Stack Insurance Suite
             </div>
-            <h1 className="max-w-4xl text-4xl font-black leading-[1.02] tracking-normal text-white sm:text-5xl xl:text-7xl">
-              DriveSure
+            <h1 className="max-w-4xl text-5xl font-black leading-[0.96] tracking-tight text-white sm:text-6xl xl:text-8xl">
+              DriveSure<span className="block bg-gradient-to-r from-cyan-200 via-white to-purple-200 bg-clip-text text-transparent">Insurance OS</span>
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-white/62 md:text-lg">
               A full-stack car insurance operations platform for managing customers, vehicles, policies, claims, payments, service requests, security, reports, and analytics from one secure dashboard.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link className="btn-primary" to="/login">
+              <Link className="btn-primary rounded-full px-5" to="/login">
                 Open Project
+                <ArrowRight size={17} />
               </Link>
-              <button className="btn-secondary" type="button" onClick={scrollToModules}>
+              <button className="btn-secondary rounded-full px-5" type="button" onClick={scrollToModules}>
                 View Modules
               </button>
             </div>
-            <div className="mt-9 grid gap-4 sm:grid-cols-3">
-              <PortfolioMetric value="20+" label="Core features" />
-              <PortfolioMetric value="5" label="User roles" />
-              <PortfolioMetric value="MERN" label="Tech stack" />
+            <div className="mt-9 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              {portfolioStats.map(([value, label, detail]) => (
+                <PortfolioMetric key={label} value={value} label={label} detail={detail} />
+              ))}
             </div>
           </div>
 
           <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
-            <div className="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-2xl shadow-black/30 backdrop-blur">
+            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.07] p-5 shadow-2xl shadow-black/35 backdrop-blur-xl">
+              <div className="absolute -right-24 -top-24 h-56 w-56 rounded-full bg-cyan-300/10 blur-3xl" />
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.16em] text-cyan-200/70">Operations</p>
                   <h2 className="mt-1 text-2xl font-bold">AI Dashboard</h2>
                 </div>
-                <BarChart3 className="text-cyan-200" />
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-cyan-300/20 bg-cyan-300/10 text-cyan-100">
+                  <Gauge size={22} />
+                </span>
               </div>
-              <div className="mt-5 h-56 rounded-md border border-white/10 bg-[#1c1241] p-4">
+              <div className="relative mt-5 h-60 overflow-hidden rounded-xl border border-white/10 bg-[#120a2c] p-4">
+                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-cyan-400/10 to-transparent" />
                 <svg className="h-full w-full" viewBox="0 0 420 180" preserveAspectRatio="none">
                   {[0, 1, 2, 3].map((line) => (
                     <line key={line} x1="10" x2="410" y1={26 + line * 38} y2={26 + line * 38} stroke="rgba(255,255,255,0.08)" strokeDasharray="4 6" />
@@ -236,7 +261,7 @@ const ProjectPortfolio = () => {
                 <PortfolioMetric value="PDF" label="Reports" />
               </div>
             </div>
-            <div className="ml-auto w-full max-w-xl rounded-lg border border-white/10 bg-[#2b2148]/95 p-5 shadow-2xl shadow-black/35 backdrop-blur">
+            <div className="ml-auto w-full max-w-xl rounded-2xl border border-white/10 bg-[#211b3f]/95 p-5 shadow-2xl shadow-black/35 backdrop-blur-xl">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                 <div className="flex h-16 w-20 items-center justify-center rounded-md bg-amber-400/15">
                   <img src="/module-art/claims.svg" alt="Claims module" className="h-14 w-16 object-contain" />
@@ -257,8 +282,8 @@ const ProjectPortfolio = () => {
         </div>
       </section>
 
-      <main className="mx-auto max-w-7xl px-5 py-12 md:px-8">
-        <section className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+      <main className="mx-auto max-w-7xl px-5 py-14 md:px-8">
+        <section className="grid gap-6 rounded-2xl border border-white/10 bg-white/[0.045] p-6 shadow-2xl shadow-black/20 backdrop-blur lg:grid-cols-[0.9fr_1.1fr] lg:p-8">
           <div>
             <p className="label">Project Objective</p>
             <h2 className="mt-2 text-3xl font-black text-white">A practical insurance workflow from quotation to claim settlement</h2>
@@ -268,7 +293,7 @@ const ProjectPortfolio = () => {
           </p>
         </section>
 
-        <section id="modules" className="mt-12 rounded-lg border border-white/10 bg-white/[0.035] p-5 md:p-7">
+        <section id="modules" className="mt-12 overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.07),rgba(255,255,255,0.025))] p-5 shadow-2xl shadow-black/20 backdrop-blur-xl md:p-7">
           <div className="mb-7 grid gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
             <div>
               <p className="label">Modules</p>
@@ -283,16 +308,17 @@ const ProjectPortfolio = () => {
             {modules.map((module) => {
               const Icon = module.icon;
               return (
-                <article key={module.title} className="group relative overflow-hidden rounded-lg border border-white/10 bg-[#1b1239]/80 p-5 shadow-xl backdrop-blur transition hover:-translate-y-1 hover:border-purple-300/35 hover:bg-[#211748]">
-                  <div className="absolute right-4 top-4 opacity-10 transition group-hover:opacity-20">
+                <article key={module.title} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#120b2b]/86 p-5 shadow-xl shadow-black/20 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-cyan-300/30 hover:bg-[#181039]">
+                  <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-cyan-300/8 blur-2xl transition group-hover:bg-purple-300/10" />
+                  <div className="absolute right-4 top-4 opacity-12 transition group-hover:scale-110 group-hover:opacity-25">
                     <img src={module.art} alt="" className="h-28 w-32 object-contain" />
                   </div>
                   <div className="relative">
                     <div className="flex items-start justify-between gap-4">
-                      <span className="flex h-12 w-12 items-center justify-center rounded-md bg-purple-500/16 text-purple-100 ring-1 ring-white/10">
+                      <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400/16 to-purple-500/18 text-cyan-100 ring-1 ring-white/10">
                         <Icon size={22} />
                       </span>
-                      <span className="rounded-md border border-cyan-300/15 bg-cyan-300/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-cyan-100">
+                      <span className="rounded-full border border-cyan-300/15 bg-cyan-300/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-cyan-100">
                         {module.outcome}
                       </span>
                     </div>
@@ -307,7 +333,7 @@ const ProjectPortfolio = () => {
             })}
           </div>
 
-          <div className="mt-7 grid gap-4 rounded-lg border border-white/10 bg-white/[0.04] p-5 lg:grid-cols-4">
+          <div className="mt-7 grid gap-4 rounded-2xl border border-white/10 bg-white/[0.055] p-5 lg:grid-cols-4">
             {[
               ["Users", "Admin, manager, agent, surveyor, customer"],
               ["Documents", "Policies, invoices, reports, evidence"],
@@ -321,7 +347,7 @@ const ProjectPortfolio = () => {
             ))}
           </div>
 
-          <div className="mt-7 rounded-lg border border-white/10 bg-[#120a2a]/70 p-5">
+          <div className="mt-7 rounded-2xl border border-white/10 bg-[#0d071f]/78 p-5 shadow-xl shadow-black/20">
             <div className="mb-5 flex flex-col justify-between gap-3 md:flex-row md:items-end">
               <div>
                 <p className="label">Complete Module List</p>
@@ -333,9 +359,9 @@ const ProjectPortfolio = () => {
             </div>
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
               {projectModules.map(([title, detail], index) => (
-                <article key={title} className="rounded-md border border-white/10 bg-white/[0.04] p-4">
+                <article key={title} className="group rounded-xl border border-white/10 bg-white/[0.045] p-4 transition hover:-translate-y-0.5 hover:border-cyan-300/25 hover:bg-white/[0.07]">
                   <div className="mb-3 flex items-center gap-3">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-purple-500/16 text-sm font-black text-purple-100">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-purple-500/16 text-sm font-black text-purple-100 transition group-hover:bg-cyan-400/16 group-hover:text-cyan-100">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <h4 className="font-bold text-white">{title}</h4>
@@ -347,7 +373,7 @@ const ProjectPortfolio = () => {
           </div>
         </section>
 
-        <section className="mt-12 rounded-lg border border-white/10 bg-white/[0.045] p-6">
+        <section className="mt-12 rounded-2xl border border-white/10 bg-white/[0.045] p-6 shadow-2xl shadow-black/15 backdrop-blur">
           <div className="mb-6">
             <p className="label">UI/UX Features</p>
             <h2 className="mt-2 text-3xl font-black text-white">Modern Project Experience</h2>
@@ -359,7 +385,7 @@ const ProjectPortfolio = () => {
             {uiFeatures.map((feature) => {
               const Icon = feature.icon;
               return (
-                <article key={feature.title} className="rounded-md border border-white/10 bg-white/[0.04] p-4">
+                <article key={feature.title} className="rounded-xl border border-white/10 bg-white/[0.04] p-4 transition hover:-translate-y-1 hover:border-purple-300/25 hover:bg-white/[0.065]">
                   <div className="flex items-start gap-3">
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-cyan-400/12 text-cyan-100">
                       <Icon size={19} />
@@ -376,7 +402,7 @@ const ProjectPortfolio = () => {
         </section>
 
         <section className="mt-12 grid gap-5 lg:grid-cols-2">
-          <article className="rounded-lg border border-white/10 bg-white/[0.045] p-6">
+          <article className="rounded-2xl border border-white/10 bg-white/[0.045] p-6 shadow-xl shadow-black/15">
             <div className="flex items-center gap-3">
               <Activity className="text-cyan-200" />
               <h2 className="text-2xl font-black text-white">System Workflow</h2>
@@ -391,7 +417,7 @@ const ProjectPortfolio = () => {
             </div>
           </article>
 
-          <article className="rounded-lg border border-white/10 bg-white/[0.045] p-6">
+          <article className="rounded-2xl border border-white/10 bg-white/[0.045] p-6 shadow-xl shadow-black/15">
             <div className="flex items-center gap-3">
               <Database className="text-emerald-200" />
               <h2 className="text-2xl font-black text-white">Technical Stack</h2>
@@ -414,7 +440,7 @@ const ProjectPortfolio = () => {
           </article>
         </section>
 
-        <section className="mt-12 rounded-lg border border-white/10 bg-white/[0.045] p-6">
+        <section className="mt-12 overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(34,211,238,0.08),rgba(168,85,247,0.08)_46%,rgba(255,255,255,0.035))] p-6 shadow-2xl shadow-black/20">
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
             <div>
               <p className="label">Viva Ready</p>
@@ -444,6 +470,24 @@ const ProjectPortfolio = () => {
                 <h3 className="mt-3 font-bold text-white">Insurance Domain</h3>
                 <p className="mt-2 text-sm leading-6 text-white/52">Premiums, policies, add-ons, claims, surveyors, garages, renewals, refunds, and EMI plans.</p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-12 rounded-2xl border border-white/10 bg-[#0d071f] p-6 shadow-2xl shadow-black/20 md:p-8">
+          <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+            <div>
+              <p className="label">Presentation Highlights</p>
+              <h2 className="mt-2 text-3xl font-black text-white">Built to look complete, practical, and demonstrable</h2>
+            </div>
+            <div className="grid gap-4 md:grid-cols-3">
+              {proofCards.map(([title, detail]) => (
+                <article key={title} className="rounded-xl border border-white/10 bg-white/[0.045] p-5">
+                  <CheckCircle2 className="text-emerald-200" />
+                  <h3 className="mt-4 font-black text-white">{title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-white/52">{detail}</p>
+                </article>
+              ))}
             </div>
           </div>
         </section>
