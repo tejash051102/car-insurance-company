@@ -119,6 +119,9 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     policyStatus,
     claimStatus,
     monthlyRevenue,
+    monthlyClaims,
+    claimApprovalRate,
+    topVehicleTypes,
     expiringPolicies,
     hierarchy
   ] = await Promise.all([
@@ -147,6 +150,35 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
       { $sort: { "_id.year": 1, "_id.month": 1 } },
       { $limit: 12 }
     ]),
+    Claim.aggregate([
+      {
+        $group: {
+          _id: { year: { $year: "$incidentDate" }, month: { $month: "$incidentDate" } },
+          total: { $sum: "$claimAmount" },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { "_id.year": 1, "_id.month": 1 } },
+      { $limit: 12 }
+    ]),
+    Claim.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: { $sum: 1 },
+          approved: {
+            $sum: {
+              $cond: [{ $in: ["$status", ["approved", "paid", "settled"]] }, 1, 0]
+            }
+          }
+        }
+      }
+    ]),
+    Vehicle.aggregate([
+      { $group: { _id: "$vehicleType", count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+      { $limit: 6 }
+    ]),
     Policy.find({
       status: { $in: ["active", "pending"] },
       endDate: { $gte: now, $lte: expiryWindow }
@@ -172,6 +204,11 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     policyStatus,
     claimStatus,
     monthlyRevenue,
+    monthlyClaims,
+    claimApprovalRate: claimApprovalRate[0]?.total
+      ? Math.round((claimApprovalRate[0].approved / claimApprovalRate[0].total) * 100)
+      : 0,
+    topVehicleTypes,
     expiringPolicies,
     hierarchy
   });

@@ -41,6 +41,7 @@ const paymentSchema = new mongoose.Schema(
       type: String,
       trim: true
     },
+    receiptIssuedAt: Date,
     notes: String
   },
   { timestamps: true }

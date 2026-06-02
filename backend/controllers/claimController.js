@@ -1,6 +1,28 @@
 import asyncHandler from "express-async-handler";
 import Claim from "../models/Claim.js";
 import Policy from "../models/Policy.js";
+import { logActivity } from "../utils/activityLogger.js";
+import { sendCsv } from "../utils/csvExporter.js";
+import { buildClaimStatusMessage, sendEmail } from "../utils/emailService.js";
+import { getPagination, sendPaginated } from "../utils/pagination.js";
+import { calculateClaimRisk } from "../utils/riskScoring.js";
+
+const generateClaimNumber = () => `CLM-${Date.now().toString().slice(-8)}`;
+const workflowStatuses = ["submitted", "under-review", "survey-scheduled", "approved", "rejected", "paid", "settled"];
+
+const flattenFiles = (files) => {
+  if (!files) return [];
+  if (Array.isArray(files)) return files;
+  return Object.values(files).flat();
+};
+
+const filesToDocuments = (files = []) =>
+  flattenFiles(files).map((file) => ({
+    label: file.fieldname === "accidentPhotos" ? "Accident photo" : file.fieldname === "repairBills" ? "Repair bill" : file.fieldname === "firReports" ? "FIR/report" : "Claim evidence",
+    url: `/uploads/${file.filename}`,
+    originalName: file.originalname
+  }));
+
 export const getClaims = asyncHandler(async (req, res) => {
   const filter = {
     ...(req.query.status ? { status: req.query.status } : {}),
@@ -24,6 +46,8 @@ export const getClaims = asyncHandler(async (req, res) => {
         path: "policy",
         populate: { path: "vehicle" }
       })
+      .populate("assignedAgent", "name email role")
+      .populate("inspection.inspector", "name email role")
       .sort({ createdAt: -1 }),
     Claim.countDocuments(filter),
     { page, limit, skip }
@@ -31,7 +55,11 @@ export const getClaims = asyncHandler(async (req, res) => {
 });
 
 export const getClaimById = asyncHandler(async (req, res) => {
-  const claim = await Claim.findById(req.params.id).populate("customer").populate("policy");
+  const claim = await Claim.findById(req.params.id)
+    .populate("customer")
+    .populate("policy")
+    .populate("assignedAgent", "name email role")
+    .populate("inspection.inspector", "name email role");
 
   if (!claim) {
     res.status(404);
@@ -72,8 +100,18 @@ export const createClaim = asyncHandler(async (req, res) => {
     ...req.body,
     customer: req.body.customer || policy.customer,
     claimNumber: req.body.claimNumber || generateClaimNumber(),
-    documentUrl: req.file ? `/uploads/${req.file.filename}` : req.body.documentUrl
+    documentUrl: req.file ? `/uploads/${req.file.filename}` : req.body.documentUrl,
+    documents: filesToDocuments(req.files || req.file)
   });
+
+  const risk = await calculateClaimRisk(claim);
+  claim.fraud = {
+    score: risk.score,
+    level: risk.level,
+    reasons: risk.reasons,
+    calculatedAt: new Date()
+  };
+  await claim.save();
 
   const populatedClaim = await claim.populate(["customer", "policy"]);
   await logActivity({
@@ -93,12 +131,26 @@ export const updateClaim = asyncHandler(async (req, res) => {
     ...(req.file ? { documentUrl: `/uploads/${req.file.filename}` } : {})
   };
 
+  const existingClaim = await Claim.findById(req.params.id);
+
+  if (!existingClaim) {
+    res.status(404);
+    throw new Error("Claim not found");
+  }
+
+  const newDocuments = filesToDocuments(req.files || req.file);
+  if (newDocuments.length) {
+    update.documents = [...(existingClaim.documents || []), ...newDocuments];
+  }
+
   const claim = await Claim.findByIdAndUpdate(req.params.id, update, {
     new: true,
     runValidators: true
   })
     .populate("customer")
-    .populate("policy");
+    .populate("policy")
+    .populate("assignedAgent", "name email role")
+    .populate("inspection.inspector", "name email role");
 
   if (!claim) {
     res.status(404);
@@ -118,9 +170,8 @@ export const updateClaim = asyncHandler(async (req, res) => {
 
 export const decideClaim = asyncHandler(async (req, res) => {
   const { status, approvedAmount, decisionNote } = req.body;
-  const allowedStatuses = ["under-review", "approved", "rejected", "settled"];
 
-  if (!allowedStatuses.includes(status)) {
+  if (!workflowStatuses.includes(status)) {
     res.status(400);
     throw new Error("Invalid claim decision status");
   }
@@ -131,6 +182,19 @@ export const decideClaim = asyncHandler(async (req, res) => {
       status,
       approvedAmount: Number(approvedAmount || 0),
       decisionNote,
+      assignedAgent: req.body.assignedAgent,
+      inspection: {
+        scheduledAt: req.body.inspectionDate,
+        inspector: req.body.inspector,
+        result: req.body.inspectionResult || "pending",
+        report: req.body.inspectionReport
+      },
+      repair: {
+        garage: req.body.garage || undefined,
+        estimateAmount: Number(req.body.repairEstimate || 0),
+        status: req.body.repairStatus || "not-started",
+        notes: req.body.repairNotes
+      },
       decidedBy: req.user?._id,
       decidedAt: new Date()
     },
@@ -138,6 +202,9 @@ export const decideClaim = asyncHandler(async (req, res) => {
   )
     .populate("customer")
     .populate("policy")
+    .populate("assignedAgent", "name email role")
+    .populate("inspection.inspector", "name email role")
+    .populate("repair.garage")
     .populate("decidedBy", "name email role");
 
   if (!claim) {
@@ -153,33 +220,27 @@ export const decideClaim = asyncHandler(async (req, res) => {
     message: `Marked claim ${claim.claimNumber} as ${status}`
   });
 
+  await sendEmail(buildClaimStatusMessage(claim));
+
   res.json(claim);
 });
 
-export const updateClaimStatus = asyncHandler(async (req, res) => {
-  const { status, approvedAmount } = req.body;
+export const refreshClaimFraudScore = asyncHandler(async (req, res) => {
   const claim = await Claim.findById(req.params.id);
-
   if (!claim) {
     res.status(404);
     throw new Error("Claim not found");
   }
 
-  if (!allowedTransitions[claim.status]?.includes(status)) {
-    res.status(400);
-    throw new Error(`Cannot move claim from ${claim.status} to ${status}`);
-  }
-
-  claim.status = status;
-
-  if (status === "approved" && approvedAmount !== undefined) {
-    claim.approvedAmount = Number(approvedAmount);
-  }
-
-  const updatedClaim = await claim.save();
-  await updatedClaim.populate(["customer", "policy"]);
-
-  res.json(updatedClaim);
+  const risk = await calculateClaimRisk(claim);
+  claim.fraud = {
+    score: risk.score,
+    level: risk.level,
+    reasons: risk.reasons,
+    calculatedAt: new Date()
+  };
+  await claim.save();
+  res.json(await claim.populate(["customer", "policy"]));
 });
 
 export const deleteClaim = asyncHandler(async (req, res) => {

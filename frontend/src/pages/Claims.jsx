@@ -1,6 +1,6 @@
-import { ClipboardCheck, Download, Edit3, Plus, Search, Stamp, Trash2 } from "lucide-react";
+import { ClipboardCheck, Download, Edit3, Eye, Plus, Search, ShieldAlert, Stamp, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import api from "../api/axios.js";
+import api, { getAssetUrl } from "../api/axios.js";
 import Pagination from "../components/Pagination.jsx";
 import { getItems, getMeta } from "../utils/apiData.js";
 import { canManageRecords } from "../utils/auth.js";
@@ -13,7 +13,10 @@ const emptyForm = {
   approvedAmount: "",
   status: "submitted",
   description: "",
-  document: null
+  document: null,
+  accidentPhotos: [],
+  repairBills: [],
+  firReports: []
 };
 
 const formatCurrency = (amount = 0) =>
@@ -33,20 +36,41 @@ const Claims = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [decisionClaim, setDecisionClaim] = useState(null);
-  const [decision, setDecision] = useState({ status: "approved", approvedAmount: "", decisionNote: "" });
+  const [decision, setDecision] = useState({
+    status: "approved",
+    approvedAmount: "",
+    decisionNote: "",
+    assignedAgent: "",
+    inspectionDate: "",
+    inspector: "",
+    inspectionResult: "pending",
+    inspectionReport: ""
+  });
   const [deciding, setDeciding] = useState(false);
+  const [teamUsers, setTeamUsers] = useState({ agents: [], managers: [] });
+  const [garages, setGarages] = useState([]);
   const canManage = canManageRecords();
 
   const loadData = async (page = 1, term = search) => {
     setError("");
     try {
-      const [claimsResponse, policiesResponse] = await Promise.all([
+      const [claimsResponse, policiesResponse, garagesResponse] = await Promise.all([
         api.get("/claims", { params: { page, limit: 10, ...(term ? { search: term } : {}) } }),
-        api.get("/policies", { params: { limit: 100 } })
+        api.get("/policies", { params: { limit: 100 } }),
+        api.get("/garages").catch(() => ({ data: [] }))
       ]);
       setClaims(getItems(claimsResponse.data));
       setMeta(getMeta(claimsResponse.data));
       setPolicies(getItems(policiesResponse.data));
+      setGarages(garagesResponse.data);
+      if (canManage) {
+        try {
+          const { data } = await api.get("/users/team");
+          setTeamUsers(data);
+        } catch {
+          setTeamUsers({ agents: [], managers: [] });
+        }
+      }
     } catch (err) {
       setError(err.message);
     }
@@ -58,7 +82,7 @@ const Claims = () => {
 
   const updateField = (event) => {
     const { name, value, files } = event.target;
-    setForm((current) => ({ ...current, [name]: files ? files[0] : value }));
+    setForm((current) => ({ ...current, [name]: files ? (event.target.multiple ? Array.from(files) : files[0]) : value }));
   };
 
   const resetForm = () => {
@@ -82,6 +106,9 @@ const Claims = () => {
     if (form.document) {
       data.append("document", form.document);
     }
+    form.accidentPhotos.forEach((file) => data.append("accidentPhotos", file));
+    form.repairBills.forEach((file) => data.append("repairBills", file));
+    form.firReports.forEach((file) => data.append("firReports", file));
 
     try {
       if (editingId) {
@@ -108,7 +135,10 @@ const Claims = () => {
       approvedAmount: claim.approvedAmount || "",
       status: claim.status || "submitted",
       description: claim.description || "",
-      document: null
+      document: null,
+      accidentPhotos: [],
+      repairBills: [],
+      firReports: []
     });
   };
 
@@ -128,8 +158,27 @@ const Claims = () => {
     setDecision({
       status: claim.status === "submitted" ? "approved" : claim.status,
       approvedAmount: claim.approvedAmount || claim.claimAmount || "",
-      decisionNote: claim.decisionNote || ""
+      decisionNote: claim.decisionNote || "",
+      assignedAgent: claim.assignedAgent?._id || "",
+      inspectionDate: claim.inspection?.scheduledAt ? claim.inspection.scheduledAt.slice(0, 16) : "",
+      inspector: claim.inspection?.inspector?._id || "",
+      inspectionResult: claim.inspection?.result || "pending",
+      inspectionReport: claim.inspection?.report || "",
+      garage: claim.repair?.garage?._id || "",
+      repairEstimate: claim.repair?.estimateAmount || "",
+      repairStatus: claim.repair?.status || "not-started",
+      repairNotes: claim.repair?.notes || ""
     });
+  };
+
+  const refreshFraudScore = async (claim) => {
+    setError("");
+    try {
+      await api.patch(`/claims/${claim._id}/fraud-score`);
+      await loadData(meta.page, search);
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const submitDecision = async (event) => {
@@ -205,11 +254,16 @@ const Claims = () => {
           <select className="field" name="status" value={form.status} onChange={updateField}>
             <option value="submitted">Submitted</option>
             <option value="under-review">Under review</option>
+            <option value="survey-scheduled">Survey scheduled</option>
             <option value="approved">Approved</option>
             <option value="rejected">Rejected</option>
+            <option value="paid">Paid</option>
             <option value="settled">Settled</option>
           </select>
           <input className="field" name="document" type="file" accept=".jpg,.jpeg,.png,.pdf" onChange={updateField} />
+          <input className="field" name="accidentPhotos" type="file" accept=".jpg,.jpeg,.png,.pdf" multiple onChange={updateField} title="Accident photos" />
+          <input className="field" name="repairBills" type="file" accept=".jpg,.jpeg,.png,.pdf" multiple onChange={updateField} title="Repair bills" />
+          <input className="field" name="firReports" type="file" accept=".jpg,.jpeg,.png,.pdf" multiple onChange={updateField} title="FIR or reports" />
           <textarea className="field md:col-span-2 xl:col-span-4" name="description" value={form.description} onChange={updateField} placeholder="Incident description" rows="3" required />
           <div className="flex gap-2">
             <button className="btn-primary" type="submit" disabled={loading}>
@@ -253,6 +307,15 @@ const Claims = () => {
                     {claim.approvedAmount ? (
                       <p className="text-xs text-slate-500">Approved {formatCurrency(claim.approvedAmount)}</p>
                     ) : null}
+                    {claim.inspection?.scheduledAt ? (
+                      <p className="text-xs text-slate-500">Inspection {claim.inspection.scheduledAt.slice(0, 10)}</p>
+                    ) : null}
+                    {claim.fraud?.score ? (
+                      <p className={`text-xs ${claim.fraud.level === "high" ? "text-red-600" : claim.fraud.level === "medium" ? "text-amber-600" : "text-emerald-600"}`}>
+                        Fraud {claim.fraud.score}/100 {claim.fraud.level}
+                      </p>
+                    ) : null}
+                    {claim.repair?.garage?.name ? <p className="text-xs text-slate-500">{claim.repair.garage.name}</p> : null}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
@@ -260,6 +323,16 @@ const Claims = () => {
                         <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => openDecision(claim)} aria-label="Decide claim">
                           <Stamp size={15} />
                         </button>
+                      ) : null}
+                      {canManage ? (
+                        <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => refreshFraudScore(claim)} aria-label="Refresh fraud score">
+                          <ShieldAlert size={15} />
+                        </button>
+                      ) : null}
+                      {claim.documentUrl || claim.documents?.length ? (
+                        <a className="btn-secondary h-9 w-9 px-0" href={getAssetUrl(claim.documentUrl || claim.documents[0]?.url)} target="_blank" rel="noreferrer" aria-label="View evidence">
+                          <Eye size={15} />
+                        </a>
                       ) : null}
                       <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => editClaim(claim)} aria-label="Edit claim">
                         <Edit3 size={15} />
@@ -300,11 +373,48 @@ const Claims = () => {
           <form onSubmit={submitDecision} className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <select className="field" value={decision.status} onChange={(event) => setDecision((current) => ({ ...current, status: event.target.value }))}>
               <option value="under-review">Under review</option>
+              <option value="survey-scheduled">Survey scheduled</option>
               <option value="approved">Approved</option>
               <option value="rejected">Rejected</option>
+              <option value="paid">Paid</option>
               <option value="settled">Settled</option>
             </select>
             <input className="field" type="number" min="0" value={decision.approvedAmount} onChange={(event) => setDecision((current) => ({ ...current, approvedAmount: event.target.value }))} placeholder="Approved amount" />
+            <select className="field" value={decision.assignedAgent} onChange={(event) => setDecision((current) => ({ ...current, assignedAgent: event.target.value }))}>
+              <option value="">Assign agent</option>
+              {teamUsers.agents.map((agent) => (
+                <option key={agent._id} value={agent._id}>{agent.name}</option>
+              ))}
+            </select>
+            <input className="field" type="datetime-local" value={decision.inspectionDate} onChange={(event) => setDecision((current) => ({ ...current, inspectionDate: event.target.value }))} />
+            <select className="field" value={decision.inspector} onChange={(event) => setDecision((current) => ({ ...current, inspector: event.target.value }))}>
+              <option value="">Surveyor / inspector</option>
+              {[...teamUsers.managers, ...teamUsers.agents].map((user) => (
+                <option key={user._id} value={user._id}>{user.name}</option>
+              ))}
+            </select>
+            <select className="field" value={decision.inspectionResult} onChange={(event) => setDecision((current) => ({ ...current, inspectionResult: event.target.value }))}>
+              <option value="pending">Inspection pending</option>
+              <option value="passed">Passed</option>
+              <option value="failed">Failed</option>
+              <option value="needs-review">Needs review</option>
+            </select>
+            <textarea className="field md:col-span-2" value={decision.inspectionReport} onChange={(event) => setDecision((current) => ({ ...current, inspectionReport: event.target.value }))} placeholder="Inspection report" rows="2" />
+            <select className="field" value={decision.garage} onChange={(event) => setDecision((current) => ({ ...current, garage: event.target.value }))}>
+              <option value="">Repair garage</option>
+              {garages.map((garage) => (
+                <option key={garage._id} value={garage._id}>{garage.name}</option>
+              ))}
+            </select>
+            <select className="field" value={decision.repairStatus} onChange={(event) => setDecision((current) => ({ ...current, repairStatus: event.target.value }))}>
+              <option value="not-started">Repair not started</option>
+              <option value="estimate-requested">Estimate requested</option>
+              <option value="repairing">Repairing</option>
+              <option value="completed">Completed</option>
+              <option value="billed">Billed</option>
+            </select>
+            <input className="field" type="number" min="0" value={decision.repairEstimate} onChange={(event) => setDecision((current) => ({ ...current, repairEstimate: event.target.value }))} placeholder="Repair estimate" />
+            <input className="field" value={decision.repairNotes} onChange={(event) => setDecision((current) => ({ ...current, repairNotes: event.target.value }))} placeholder="Repair notes" />
             <textarea className="field md:col-span-2" value={decision.decisionNote} onChange={(event) => setDecision((current) => ({ ...current, decisionNote: event.target.value }))} placeholder="Decision note" rows="2" />
             <button className="btn-primary" type="submit" disabled={deciding}>
               <Stamp size={16} />

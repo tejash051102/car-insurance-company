@@ -38,7 +38,7 @@ const claimSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["submitted", "under-review", "approved", "rejected", "settled"],
+      enum: ["submitted", "under-review", "survey-scheduled", "approved", "rejected", "paid", "settled"],
       default: "submitted"
     },
     description: {
@@ -51,7 +51,63 @@ const claimSchema = new mongoose.Schema(
       ref: "User"
     },
     decidedAt: Date,
-    documentUrl: String
+    documentUrl: String,
+    documents: [
+      {
+        label: {
+          type: String,
+          default: "Claim evidence"
+        },
+        url: String,
+        originalName: String,
+        uploadedAt: {
+          type: Date,
+          default: Date.now
+        }
+      }
+    ],
+    inspection: {
+      scheduledAt: Date,
+      inspector: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      },
+      result: {
+        type: String,
+        enum: ["pending", "passed", "failed", "needs-review"],
+        default: "pending"
+      },
+      report: String
+    },
+    fraud: {
+      score: Number,
+      level: {
+        type: String,
+        enum: ["low", "medium", "high"]
+      },
+      reasons: [String],
+      calculatedAt: Date
+    },
+    repair: {
+      garage: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Garage"
+      },
+      estimateAmount: {
+        type: Number,
+        default: 0
+      },
+      status: {
+        type: String,
+        enum: ["not-started", "estimate-requested", "repairing", "completed", "billed"],
+        default: "not-started"
+      },
+      notes: String
+    },
+    assignedAgent: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
   },
   { timestamps: true }
 );

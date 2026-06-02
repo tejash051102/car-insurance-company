@@ -12,6 +12,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import api from "../api/axios.js";
 import DashboardCard from "../components/DashboardCard.jsx";
+import PremiumsInTimeChart from "../components/PremiumsInTimeChart.jsx";
 import { canManageRecords } from "../utils/auth.js";
 
 const formatCurrency = (amount = 0) =>
@@ -65,62 +66,11 @@ const MetricCard = ({ title, value, total, percent, icon: Icon, variant }) => (
   </article>
 );
 
-const makeLinePoints = (values, width = 640, height = 220, padding = 24) => {
-  const max = Math.max(...values, 1);
-  const min = Math.min(...values, 0);
-  const range = Math.max(max - min, 1);
-
-  return values
-    .map((value, index) => {
-      const x = padding + (index / (values.length - 1 || 1)) * (width - padding * 2);
-      const y = height - padding - ((value - min) / range) * (height - padding * 2);
-      return `${x},${y}`;
-    })
-    .join(" ");
-};
-
-const RevenueLineChart = ({ stats }) => {
-  const revenue = stats?.monthlyRevenue || [];
-  const values = revenue.length ? revenue.map((item) => item.total || 0) : [1200, 3400, 4100, 3300, 2600, 2900, 3900, 4700, 4200, 3100, 2800, 3600];
-  const claims = stats?.claimStatus?.length ? stats.claimStatus.map((item) => (item.count || 0) * 900) : [800, 2900, 1300, 2100, 3600, 3300, 2500, 1700, 900, 1100, 2100, 3700];
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const markerValue = values[6] || values[Math.floor(values.length / 2)] || 0;
-
-  return (
-    <section className="reference-panel p-5">
-      <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-white">Premiums in Time</h3>
-        <div className="flex gap-3 text-xs text-white/45">
-          <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-sky-400" /> Revenue</span>
-          <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-purple-500" /> Claims</span>
-        </div>
-      </div>
-      <div className="relative overflow-hidden rounded-lg">
-        <svg className="h-[260px] w-full" viewBox="0 0 680 260" preserveAspectRatio="none">
-          {[0, 1, 2, 3, 4].map((line) => (
-            <line key={line} x1="35" x2="650" y1={35 + line * 45} y2={35 + line * 45} stroke="rgba(255,255,255,0.07)" strokeDasharray="3 5" />
-          ))}
-          <polyline points={makeLinePoints(claims, 680, 238)} fill="none" stroke="#6d28d9" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity="0.85" />
-          <polyline points={makeLinePoints(values, 680, 238)} fill="none" stroke="#0ea5e9" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-          <circle cx="386" cy="112" r="5" fill="#0ea5e9" />
-          <g>
-            <rect x="370" y="50" width="58" height="42" rx="8" fill="rgba(255,255,255,0.12)" />
-            <text x="399" y="70" textAnchor="middle" fill="#fff" fontSize="12" fontWeight="700">{formatCurrency(markerValue)}</text>
-            <text x="399" y="84" textAnchor="middle" fill="rgba(255,255,255,0.6)" fontSize="10">July</text>
-          </g>
-        </svg>
-        <div className="grid grid-cols-12 gap-1 px-7 text-center text-xs text-white/38">
-          {months.map((month) => <span key={month}>{month}</span>)}
-        </div>
-      </div>
-    </section>
-  );
-};
-
 const IssuesPanel = ({ stats }) => {
   const rows = [
     `Policies expiring soon: ${stats?.expiringPolicies?.length || 0}`,
     `Claims awaiting review: ${(stats?.claimStatus || []).find((item) => item._id === "submitted")?.count || 0}`,
+    `Claim approval rate: ${stats?.claimApprovalRate || 0}%`,
     `Customer portfolio health: ${stats?.totals?.customers || 0} customers`,
     `Premium revenue: ${formatCurrency(stats?.totals?.revenue)}`
   ];
@@ -174,7 +124,7 @@ const PremiumEstimator = () => {
 
   const premium = useMemo(() => {
     const typeFactor = { car: 0.032, bike: 0.022, suv: 0.04, truck: 0.052, van: 0.044, other: 0.035 }[form.vehicleType];
-    const coverageFactor = { comprehensive: 1.35, collision: 1.18, liability: 0.82, thirdParty: 0.72 }[form.coverage];
+    const coverageFactor = { comprehensive: 1.35, collision: 1.18, liability: 0.82, "third-party": 0.72 }[form.coverage];
     const ageFactor = Math.max(0.72, 1 - Number(form.age || 0) * 0.035);
     return Math.round(Number(form.value || 0) * typeFactor * coverageFactor * ageFactor);
   }, [form]);
@@ -202,7 +152,7 @@ const PremiumEstimator = () => {
           <option value="comprehensive">Comprehensive</option>
           <option value="collision">Collision</option>
           <option value="liability">Liability</option>
-          <option value="thirdParty">Third Party</option>
+          <option value="third-party">Third Party</option>
         </select>
       </div>
       <label className="mt-4 block space-y-2">
@@ -212,6 +162,31 @@ const PremiumEstimator = () => {
       <div className="mt-5 rounded-lg bg-gradient-to-br from-purple-600/35 to-pink-600/25 p-4">
         <p className="text-sm text-white/58">Estimated annual premium</p>
         <p className="mt-1 text-3xl font-light text-white">{formatCurrency(premium)}</p>
+      </div>
+    </section>
+  );
+};
+
+const VehicleTypePanel = ({ stats }) => {
+  const rows = stats?.topVehicleTypes?.length ? stats.topVehicleTypes : [];
+  const max = Math.max(...rows.map((row) => row.count), 1);
+
+  return (
+    <section className="reference-panel p-5">
+      <h3 className="text-lg font-semibold text-white">Top Vehicle Types</h3>
+      <div className="mt-5 space-y-3">
+        {rows.map((row) => (
+          <div key={row._id || "unknown"}>
+            <div className="mb-1 flex justify-between text-xs font-semibold capitalize text-white/55">
+              <span>{row._id || "unknown"}</span>
+              <span>{row.count}</span>
+            </div>
+            <div className="h-2 rounded-full bg-white/10">
+              <div className="h-2 rounded-full bg-emerald-300" style={{ width: `${Math.max((row.count / max) * 100, 8)}%` }} />
+            </div>
+          </div>
+        ))}
+        {!rows.length ? <p className="text-sm text-white/42">No vehicle analytics yet.</p> : null}
       </div>
     </section>
   );
@@ -234,6 +209,8 @@ const Dashboard = () => {
     };
 
     loadStats();
+    const interval = window.setInterval(loadStats, 30000);
+    return () => window.clearInterval(interval);
   }, []);
 
   const totals = stats?.totals || {};
@@ -288,11 +265,12 @@ const Dashboard = () => {
       </section>
 
       <section className="grid gap-6 xl:grid-cols-[1fr_0.52fr]">
-        <RevenueLineChart stats={stats} />
+        <PremiumsInTimeChart stats={stats} />
         <SettingsPanel />
         <div className="grid gap-6 md:grid-cols-2">
           <IssuesPanel stats={stats} />
           <PremiumEstimator />
+          <VehicleTypePanel stats={stats} />
         </div>
       </section>
     </div>

@@ -23,6 +23,8 @@ import ticketRoutes from "./routes/ticketRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import backupRoutes from "./routes/backupRoutes.js";
+import garageRoutes from "./routes/garageRoutes.js";
+import serviceRoutes from "./routes/serviceRoutes.js";
 
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import { authRateLimit, securityHeaders } from "./middleware/securityMiddleware.js";
@@ -101,6 +103,8 @@ const startServer = async () => {
     app.use("/api/notifications", notificationRoutes);
     app.use("/api/reports", reportRoutes);
     app.use("/api/backups", backupRoutes);
+    app.use("/api/garages", garageRoutes);
+    app.use("/api/services", serviceRoutes);
 
     // Backward-compatible aliases for clients configured without the /api prefix.
     app.use("/auth", authRateLimit, authRoutes);
@@ -119,6 +123,8 @@ const startServer = async () => {
     app.use("/notifications", notificationRoutes);
     app.use("/reports", reportRoutes);
     app.use("/backups", backupRoutes);
+    app.use("/garages", garageRoutes);
+    app.use("/services", serviceRoutes);
 
     app.use(notFound);
     app.use(errorHandler);

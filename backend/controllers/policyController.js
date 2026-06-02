@@ -2,10 +2,12 @@ import asyncHandler from "express-async-handler";
 import Policy from "../models/Policy.js";
 import Claim from "../models/Claim.js";
 import Payment from "../models/Payment.js";
+import { logActivity } from "../utils/activityLogger.js";
 import { buildPolicyExpiryMessage, sendEmail } from "../utils/emailService.js";
 import { sendCsv } from "../utils/csvExporter.js";
 import { getPagination, sendPaginated } from "../utils/pagination.js";
-import { createPolicyPdf } from "../utils/pdfGenerator.js";
+import { calculatePremium } from "../utils/premiumCalculator.js";
+import { createPolicyPdf, createQuotationPdf } from "../utils/pdfGenerator.js";
 
 const generatePolicyNumber = () => `POL-${Date.now().toString().slice(-8)}`;
 
@@ -105,8 +107,10 @@ export const exportPolicies = asyncHandler(async (req, res) => {
 });
 
 export const createPolicy = asyncHandler(async (req, res) => {
+  const addOnPremium = (req.body.addOns || []).reduce((sum, addOn) => sum + Number(addOn.premium || 0), 0);
   const policy = await Policy.create({
     ...req.body,
+    premiumAmount: Number(req.body.premiumAmount || 0) + addOnPremium,
     policyNumber: req.body.policyNumber || generatePolicyNumber(),
     approvalStatus: req.user?.role === "admin" ? "approved" : "pending",
     approvedBy: req.user?.role === "admin" ? req.user._id : undefined,
@@ -115,6 +119,111 @@ export const createPolicy = asyncHandler(async (req, res) => {
 
   const populatedPolicy = await policy.populate(["customer", "vehicle"]);
   res.status(201).json(populatedPolicy);
+});
+
+export const calculatePolicyPremium = asyncHandler(async (req, res) => {
+  res.json(calculatePremium(req.body));
+});
+
+export const downloadQuotationPdf = asyncHandler(async (req, res) => {
+  const quote = {
+    ...req.body,
+    ...calculatePremium(req.body)
+  };
+
+  const pdfBuffer = await createQuotationPdf(quote);
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", "attachment; filename=insurance-quotation.pdf");
+  res.send(pdfBuffer);
+});
+
+export const renewPolicy = asyncHandler(async (req, res) => {
+  const policy = await Policy.findById(req.params.id).populate("customer").populate("vehicle");
+
+  if (!policy) {
+    res.status(404);
+    throw new Error("Policy not found");
+  }
+
+  const startDate = req.body.startDate ? new Date(req.body.startDate) : new Date(policy.endDate);
+  startDate.setDate(startDate.getDate() + 1);
+  const endDate = req.body.endDate ? new Date(req.body.endDate) : new Date(startDate);
+  if (!req.body.endDate) endDate.setFullYear(endDate.getFullYear() + 1);
+
+  const previousClaims = await Claim.countDocuments({ policy: policy._id });
+  const noClaimBonusPercent = previousClaims === 0 ? Number(req.body.noClaimBonusPercent ?? 20) : 0;
+  const basePremium = Number(req.body.premiumAmount || policy.premiumAmount);
+  const discountedPremium = Math.max(Math.round(basePremium * (1 - noClaimBonusPercent / 100)), 0);
+
+  const renewal = await Policy.create({
+    customer: policy.customer._id,
+    vehicle: policy.vehicle._id,
+    type: req.body.type || policy.type,
+    coverageAmount: Number(req.body.coverageAmount || policy.coverageAmount),
+    premiumAmount: discountedPremium,
+    startDate,
+    endDate,
+    status: "active",
+    approvalStatus: "approved",
+    approvedBy: req.user?._id,
+    approvedAt: new Date(),
+    assignedAgent: req.body.assignedAgent || policy.assignedAgent,
+    addOns: req.body.addOns || policy.addOns,
+    noClaimBonusPercent,
+    renewalOf: policy._id,
+    policyNumber: req.body.policyNumber || generatePolicyNumber(),
+    notes: req.body.notes || `Renewal of ${policy.policyNumber}`
+  });
+
+  policy.renewalHistory.push({
+    renewedPolicy: renewal._id,
+    oldEndDate: policy.endDate,
+    newStartDate: startDate,
+    newEndDate: endDate,
+    premiumAmount: renewal.premiumAmount,
+    noClaimBonusPercent,
+    renewedBy: req.user?._id
+  });
+  policy.status = "expired";
+  await policy.save();
+
+  const populatedRenewal = await renewal.populate(["customer", "vehicle", "assignedAgent"]);
+  res.status(201).json(populatedRenewal);
+});
+
+export const cancelPolicy = asyncHandler(async (req, res) => {
+  const policy = await Policy.findById(req.params.id).populate("customer").populate("vehicle");
+
+  if (!policy) {
+    res.status(404);
+    throw new Error("Policy not found");
+  }
+
+  const now = new Date();
+  const start = new Date(policy.startDate);
+  const end = new Date(policy.endDate);
+  const totalDays = Math.max((end - start) / 86400000, 1);
+  const remainingDays = Math.max((end - now) / 86400000, 0);
+  const refundAmount = Math.round(Number(policy.premiumAmount || 0) * (remainingDays / totalDays) * 0.85);
+
+  policy.status = "cancelled";
+  policy.cancellation = {
+    reason: req.body.reason || "Cancelled by insurance team",
+    refundAmount,
+    cancelledBy: req.user?._id,
+    cancelledAt: now
+  };
+  await policy.save();
+
+  await logActivity({
+    req,
+    action: "cancelled",
+    entityType: "Policy",
+    entityId: policy._id,
+    message: `Cancelled policy ${policy.policyNumber}; refund ${refundAmount}`
+  });
+
+  res.json(policy);
 });
 
 export const approvePolicy = asyncHandler(async (req, res) => {

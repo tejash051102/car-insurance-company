@@ -17,6 +17,7 @@ import Register from "./pages/Register.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import RbacReport from "./pages/RbacReport.jsx";
 import SecurityCenter from "./pages/SecurityCenter.jsx";
+import ServiceHub from "./pages/ServiceHub.jsx";
 import VerifyEmail from "./pages/VerifyEmail.jsx";
 import Vehicles from "./pages/Vehicles.jsx";
 import Activities from "./pages/Activities.jsx";
@@ -57,6 +58,9 @@ const moduleMeta = {
   },
   "/tickets": {
     className: "page-tickets"
+  },
+  "/service-hub": {
+    className: "page-service"
   },
   "/notifications": {
     className: "page-notifications"
@@ -106,6 +110,7 @@ const AppLayout = ({ onLogout }) => {
               <Route path="/security" element={<SecurityCenter />} />
               <Route path="/intelligence" element={<Intelligence />} />
               <Route path="/tickets" element={<Tickets />} />
+              <Route path="/service-hub" element={<ServiceHub />} />
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/backups" element={<BackupCenter />} />

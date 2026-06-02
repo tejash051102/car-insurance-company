@@ -209,6 +209,7 @@ const Payments = () => {
                 <th className="px-4 py-3">Amount</th>
                 <th className="px-4 py-3">Method</th>
                 <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3">Receipt</th>
                 <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
@@ -224,6 +225,15 @@ const Payments = () => {
                   <td className="px-4 py-3">{formatCurrency(payment.amount)}</td>
                   <td className="px-4 py-3 capitalize">{payment.method}</td>
                   <td className="px-4 py-3 capitalize">{payment.status}</td>
+                  <td className="px-4 py-3">
+                    {payment.receiptIssuedAt ? (
+                      <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                        Receipt {payment.receiptIssuedAt.slice(0, 10)}
+                      </span>
+                    ) : (
+                      <span className="text-xs text-slate-500">Not issued</span>
+                    )}
+                  </td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
                       <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => editPayment(payment)} aria-label="Edit payment">
@@ -243,7 +253,7 @@ const Payments = () => {
               ))}
               {!payments.length ? (
                 <tr>
-                  <td colSpan="7" className="px-4 py-8 text-center text-slate-500">
+                  <td colSpan="8" className="px-4 py-8 text-center text-slate-500">
                     No payments found.
                   </td>
                 </tr>

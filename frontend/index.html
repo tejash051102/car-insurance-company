@@ -6,6 +6,34 @@
     <meta name="theme-color" content="#0f172a" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Insurance Management System</title>
+    <script>
+      (() => {
+        const ignoredMessages = [
+          "A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received",
+          "[DEFAULT]: WARN : Using DEFAULT root logger"
+        ];
+        const shouldIgnore = (value) => ignoredMessages.some((message) => String(value || "").includes(message));
+
+        window.addEventListener("unhandledrejection", (event) => {
+          const message = event.reason && event.reason.message ? event.reason.message : event.reason;
+          if (shouldIgnore(message)) {
+            event.preventDefault();
+          }
+        }, true);
+
+        window.addEventListener("error", (event) => {
+          if (shouldIgnore(event.message)) {
+            event.preventDefault();
+          }
+        }, true);
+
+        const warn = console.warn.bind(console);
+        console.warn = (...args) => {
+          if (shouldIgnore(args.join(" "))) return;
+          warn(...args);
+        };
+      })();
+    </script>
     <style>
       body {
         margin: 0;

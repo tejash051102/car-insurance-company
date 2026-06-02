@@ -47,6 +47,33 @@ const policySchema = new mongoose.Schema(
       enum: ["active", "expired", "cancelled", "pending"],
       default: "pending"
     },
+    addOns: [
+      {
+        name: {
+          type: String,
+          enum: ["roadside-assistance", "zero-depreciation", "engine-protection", "passenger-cover"]
+        },
+        premium: {
+          type: Number,
+          default: 0
+        }
+      }
+    ],
+    noClaimBonusPercent: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 50
+    },
+    cancellation: {
+      reason: String,
+      refundAmount: Number,
+      cancelledBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      },
+      cancelledAt: Date
+    },
     approvalStatus: {
       type: String,
       enum: ["pending", "approved", "rejected"],
@@ -58,6 +85,42 @@ const policySchema = new mongoose.Schema(
       ref: "User"
     },
     approvedAt: Date,
+    assignedAgent: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    },
+    renewalOf: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Policy"
+    },
+    renewalHistory: [
+      {
+        renewedPolicy: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Policy"
+        },
+        oldEndDate: Date,
+        newStartDate: Date,
+        newEndDate: Date,
+        premiumAmount: Number,
+        noClaimBonusPercent: Number,
+        renewedBy: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User"
+        },
+        renewedAt: {
+          type: Date,
+          default: Date.now
+        }
+      }
+    ],
+    quotation: {
+      premiumAmount: Number,
+      coverageAmount: Number,
+      validUntil: Date,
+      generatedAt: Date,
+      factors: mongoose.Schema.Types.Mixed
+    },
     notes: encryptedString()
   },
   { timestamps: true, toJSON: { getters: true }, toObject: { getters: true } }

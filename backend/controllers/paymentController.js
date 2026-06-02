@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import Payment from "../models/Payment.js";
 import Policy from "../models/Policy.js";
 import { sendCsv } from "../utils/csvExporter.js";
+import { buildPaymentReceiptMessage, sendEmail } from "../utils/emailService.js";
 import { createInvoicePdf } from "../utils/invoiceGenerator.js";
 import { getPagination, sendPaginated } from "../utils/pagination.js";
 
@@ -73,10 +74,14 @@ export const createPayment = asyncHandler(async (req, res) => {
   const payment = await Payment.create({
     ...req.body,
     customer: req.body.customer || policy.customer,
-    paymentNumber: req.body.paymentNumber || generatePaymentNumber()
+    paymentNumber: req.body.paymentNumber || generatePaymentNumber(),
+    receiptIssuedAt: req.body.status === "paid" ? new Date() : undefined
   });
 
   const populatedPayment = await payment.populate(["customer", "policy"]);
+  if (populatedPayment.status === "paid") {
+    await sendEmail(buildPaymentReceiptMessage(populatedPayment));
+  }
   res.status(201).json(populatedPayment);
 });
 
@@ -91,6 +96,11 @@ export const updatePayment = asyncHandler(async (req, res) => {
   if (!payment) {
     res.status(404);
     throw new Error("Payment not found");
+  }
+
+  if (payment.status === "paid" && !payment.receiptIssuedAt) {
+    payment.receiptIssuedAt = new Date();
+    await payment.save();
   }
 
   res.json(payment);

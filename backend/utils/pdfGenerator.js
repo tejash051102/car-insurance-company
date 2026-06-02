@@ -66,3 +66,42 @@ export const createPolicyPdf = (policy) =>
 
     doc.end();
   });
+
+export const createQuotationPdf = (quote) =>
+  new Promise((resolve, reject) => {
+    const doc = new PDFDocument({ margin: 48, size: "A4" });
+    const chunks = [];
+
+    doc.on("data", (chunk) => chunks.push(chunk));
+    doc.on("end", () => resolve(Buffer.concat(chunks)));
+    doc.on("error", reject);
+
+    addBrandHeader(doc, {
+      title: "Insurance Quotation",
+      subtitle: "Estimated premium quotation before policy creation.",
+      badge: "quote"
+    });
+
+    doc.fontSize(14).fillColor(colors.ink).text("Quotation Summary", 48, doc.y);
+    doc.moveDown(0.8);
+
+    drawKeyValueGrid(doc, [
+      { label: "Customer", value: quote.customer?.fullName || quote.customerName || "Prospect" },
+      { label: "Vehicle Type", value: quote.vehicleType },
+      { label: "Vehicle Value", value: formatCurrency(quote.vehicleValue) },
+      { label: "Vehicle Age", value: `${quote.vehicleAge || 0} years` },
+      { label: "Coverage Type", value: quote.coverageType },
+      { label: "Claim History", value: quote.claimHistory || 0 },
+      { label: "Estimated Premium", value: formatCurrency(quote.premiumAmount) },
+      { label: "Estimated Coverage", value: formatCurrency(quote.coverageAmount) }
+    ]);
+
+    doc.moveDown(0.6);
+    doc.fontSize(10).fillColor(colors.muted).text(
+      "This quotation is indicative and subject to underwriting approval, vehicle inspection, document verification, and policy terms.",
+      { lineGap: 3 }
+    );
+
+    addFooter(doc);
+    doc.end();
+  });
