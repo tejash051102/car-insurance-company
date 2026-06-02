@@ -96,7 +96,7 @@ const uiFeatures = [
 ];
 
 const PortfolioMetric = ({ value, label }) => (
-  <div className="rounded-md border border-white/10 bg-white/[0.055] px-4 py-3">
+  <div className="rounded-md border border-white/10 bg-white/[0.055] px-5 py-4">
     <p className="text-2xl font-bold text-white">{value}</p>
     <p className="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-white/45">{label}</p>
   </div>
@@ -106,20 +106,35 @@ const ProjectPortfolio = () => {
   return (
     <div className="min-h-screen bg-[#0c0521] text-white">
       <section className="relative overflow-hidden border-b border-white/10">
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(124,58,237,0.24),transparent_42%),linear-gradient(315deg,rgba(14,165,233,0.14),transparent_34%),#0c0521]" />
-        <div className="relative mx-auto grid min-h-[92vh] max-w-7xl gap-10 px-5 py-8 md:px-8 lg:grid-cols-[1fr_0.86fr] lg:items-center">
-          <div className="max-w-3xl">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-md border border-cyan-300/20 bg-cyan-300/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.14em] text-cyan-100">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(124,58,237,0.22),transparent_44%),linear-gradient(315deg,rgba(14,165,233,0.13),transparent_36%),#0b031d]" />
+        <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-5 md:px-8">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-md border border-cyan-300/20 bg-cyan-300/10 text-cyan-100">
               <ShieldCheck size={16} />
-              B.Tech Project Portfolio
+            </span>
+            <div>
+              <p className="text-sm font-black tracking-normal text-white">AutoSure</p>
+              <p className="text-xs font-semibold text-white/42">Insurance Operations Platform</p>
             </div>
-            <h1 className="text-4xl font-black leading-tight tracking-normal text-white md:text-6xl">
+          </div>
+          <div className="flex items-center gap-2">
+            <a className="btn-secondary hidden sm:inline-flex" href="#modules">Modules</a>
+            <Link className="btn-primary" to="/login">Login</Link>
+          </div>
+        </div>
+
+        <div className="relative mx-auto grid min-h-[calc(100vh-82px)] max-w-7xl gap-10 px-5 pb-12 pt-8 md:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:pb-16">
+          <div className="max-w-3xl">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-md border border-purple-300/20 bg-purple-300/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.14em] text-purple-100">
+              Enterprise Insurance Suite
+            </div>
+            <h1 className="max-w-4xl text-4xl font-black leading-[1.02] tracking-normal text-white sm:text-5xl xl:text-7xl">
               Car Insurance Company Management System
             </h1>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-white/62 md:text-lg">
+            <p className="mt-6 max-w-2xl text-base leading-8 text-white/62 md:text-lg">
               A full-stack insurance operations platform for managing customers, vehicles, policies, claims, payments, service requests, security, reports, and analytics from one secure dashboard.
             </p>
-            <div className="mt-7 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap gap-3">
               <Link className="btn-primary" to="/login">
                 Open Project
               </Link>
@@ -127,23 +142,23 @@ const ProjectPortfolio = () => {
                 View Modules
               </a>
             </div>
-            <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            <div className="mt-9 grid gap-4 sm:grid-cols-3">
               <PortfolioMetric value="20+" label="Core features" />
               <PortfolioMetric value="5" label="User roles" />
               <PortfolioMetric value="MERN" label="Tech stack" />
             </div>
           </div>
 
-          <div className="relative min-h-[460px]">
-            <div className="absolute left-0 top-6 w-[78%] rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-2xl backdrop-blur">
+          <div className="relative mx-auto min-h-[520px] w-full max-w-2xl">
+            <div className="absolute left-0 right-8 top-6 rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-2xl shadow-black/30 backdrop-blur">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.16em] text-cyan-200/70">Operations</p>
-                  <h2 className="mt-1 text-xl font-bold">AI Dashboard</h2>
+                  <h2 className="mt-1 text-2xl font-bold">AI Dashboard</h2>
                 </div>
                 <BarChart3 className="text-cyan-200" />
               </div>
-              <div className="mt-5 h-44 rounded-md border border-white/10 bg-[#1c1241] p-4">
+              <div className="mt-5 h-56 rounded-md border border-white/10 bg-[#1c1241] p-4">
                 <svg className="h-full w-full" viewBox="0 0 420 180" preserveAspectRatio="none">
                   {[0, 1, 2, 3].map((line) => (
                     <line key={line} x1="10" x2="410" y1={26 + line * 38} y2={26 + line * 38} stroke="rgba(255,255,255,0.08)" strokeDasharray="4 6" />
@@ -152,20 +167,27 @@ const ProjectPortfolio = () => {
                   <polyline points="12,148 70,70 128,126 188,90 248,38 310,62 408,36" fill="none" stroke="#8b5cf6" strokeWidth="5" strokeLinecap="round" />
                 </svg>
               </div>
+              <div className="mt-5 grid grid-cols-3 gap-3">
+                <PortfolioMetric value="Live" label="Revenue" />
+                <PortfolioMetric value="AI" label="Risk Score" />
+                <PortfolioMetric value="PDF" label="Reports" />
+              </div>
             </div>
-            <div className="absolute bottom-8 right-0 w-[72%] rounded-lg border border-white/10 bg-white/[0.07] p-5 shadow-2xl backdrop-blur">
-              <div className="flex items-center gap-3">
-                <img src="/module-art/claims.svg" alt="Claims module" className="h-16 w-20 object-contain" />
+            <div className="absolute bottom-4 right-0 w-[min(92%,520px)] rounded-lg border border-white/10 bg-[#2b2148]/95 p-5 shadow-2xl shadow-black/35 backdrop-blur">
+              <div className="flex items-center gap-4">
+                <div className="flex h-16 w-20 items-center justify-center rounded-md bg-amber-400/15">
+                  <img src="/module-art/claims.svg" alt="Claims module" className="h-14 w-16 object-contain" />
+                </div>
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.16em] text-purple-200/70">Claim Engine</p>
-                  <h3 className="text-lg font-bold">Fraud score, inspection, repair, approval</h3>
+                  <h3 className="text-xl font-bold leading-snug">Fraud score, inspection, repair, approval</h3>
                 </div>
               </div>
-              <div className="mt-4 grid grid-cols-2 gap-3 text-sm text-white/62">
-                <span className="rounded-md bg-white/[0.06] px-3 py-2">Evidence upload</span>
-                <span className="rounded-md bg-white/[0.06] px-3 py-2">Garage repair</span>
-                <span className="rounded-md bg-white/[0.06] px-3 py-2">Survey report</span>
-                <span className="rounded-md bg-white/[0.06] px-3 py-2">Paid status</span>
+              <div className="mt-5 grid grid-cols-2 gap-3 text-sm font-semibold text-white/72">
+                <span className="rounded-md bg-white/[0.07] px-4 py-3">Evidence upload</span>
+                <span className="rounded-md bg-white/[0.07] px-4 py-3">Garage repair</span>
+                <span className="rounded-md bg-white/[0.07] px-4 py-3">Survey report</span>
+                <span className="rounded-md bg-white/[0.07] px-4 py-3">Paid status</span>
               </div>
             </div>
           </div>
