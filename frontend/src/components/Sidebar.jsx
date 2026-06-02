@@ -47,11 +47,11 @@ const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
     >
       <div className="flex items-center gap-3 overflow-hidden">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-purple-500/25 text-white shadow-inner shadow-white/5 ring-1 ring-purple-300/25">
-          <img src="/favicon.svg" alt="Insurance Management System" className="h-8 w-8 object-contain" />
+          <img src="/favicon.svg" alt="DriveSure" className="h-8 w-8 object-contain" />
         </div>
         {isExpanded && (
           <div className="min-w-0 overflow-hidden">
-            <p className="truncate text-lg font-black tracking-tight text-white">AutoSure</p>
+            <p className="truncate text-lg font-black tracking-tight text-white">DriveSure</p>
             <p className="truncate text-[11px] font-medium text-purple-200/70">Insurance Command</p>
           </div>
         )}

@@ -409,7 +409,7 @@ const Register = ({ onAuth }) => {
           <ShieldPlus size={24} color="#0ea5e9" strokeWidth={1.5} />
         </div>
         <p style={{ fontSize: "11px", fontWeight: 600, letterSpacing: "0.2em", color: "#0ea5e9", textTransform: "uppercase" }}>
-          Insurance Management System
+          DriveSure
         </p>
       </div>
 

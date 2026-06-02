@@ -113,7 +113,7 @@ const ProjectPortfolio = () => {
               <ShieldCheck size={16} />
             </span>
             <div>
-              <p className="text-sm font-black tracking-normal text-white">AutoSure</p>
+              <p className="text-sm font-black tracking-normal text-white">DriveSure</p>
               <p className="text-xs font-semibold text-white/42">Insurance Operations Platform</p>
             </div>
           </div>
@@ -129,10 +129,10 @@ const ProjectPortfolio = () => {
               Enterprise Insurance Suite
             </div>
             <h1 className="max-w-4xl text-4xl font-black leading-[1.02] tracking-normal text-white sm:text-5xl xl:text-7xl">
-              Car Insurance Company Management System
+              DriveSure
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-white/62 md:text-lg">
-              A full-stack insurance operations platform for managing customers, vehicles, policies, claims, payments, service requests, security, reports, and analytics from one secure dashboard.
+              A full-stack car insurance operations platform for managing customers, vehicles, policies, claims, payments, service requests, security, reports, and analytics from one secure dashboard.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link className="btn-primary" to="/login">
@@ -149,8 +149,8 @@ const ProjectPortfolio = () => {
             </div>
           </div>
 
-          <div className="relative mx-auto min-h-[520px] w-full max-w-2xl">
-            <div className="absolute left-0 right-8 top-6 rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-2xl shadow-black/30 backdrop-blur">
+          <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
+            <div className="rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-2xl shadow-black/30 backdrop-blur">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.16em] text-cyan-200/70">Operations</p>
@@ -173,8 +173,8 @@ const ProjectPortfolio = () => {
                 <PortfolioMetric value="PDF" label="Reports" />
               </div>
             </div>
-            <div className="absolute bottom-4 right-0 w-[min(92%,520px)] rounded-lg border border-white/10 bg-[#2b2148]/95 p-5 shadow-2xl shadow-black/35 backdrop-blur">
-              <div className="flex items-center gap-4">
+            <div className="ml-auto w-full max-w-xl rounded-lg border border-white/10 bg-[#2b2148]/95 p-5 shadow-2xl shadow-black/35 backdrop-blur">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                 <div className="flex h-16 w-20 items-center justify-center rounded-md bg-amber-400/15">
                   <img src="/module-art/claims.svg" alt="Claims module" className="h-14 w-16 object-contain" />
                 </div>

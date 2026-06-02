@@ -1,4 +1,4 @@
-# Car Insurance Company Management System
+# DriveSure
 
 A full-stack MERN management system for a car insurance company. It includes JWT authentication, customer and vehicle records, policy management, claim tracking, payment collection, dashboard statistics, PDF policy certificates, and a Postman collection.
 
