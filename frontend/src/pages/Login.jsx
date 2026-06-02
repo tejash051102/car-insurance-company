@@ -355,16 +355,24 @@ const Login = ({ onAuth }) => {
         }}
         className="login-left-panel"
       >
-        {/* shield icon */}
-        <div style={{
-          width: "56px", height: "56px", borderRadius: "14px",
-          background: "rgba(14,165,233,0.15)",
-          border: "1px solid rgba(14,165,233,0.3)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          marginBottom: "32px",
-          boxShadow: "0 0 32px rgba(14,165,233,0.15)",
-        }}>
-          <ShieldCheck size={26} color="#0ea5e9" strokeWidth={1.5} />
+        {/* logo */}
+        <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "32px" }}>
+          <div style={{
+            width: "56px", height: "56px", borderRadius: "14px",
+            background: "rgba(14,165,233,0.15)",
+            border: "1px solid rgba(14,165,233,0.3)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: "0 0 32px rgba(14,165,233,0.15)",
+            overflow: "hidden",
+          }}>
+            <img src="/favicon.svg" alt="DriveSure" style={{ width: "44px", height: "44px", objectFit: "contain" }} />
+          </div>
+          <div>
+            <p style={{ fontSize: "22px", fontWeight: 900, color: "#fff", lineHeight: 1 }}>DriveSure</p>
+            <p style={{ marginTop: "4px", fontSize: "11px", fontWeight: 600, letterSpacing: "0.16em", color: "rgba(103,232,249,0.72)", textTransform: "uppercase" }}>
+              Insurance OS
+            </p>
+          </div>
         </div>
 
         <p style={{ fontSize: "11px", fontWeight: 600, letterSpacing: "0.2em", color: "#0ea5e9", textTransform: "uppercase", marginBottom: "14px" }}>
@@ -426,7 +434,7 @@ const Login = ({ onAuth }) => {
               display: "flex", alignItems: "center", justifyContent: "center",
               flexShrink: 0,
             }}>
-              <ShieldCheck size={22} color="#0ea5e9" strokeWidth={1.5} />
+              <img src="/favicon.svg" alt="DriveSure" style={{ width: "34px", height: "34px", objectFit: "contain" }} />
             </div>
             <div>
               <p style={{ fontSize: "11px", fontWeight: 600, color: "#0ea5e9", letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "4px" }}>

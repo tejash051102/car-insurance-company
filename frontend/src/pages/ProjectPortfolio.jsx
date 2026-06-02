@@ -162,6 +162,10 @@ const PortfolioMetric = ({ value, label }) => (
 );
 
 const ProjectPortfolio = () => {
+  const scrollToModules = () => {
+    document.getElementById("modules")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <div className="min-h-screen bg-[#0c0521] text-white">
       <section className="relative overflow-hidden border-b border-white/10">
@@ -177,7 +181,7 @@ const ProjectPortfolio = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <a className="btn-secondary hidden sm:inline-flex" href="#modules">Modules</a>
+            <button className="btn-secondary hidden sm:inline-flex" type="button" onClick={scrollToModules}>Modules</button>
             <Link className="btn-primary" to="/login">Login</Link>
           </div>
         </div>
@@ -197,9 +201,9 @@ const ProjectPortfolio = () => {
               <Link className="btn-primary" to="/login">
                 Open Project
               </Link>
-              <a className="btn-secondary" href="#modules">
+              <button className="btn-secondary" type="button" onClick={scrollToModules}>
                 View Modules
-              </a>
+              </button>
             </div>
             <div className="mt-9 grid gap-4 sm:grid-cols-3">
               <PortfolioMetric value="20+" label="Core features" />

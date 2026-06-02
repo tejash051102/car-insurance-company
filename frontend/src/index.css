@@ -652,7 +652,7 @@ textarea {
   }
 
   .app-main ::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.03);
+    background: transparent;
   }
 
   .app-main ::-webkit-scrollbar-thumb {
@@ -1007,7 +1007,15 @@ html[data-theme="light"] .app-main input[type="file"]::file-selector-button {
 }
 
 html[data-theme="light"] .app-main ::-webkit-scrollbar-track {
-  background: rgba(148, 163, 184, 0.14);
+  background: transparent;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 html[data-theme="light"] .app-main ::-webkit-scrollbar-thumb {
