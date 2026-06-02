@@ -18,12 +18,48 @@ import {
 import { Link } from "react-router-dom";
 
 const modules = [
-  { title: "Customer Registry", detail: "Customer profiles, OTP verification, document uploads, and secure customer portal access.", art: "/module-art/customers.svg", icon: Users },
-  { title: "Vehicle & Policy Management", detail: "Vehicle records, policy creation, add-ons, premium calculator, quotation PDF, renewals, and cancellation refunds.", art: "/module-art/policies.svg", icon: ShieldCheck },
-  { title: "Claims Workflow", detail: "Claim registration, evidence uploads, approval stages, fraud score refresh, inspection scheduling, and repair tracking.", art: "/module-art/claims.svg", icon: ClipboardCheck },
-  { title: "Payments & EMI Plans", detail: "Premium payments, receipts, invoice PDFs, payment status tracking, and installment payment plans.", art: "/module-art/payments.svg", icon: BarChart3 },
-  { title: "Service Hub", detail: "Garage partners, customer feedback, internal messaging, live chat-style threads, and audit timelines.", art: "/module-art/portal.svg", icon: MessageSquare },
-  { title: "Security Center", detail: "JWT access control, RBAC reporting, activity logs, failed-login monitoring, and security alerts.", art: "/module-art/security.svg", icon: LockKeyhole }
+  {
+    title: "Customer Registry",
+    detail: "Customer profiles, OTP verification, document uploads, and secure customer portal access.",
+    outcome: "Complete customer lifecycle",
+    art: "/module-art/customers.svg",
+    icon: Users
+  },
+  {
+    title: "Vehicle & Policy Management",
+    detail: "Vehicle records, policy creation, add-ons, premium calculator, quotation PDF, renewals, and cancellation refunds.",
+    outcome: "From quotation to renewal",
+    art: "/module-art/policies.svg",
+    icon: ShieldCheck
+  },
+  {
+    title: "Claims Workflow",
+    detail: "Claim registration, evidence uploads, approval stages, fraud score refresh, inspection scheduling, and repair tracking.",
+    outcome: "Traceable claim handling",
+    art: "/module-art/claims.svg",
+    icon: ClipboardCheck
+  },
+  {
+    title: "Payments & EMI Plans",
+    detail: "Premium payments, receipts, invoice PDFs, payment status tracking, and installment payment plans.",
+    outcome: "Receipts and installments",
+    art: "/module-art/payments.svg",
+    icon: BarChart3
+  },
+  {
+    title: "Service Hub",
+    detail: "Garage partners, customer feedback, internal messaging, live chat-style threads, and audit timelines.",
+    outcome: "After-sales operations",
+    art: "/module-art/portal.svg",
+    icon: MessageSquare
+  },
+  {
+    title: "Security Center",
+    detail: "JWT access control, RBAC reporting, activity logs, failed-login monitoring, and security alerts.",
+    outcome: "Protected operations",
+    art: "/module-art/security.svg",
+    icon: LockKeyhole
+  }
 ];
 
 const techStack = [
@@ -93,6 +129,29 @@ const uiFeatures = [
     detail: "A floating assistant helps users understand project modules like policies, claims, payments, security, and portfolio flow.",
     icon: Bot
   }
+];
+
+const projectModules = [
+  ["Authentication", "Login, registration, JWT access, email verification, password reset, and profile security."],
+  ["Customer Management", "Customer records, contact verification, document upload, and customer status tracking."],
+  ["Vehicle Management", "Vehicle registration, model, year, type, fuel, value, and customer linkage."],
+  ["Policy Management", "Policy creation, approval, add-ons, renewals, cancellation, refund, and certificate PDF."],
+  ["Premium Calculator", "Estimate premium using vehicle type, value, age, claim history, and coverage type."],
+  ["Quotation Module", "Generate customer-ready quotation PDFs before policy creation."],
+  ["Claims Management", "Claim registration, status workflow, evidence uploads, approval, rejection, and settlement."],
+  ["Claim Timeline", "Visual tracking from submitted to review, survey, approval, payment, and settlement."],
+  ["Fraud Analysis", "Claim risk score, repeated claim detection, high amount checks, and missing document signals."],
+  ["Surveyor Inspection", "Schedule inspection, assign surveyor, store result, and maintain inspection report."],
+  ["Garage Partners", "Approved garages, repair estimate, repair status, and claim repair notes."],
+  ["Payments", "Payment records, transaction status, method tracking, invoice PDF, and receipt issue history."],
+  ["EMI Plans", "Monthly or quarterly installment plans with due dates and paid status tracking."],
+  ["Dashboard Analytics", "Revenue trends, claim amounts, policy counts, customer growth, and operational cards."],
+  ["Reports", "Policy, claim, payment, security, CSV export, and PDF report generation."],
+  ["Notifications", "Policy expiry, payment status, claim update, and security alert notifications."],
+  ["Customer Portal", "Customer login, policy view, claim status, receipts, profile updates, and support tickets."],
+  ["Support Tickets", "Ticket category, priority, status, staff response, and customer portal requests."],
+  ["Service Hub", "Garage management, EMI plans, feedback, internal messages, live chat-style threads, and timeline lookup."],
+  ["Security Center", "RBAC report, audit logs, login monitoring, encrypted fields, and security alerts."]
 ];
 
 const PortfolioMetric = ({ value, label }) => (
@@ -205,29 +264,82 @@ const ProjectPortfolio = () => {
           </p>
         </section>
 
-        <section id="modules" className="mt-12">
-          <div className="mb-6 flex items-end justify-between gap-4">
+        <section id="modules" className="mt-12 rounded-lg border border-white/10 bg-white/[0.035] p-5 md:p-7">
+          <div className="mb-7 grid gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
             <div>
               <p className="label">Modules</p>
-              <h2 className="mt-2 text-3xl font-black text-white">Feature Portfolio</h2>
+              <h2 className="mt-2 text-3xl font-black text-white md:text-4xl">DriveSure Feature Portfolio</h2>
             </div>
+            <p className="max-w-3xl text-sm leading-7 text-white/56 md:text-base">
+              The system is organized into operational modules that mirror a real car insurance company: customer onboarding, policy lifecycle, claims, payments, service support, and security governance.
+            </p>
           </div>
+
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {modules.map((module) => {
               const Icon = module.icon;
               return (
-                <article key={module.title} className="rounded-lg border border-white/10 bg-white/[0.045] p-5 shadow-xl backdrop-blur transition hover:border-purple-300/35">
-                  <div className="flex items-start justify-between gap-4">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-md bg-purple-500/16 text-purple-100">
-                      <Icon size={21} />
-                    </span>
-                    <img src={module.art} alt={module.title} className="h-16 w-20 object-contain opacity-80" />
+                <article key={module.title} className="group relative overflow-hidden rounded-lg border border-white/10 bg-[#1b1239]/80 p-5 shadow-xl backdrop-blur transition hover:-translate-y-1 hover:border-purple-300/35 hover:bg-[#211748]">
+                  <div className="absolute right-4 top-4 opacity-10 transition group-hover:opacity-20">
+                    <img src={module.art} alt="" className="h-28 w-32 object-contain" />
                   </div>
-                  <h3 className="mt-4 text-lg font-bold text-white">{module.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-white/52">{module.detail}</p>
+                  <div className="relative">
+                    <div className="flex items-start justify-between gap-4">
+                      <span className="flex h-12 w-12 items-center justify-center rounded-md bg-purple-500/16 text-purple-100 ring-1 ring-white/10">
+                        <Icon size={22} />
+                      </span>
+                      <span className="rounded-md border border-cyan-300/15 bg-cyan-300/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-cyan-100">
+                        {module.outcome}
+                      </span>
+                    </div>
+                    <h3 className="mt-5 text-xl font-bold text-white">{module.title}</h3>
+                    <p className="mt-3 min-h-24 text-sm leading-6 text-white/54">{module.detail}</p>
+                    <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
+                      <div className="h-full w-2/3 rounded-full bg-gradient-to-r from-cyan-300 to-purple-400 transition-all group-hover:w-full" />
+                    </div>
+                  </div>
                 </article>
               );
             })}
+          </div>
+
+          <div className="mt-7 grid gap-4 rounded-lg border border-white/10 bg-white/[0.04] p-5 lg:grid-cols-4">
+            {[
+              ["Users", "Admin, manager, agent, surveyor, customer"],
+              ["Documents", "Policies, invoices, reports, evidence"],
+              ["Automation", "Renewal alerts, claim risk, receipts"],
+              ["Analytics", "Revenue, claims, policies, growth"]
+            ].map(([title, detail]) => (
+              <div key={title}>
+                <p className="text-sm font-bold text-white">{title}</p>
+                <p className="mt-1 text-sm leading-6 text-white/48">{detail}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-7 rounded-lg border border-white/10 bg-[#120a2a]/70 p-5">
+            <div className="mb-5 flex flex-col justify-between gap-3 md:flex-row md:items-end">
+              <div>
+                <p className="label">Complete Module List</p>
+                <h3 className="mt-2 text-2xl font-black text-white">20 DriveSure Modules</h3>
+              </div>
+              <p className="max-w-xl text-sm leading-6 text-white/48">
+                This catalog maps the full project scope for demonstration, documentation, and viva explanation.
+              </p>
+            </div>
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+              {projectModules.map(([title, detail], index) => (
+                <article key={title} className="rounded-md border border-white/10 bg-white/[0.04] p-4">
+                  <div className="mb-3 flex items-center gap-3">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-purple-500/16 text-sm font-black text-purple-100">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <h4 className="font-bold text-white">{title}</h4>
+                  </div>
+                  <p className="text-sm leading-6 text-white/50">{detail}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 

@@ -7,3 +7,8 @@ backend/uploads/*
 !backend/uploads/.gitkeep
 *.log
 *.err
+Car-Insurance-Company-Project-Report.pdf
+Car-Insurance-Company-Project-Report.docx
+Project-Technologies-Used.pdf
+Project-Technologies-Used-Detailed.pdf
+report-assets/
