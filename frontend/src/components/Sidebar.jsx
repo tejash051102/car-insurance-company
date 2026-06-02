@@ -21,20 +21,20 @@ import { NavLink } from "react-router-dom";
 import { canManageRecords, getCurrentUser } from "../utils/auth.js";
 
 const items = [
-  { label: "AI Dashboard", to: "/", icon: Gauge },
-  { label: "Customers", to: "/customers", icon: Users },
-  { label: "Vehicles", to: "/vehicles", icon: Car },
-  { label: "Policies", to: "/policies", icon: ShieldCheck },
-  { label: "Claims", to: "/claims", icon: ClipboardCheck },
-  { label: "Payments", to: "/payments", icon: BadgeIndianRupee },
-  { label: "AI & Fraud", to: "/intelligence", icon: BrainCircuit, managerOnly: true },
-  { label: "Tickets", to: "/tickets", icon: MessageSquare },
-  { label: "Service Hub", to: "/service-hub", icon: Wrench, managerOnly: true },
-  { label: "Reports", to: "/reports", icon: FileText, managerOnly: true },
-  { label: "Audit Logs", to: "/activities", icon: History, managerOnly: true },
-  { label: "Security", to: "/security", icon: LockKeyhole, managerOnly: true },
-  { label: "RBAC Report", to: "/rbac-report", icon: FileCheck2, managerOnly: true },
-  { label: "Backups", to: "/backups", icon: DatabaseBackup, adminOnly: true },
+  { label: "AI Dashboard", to: "/app", icon: Gauge },
+  { label: "Customers", to: "/app/customers", icon: Users },
+  { label: "Vehicles", to: "/app/vehicles", icon: Car },
+  { label: "Policies", to: "/app/policies", icon: ShieldCheck },
+  { label: "Claims", to: "/app/claims", icon: ClipboardCheck },
+  { label: "Payments", to: "/app/payments", icon: BadgeIndianRupee },
+  { label: "AI & Fraud", to: "/app/intelligence", icon: BrainCircuit, managerOnly: true },
+  { label: "Tickets", to: "/app/tickets", icon: MessageSquare },
+  { label: "Service Hub", to: "/app/service-hub", icon: Wrench, managerOnly: true },
+  { label: "Reports", to: "/app/reports", icon: FileText, managerOnly: true },
+  { label: "Audit Logs", to: "/app/activities", icon: History, managerOnly: true },
+  { label: "Security", to: "/app/security", icon: LockKeyhole, managerOnly: true },
+  { label: "RBAC Report", to: "/app/rbac-report", icon: FileCheck2, managerOnly: true },
+  { label: "Backups", to: "/app/backups", icon: DatabaseBackup, adminOnly: true },
 ];
 
 const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (

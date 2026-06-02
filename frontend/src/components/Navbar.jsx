@@ -4,21 +4,21 @@ import { Link, useNavigate } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle.jsx";
 
 const searchTargets = [
-  { keywords: ["dashboard", "home", "analytics"], path: "/" },
-  { keywords: ["customer", "customers"], path: "/customers" },
-  { keywords: ["vehicle", "vehicles", "car", "bike"], path: "/vehicles" },
-  { keywords: ["policy", "policies"], path: "/policies" },
-  { keywords: ["claim", "claims"], path: "/claims" },
-  { keywords: ["payment", "payments", "invoice"], path: "/payments" },
-  { keywords: ["fraud", "ai", "risk", "intelligence"], path: "/intelligence" },
-  { keywords: ["ticket", "tickets", "support"], path: "/tickets" },
-  { keywords: ["report", "reports", "pdf"], path: "/reports" },
-  { keywords: ["audit", "activity", "logs"], path: "/activities" },
-  { keywords: ["security", "alerts", "score"], path: "/security" },
-  { keywords: ["rbac", "roles", "permissions"], path: "/rbac-report" },
-  { keywords: ["backup", "backups", "restore"], path: "/backups" },
-  { keywords: ["profile", "account"], path: "/profile" },
-  { keywords: ["notification", "notifications"], path: "/notifications" },
+  { keywords: ["dashboard", "home", "analytics"], path: "/app" },
+  { keywords: ["customer", "customers"], path: "/app/customers" },
+  { keywords: ["vehicle", "vehicles", "car", "bike"], path: "/app/vehicles" },
+  { keywords: ["policy", "policies"], path: "/app/policies" },
+  { keywords: ["claim", "claims"], path: "/app/claims" },
+  { keywords: ["payment", "payments", "invoice"], path: "/app/payments" },
+  { keywords: ["fraud", "ai", "risk", "intelligence"], path: "/app/intelligence" },
+  { keywords: ["ticket", "tickets", "support"], path: "/app/tickets" },
+  { keywords: ["report", "reports", "pdf"], path: "/app/reports" },
+  { keywords: ["audit", "activity", "logs"], path: "/app/activities" },
+  { keywords: ["security", "alerts", "score"], path: "/app/security" },
+  { keywords: ["rbac", "roles", "permissions"], path: "/app/rbac-report" },
+  { keywords: ["backup", "backups", "restore"], path: "/app/backups" },
+  { keywords: ["profile", "account"], path: "/app/profile" },
+  { keywords: ["notification", "notifications"], path: "/app/notifications" },
   { keywords: ["portal", "customer login"], path: "/customer-login" }
 ];
 
@@ -84,7 +84,7 @@ const Navbar = ({ onLogout, onMenuClick }) => {
           <UserRound size={18} className="text-purple-200" />
         </Link>
         <Link
-          to="/notifications"
+          to="/app/notifications"
           className="relative flex h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/5 text-purple-200 shadow-sm transition hover:border-purple-300/40 hover:bg-purple-400/10 hover:text-white"
           aria-label="Open notifications"
           title="Notifications"
@@ -93,7 +93,7 @@ const Navbar = ({ onLogout, onMenuClick }) => {
           <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-amber-300 shadow-[0_0_12px_rgba(251,191,36,0.75)]" />
         </Link>
         <Link
-          to="/profile"
+          to="/app/profile"
           className="flex h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/5 text-purple-200 shadow-sm transition hover:border-purple-300/40 hover:bg-purple-400/10 hover:text-white"
           aria-label="Open profile"
           title="Profile"

@@ -31,57 +31,57 @@ import Tickets from "./pages/Tickets.jsx";
 import { clearAuthUser, saveAuthUser } from "./utils/authStorage.js";
 
 const moduleMeta = {
-  "/": {
+  "/app": {
     className: "page-dashboard"
   },
-  "/customers": {
+  "/app/customers": {
     className: "page-customers"
   },
-  "/vehicles": {
+  "/app/vehicles": {
     className: "page-vehicles"
   },
-  "/policies": {
+  "/app/policies": {
     className: "page-policies"
   },
-  "/claims": {
+  "/app/claims": {
     className: "page-claims"
   },
-  "/payments": {
+  "/app/payments": {
     className: "page-payments"
   },
-  "/activities": {
+  "/app/activities": {
     className: "page-activities"
   },
-  "/security": {
+  "/app/security": {
     className: "page-security"
   },
-  "/intelligence": {
+  "/app/intelligence": {
     className: "page-intelligence"
   },
-  "/tickets": {
+  "/app/tickets": {
     className: "page-tickets"
   },
-  "/service-hub": {
+  "/app/service-hub": {
     className: "page-service"
   },
-  "/notifications": {
+  "/app/notifications": {
     className: "page-notifications"
   },
-  "/reports": {
+  "/app/reports": {
     className: "page-reports"
   },
-  "/backups": {
+  "/app/backups": {
     className: "page-backups"
   },
-  "/rbac-report": {
+  "/app/rbac-report": {
     className: "page-rbac"
   },
-  "/profile": {
+  "/app/profile": {
     className: "page-profile"
   }
 };
 
-const getModuleMeta = (pathname) => moduleMeta[pathname] || moduleMeta["/"];
+const getModuleMeta = (pathname) => moduleMeta[pathname] || moduleMeta["/app"];
 
 const AppLayout = ({ onLogout }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -102,23 +102,23 @@ const AppLayout = ({ onLogout }) => {
           <Navbar onLogout={onLogout} onMenuClick={() => setIsSidebarOpen(true)} />
           <main className="app-main mx-auto w-full max-w-[1680px] px-4 py-6 lg:px-8">
             <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/customers" element={<Customers />} />
-              <Route path="/vehicles" element={<Vehicles />} />
-              <Route path="/policies" element={<Policies />} />
-              <Route path="/claims" element={<Claims />} />
-              <Route path="/payments" element={<Payments />} />
-              <Route path="/activities" element={<Activities />} />
-              <Route path="/security" element={<SecurityCenter />} />
-              <Route path="/intelligence" element={<Intelligence />} />
-              <Route path="/tickets" element={<Tickets />} />
-              <Route path="/service-hub" element={<ServiceHub />} />
-              <Route path="/notifications" element={<Notifications />} />
-              <Route path="/reports" element={<Reports />} />
-              <Route path="/backups" element={<BackupCenter />} />
-              <Route path="/rbac-report" element={<RbacReport />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route index element={<Dashboard />} />
+              <Route path="customers" element={<Customers />} />
+              <Route path="vehicles" element={<Vehicles />} />
+              <Route path="policies" element={<Policies />} />
+              <Route path="claims" element={<Claims />} />
+              <Route path="payments" element={<Payments />} />
+              <Route path="activities" element={<Activities />} />
+              <Route path="security" element={<SecurityCenter />} />
+              <Route path="intelligence" element={<Intelligence />} />
+              <Route path="tickets" element={<Tickets />} />
+              <Route path="service-hub" element={<ServiceHub />} />
+              <Route path="notifications" element={<Notifications />} />
+              <Route path="reports" element={<Reports />} />
+              <Route path="backups" element={<BackupCenter />} />
+              <Route path="rbac-report" element={<RbacReport />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="*" element={<Navigate to="/app" replace />} />
             </Routes>
           </main>
           <AIChatAssistant />
@@ -133,7 +133,7 @@ const App = () => {
 
   const handleAuth = (userInfo) => {
     saveAuthUser(userInfo);
-    navigate("/", { replace: true });
+    navigate("/app", { replace: true });
   };
 
   const handleLogout = () => {
@@ -150,6 +150,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login onAuth={handleAuth} />} />
+      <Route path="/" element={<ProjectPortfolio />} />
       <Route path="/portfolio" element={<ProjectPortfolio />} />
       <Route path="/customer-login" element={<CustomerLogin />} />
       <Route path="/customer-portal" element={<CustomerPortal />} />
@@ -157,7 +158,8 @@ const App = () => {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword onAuth={handleAuth} />} />
       <Route path="/verify-email/:token" element={<VerifyEmail onAuth={handleAuth} />} />
-      <Route path="/*" element={<AppLayout onLogout={handleLogout} />} />
+      <Route path="/app/*" element={<AppLayout onLogout={handleLogout} />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };
