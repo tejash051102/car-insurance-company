@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+#Generated Reports
+
+Car-Insurance-Company-Project-Report.docx
+Car-Insurance-Company-Project-Report.pdf
+Project-Technologies-Used-Detailed.pdf
+project-flowchart.svg
+Project-Technologies-Used.pdf
