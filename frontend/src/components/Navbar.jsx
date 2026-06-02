@@ -42,8 +42,8 @@ const Navbar = ({ onLogout, onMenuClick }) => {
   };
 
   return (
-    <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-white/5 bg-[#211642]/90 px-4 shadow-lg shadow-black/20 backdrop-blur-xl lg:px-8">
-      <div className="flex items-center gap-3">
+    <header className="sticky top-0 z-20 flex min-h-20 items-center justify-between gap-3 border-b border-white/5 bg-[#211642]/90 px-4 py-3 shadow-lg shadow-black/20 backdrop-blur-xl sm:py-0 lg:px-8">
+      <div className="flex min-w-0 flex-1 items-center gap-3">
         <button
           className="btn-secondary h-10 w-10 px-0 lg:hidden"
           type="button"
@@ -52,12 +52,12 @@ const Navbar = ({ onLogout, onMenuClick }) => {
         >
           <Menu size={18} />
         </button>
-        <div className="lg:hidden">
+        <div className="hidden shrink-0 md:block lg:hidden">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-purple-200/80">AI Insurance OS</p>
           <h1 className="text-lg font-black text-white">Analytics Dashboard</h1>
         </div>
         <form
-          className="relative z-30 flex min-w-[150px] flex-1 items-center gap-2 rounded-md border border-white/8 bg-white/[0.035] px-3 py-2.5 text-sm text-white/70 transition focus-within:border-purple-300/40 focus-within:bg-white/[0.055] sm:min-w-[220px] lg:w-[min(44vw,420px)] lg:flex-none lg:gap-3 lg:px-4 lg:py-3"
+          className="relative z-30 flex min-w-0 flex-1 items-center gap-2 rounded-md border border-white/8 bg-white/[0.035] px-3 py-2.5 text-sm text-white/70 transition focus-within:border-purple-300/40 focus-within:bg-white/[0.055] sm:min-w-[220px] lg:w-[min(44vw,420px)] lg:flex-none lg:gap-3 lg:px-4 lg:py-3"
           onSubmit={submitSearch}
         >
           <Search size={18} className="shrink-0" />
@@ -71,13 +71,13 @@ const Navbar = ({ onLogout, onMenuClick }) => {
         </form>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex shrink-0 items-center gap-2 sm:gap-3">
         <ThemeToggle
           className="flex h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/5 text-purple-200 shadow-sm transition hover:border-purple-300/40 hover:bg-purple-400/10 hover:text-white"
         />
         <Link
           to="/customer-login"
-          className="flex h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/5 text-purple-200 shadow-sm transition hover:border-purple-300/40 hover:bg-purple-400/10 hover:text-white"
+          className="hidden h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/5 text-purple-200 shadow-sm transition hover:border-purple-300/40 hover:bg-purple-400/10 hover:text-white sm:flex"
           aria-label="Open customer portal login"
           title="Customer Portal"
         >
@@ -94,7 +94,7 @@ const Navbar = ({ onLogout, onMenuClick }) => {
         </Link>
         <Link
           to="/app/profile"
-          className="flex h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/5 text-purple-200 shadow-sm transition hover:border-purple-300/40 hover:bg-purple-400/10 hover:text-white"
+          className="hidden h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/5 text-purple-200 shadow-sm transition hover:border-purple-300/40 hover:bg-purple-400/10 hover:text-white md:flex"
           aria-label="Open profile"
           title="Profile"
         >

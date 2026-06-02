@@ -58,7 +58,7 @@ const AIChatAssistant = () => {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-50">
+    <div className="fixed bottom-4 right-4 z-50 sm:bottom-5 sm:right-5">
       {open ? (
         <section className="w-[min(360px,calc(100vw-40px))] overflow-hidden rounded-lg border border-white/10 bg-[#201449]/95 shadow-2xl shadow-black/40 backdrop-blur-xl">
           <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
@@ -94,7 +94,7 @@ const AIChatAssistant = () => {
           </form>
         </section>
       ) : (
-        <button className="btn-primary h-14 rounded-full px-5 shadow-2xl shadow-purple-950/40" type="button" onClick={() => setOpen(true)}>
+        <button className="btn-primary h-12 rounded-full px-4 shadow-2xl shadow-purple-950/40 sm:h-14 sm:px-5" type="button" onClick={() => setOpen(true)}>
           <Bot size={19} />
           AI Help
         </button>

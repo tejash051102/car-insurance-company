@@ -7,6 +7,29 @@ import { applyTheme, getStoredTheme } from "./utils/theme.js";
 
 applyTheme(getStoredTheme());
 
+const ignoredRuntimeMessages = [
+  "A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received"
+];
+
+const ignoredWarnings = [
+  "Using DEFAULT root logger",
+  "[DEFAULT]: WARN : Using DEFAULT root logger"
+];
+
+const originalWarn = console.warn.bind(console);
+console.warn = (...args) => {
+  const message = args.map((arg) => String(arg)).join(" ");
+  if (ignoredWarnings.some((warning) => message.includes(warning))) return;
+  originalWarn(...args);
+};
+
+window.addEventListener("unhandledrejection", (event) => {
+  const message = String(event.reason?.message || event.reason || "");
+  if (ignoredRuntimeMessages.some((ignored) => message.includes(ignored))) {
+    event.preventDefault();
+  }
+});
+
 try {
   window.history.replaceState(null, "", window.location.href);
 } catch {

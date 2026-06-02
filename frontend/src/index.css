@@ -1291,192 +1291,302 @@ html[data-theme="light"] .app-main a.rounded-md:hover {
   border-color: rgba(37, 99, 235, 0.28) !important;
 }
 
-html:not([data-theme="light"]) {
-  color-scheme: dark;
-}
-
-html:not([data-theme="light"]) body {
+html[data-theme="light"] body {
   background:
-    radial-gradient(circle at 8% 8%, rgba(34, 211, 238, 0.1), transparent 26%),
-    radial-gradient(circle at 88% 10%, rgba(124, 58, 237, 0.16), transparent 30%),
-    linear-gradient(145deg, #050816 0%, #0a1024 46%, #120924 100%);
+    linear-gradient(135deg, rgba(219, 234, 254, 0.82), transparent 28%),
+    linear-gradient(315deg, rgba(240, 249, 255, 0.94), transparent 34%),
+    #f3f7ff;
 }
 
-html:not([data-theme="light"]) .app-shell {
+html[data-theme="light"] .app-shell {
   background:
-    linear-gradient(180deg, rgba(8, 13, 30, 0.94), rgba(9, 12, 28, 0.98) 44%, rgba(12, 5, 33, 0.98)),
-    #070b18;
+    linear-gradient(180deg, #f8fbff 0%, #f2f6ff 46%, #eef4ff 100%),
+    #f3f7ff;
 }
 
-html:not([data-theme="light"]) .app-shell::before {
-  opacity: 0.92;
+html[data-theme="light"] .app-shell::before {
+  opacity: 1;
   background:
-    radial-gradient(circle at 16% 10%, rgba(34, 211, 238, 0.13), transparent 30%),
-    radial-gradient(circle at 88% 12%, rgba(139, 92, 246, 0.18), transparent 32%),
-    radial-gradient(circle at 72% 80%, rgba(16, 185, 129, 0.08), transparent 30%),
-    linear-gradient(180deg, transparent, rgba(3, 7, 18, 0.72));
+    linear-gradient(90deg, rgba(37, 99, 235, 0.035) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(37, 99, 235, 0.035) 1px, transparent 1px),
+    radial-gradient(circle at 78% 10%, rgba(79, 70, 229, 0.12), transparent 28%),
+    radial-gradient(circle at 12% 28%, rgba(6, 182, 212, 0.1), transparent 28%);
+  background-size: 46px 46px, 46px 46px, auto, auto;
 }
 
-html:not([data-theme="light"]) .app-shell:not(.page-dashboard)::after {
-  opacity: 0.11;
-  filter: drop-shadow(0 28px 58px rgba(var(--page-accent, 139, 92, 246), 0.16));
-}
-
-html:not([data-theme="light"]) .app-sidebar {
+html[data-theme="light"] .app-sidebar {
   background:
-    linear-gradient(180deg, rgba(9, 16, 35, 0.98), rgba(16, 13, 41, 0.98)),
-    radial-gradient(circle at 100% 0%, rgba(34, 211, 238, 0.14), transparent 34%),
-    radial-gradient(circle at 0% 100%, rgba(124, 58, 237, 0.14), transparent 36%);
-  border-right-color: rgba(148, 163, 184, 0.12) !important;
-  box-shadow: 18px 0 42px rgba(0, 0, 0, 0.36) !important;
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 248, 255, 0.98)),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.08), transparent 26%);
+  border-right-color: rgba(37, 99, 235, 0.14) !important;
+  box-shadow: 22px 0 54px rgba(30, 64, 175, 0.08) !important;
 }
 
-html:not([data-theme="light"]) .app-sidebar [class*="border-white"] {
-  border-color: rgba(148, 163, 184, 0.12) !important;
+html[data-theme="light"] .app-sidebar a {
+  border: 1px solid transparent;
 }
 
-html:not([data-theme="light"]) .app-sidebar a:not([class*="from-purple-600"]) {
-  color: rgba(226, 232, 240, 0.58) !important;
+html[data-theme="light"] .app-sidebar a:not([class*="from-purple-600"]) {
+  color: #344256 !important;
 }
 
-html:not([data-theme="light"]) .app-sidebar a:not([class*="from-purple-600"]):hover,
-html:not([data-theme="light"]) .app-sidebar button:hover {
-  background: rgba(34, 211, 238, 0.08) !important;
-  color: #e0f2fe !important;
+html[data-theme="light"] .app-sidebar a:not([class*="from-purple-600"]):hover {
+  background: #eef5ff !important;
+  border-color: rgba(37, 99, 235, 0.12);
+  color: #1d4ed8 !important;
+  transform: translateX(2px);
 }
 
-html:not([data-theme="light"]) .app-sidebar a[class*="from-purple-600"] {
-  background: linear-gradient(135deg, #0891b2, #7c3aed 56%, #be185d) !important;
-  box-shadow: 0 16px 34px rgba(8, 145, 178, 0.18), 0 12px 30px rgba(124, 58, 237, 0.2) !important;
+html[data-theme="light"] .app-sidebar a[class*="from-purple-600"] {
+  background: linear-gradient(135deg, #2563eb, #4f46e5 52%, #8b5cf6) !important;
+  border-color: rgba(255, 255, 255, 0.42);
+  box-shadow: 0 18px 36px rgba(37, 99, 235, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.26) !important;
 }
 
-html:not([data-theme="light"]) header {
-  background: rgba(9, 16, 35, 0.78) !important;
-  border-bottom-color: rgba(148, 163, 184, 0.11) !important;
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28) !important;
+html[data-theme="light"] header {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-bottom-color: rgba(191, 219, 254, 0.9) !important;
+  box-shadow: 0 18px 46px rgba(30, 64, 175, 0.08) !important;
 }
 
-html:not([data-theme="light"]) header form {
-  background: rgba(15, 23, 42, 0.62) !important;
-  border-color: rgba(148, 163, 184, 0.12) !important;
-  color: rgba(226, 232, 240, 0.72) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035), 0 12px 28px rgba(0, 0, 0, 0.18);
+html[data-theme="light"] header form {
+  background: #ffffff !important;
+  border-color: rgba(147, 197, 253, 0.6) !important;
+  box-shadow: 0 16px 36px rgba(37, 99, 235, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.92);
 }
 
-html:not([data-theme="light"]) header form:focus-within {
-  background: rgba(15, 23, 42, 0.82) !important;
-  border-color: rgba(34, 211, 238, 0.34) !important;
-  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.08), 0 18px 36px rgba(0, 0, 0, 0.24);
+html[data-theme="light"] header form:focus-within {
+  border-color: rgba(37, 99, 235, 0.5) !important;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1), 0 18px 38px rgba(37, 99, 235, 0.1);
 }
 
-html:not([data-theme="light"]) header a,
-html:not([data-theme="light"]) header button,
-html:not([data-theme="light"]) .btn-secondary {
-  background: rgba(15, 23, 42, 0.58) !important;
-  border-color: rgba(148, 163, 184, 0.13) !important;
-  color: rgba(226, 232, 240, 0.7) !important;
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.16) !important;
+html[data-theme="light"] header a,
+html[data-theme="light"] header button,
+html[data-theme="light"] .btn-secondary {
+  background: #ffffff !important;
+  border-color: rgba(191, 219, 254, 0.9) !important;
+  color: #344256 !important;
+  box-shadow: 0 12px 28px rgba(30, 64, 175, 0.07) !important;
 }
 
-html:not([data-theme="light"]) header a:hover,
-html:not([data-theme="light"]) header button:hover,
-html:not([data-theme="light"]) .btn-secondary:hover {
-  background: rgba(34, 211, 238, 0.1) !important;
-  border-color: rgba(34, 211, 238, 0.28) !important;
-  color: #e0f2fe !important;
+html[data-theme="light"] header a:hover,
+html[data-theme="light"] header button:hover,
+html[data-theme="light"] .btn-secondary:hover {
+  background: #eff6ff !important;
+  border-color: rgba(37, 99, 235, 0.35) !important;
+  color: #1d4ed8 !important;
 }
 
-html:not([data-theme="light"]) .btn-primary {
-  background: linear-gradient(135deg, #06b6d4, #7c3aed 54%, #db2777);
-  box-shadow: 0 16px 34px rgba(6, 182, 212, 0.16), 0 14px 34px rgba(124, 58, 237, 0.22);
+html[data-theme="light"] .app-main > .space-y-6 > div:first-child {
+  padding: 0.5rem 0 0.65rem;
 }
 
-html:not([data-theme="light"]) .btn-primary:hover {
-  background: linear-gradient(135deg, #22d3ee, #8b5cf6 52%, #ec4899);
-  box-shadow: 0 20px 42px rgba(6, 182, 212, 0.2), 0 18px 40px rgba(124, 58, 237, 0.26);
+html[data-theme="light"] .app-main > .space-y-6 > div:first-child p {
+  color: #4f46e5 !important;
 }
 
-html:not([data-theme="light"]) .panel,
-html:not([data-theme="light"]) .reference-panel,
-html:not([data-theme="light"]) .ai-insight-card {
+html[data-theme="light"] .app-main > .space-y-6 > div:first-child h1,
+html[data-theme="light"] .app-main h1,
+html[data-theme="light"] .app-main h2,
+html[data-theme="light"] .app-main h3 {
+  color: #14213d !important;
+}
+
+html[data-theme="light"] .dashboard-card,
+html[data-theme="light"] .panel,
+html[data-theme="light"] .reference-panel,
+html[data-theme="light"] .ai-insight-card {
   background:
-    linear-gradient(135deg, rgba(var(--page-accent, 34, 211, 238), 0.09), transparent 34%),
-    linear-gradient(180deg, rgba(15, 23, 42, 0.78), rgba(17, 24, 39, 0.62)) !important;
-  border-color: rgba(148, 163, 184, 0.12) !important;
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 251, 255, 0.92)),
+    #ffffff !important;
+  border-color: rgba(147, 197, 253, 0.42) !important;
+  box-shadow: 0 20px 46px rgba(30, 64, 175, 0.1), 0 1px 0 rgba(255, 255, 255, 0.9) inset !important;
 }
 
-html:not([data-theme="light"]) .panel:hover,
-html:not([data-theme="light"]) .reference-panel:hover,
-html:not([data-theme="light"]) .ai-insight-card:hover {
-  border-color: rgba(var(--page-accent, 34, 211, 238), 0.34) !important;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.42), 0 0 34px rgba(var(--page-accent, 34, 211, 238), 0.08) !important;
+html[data-theme="light"] .dashboard-card:hover,
+html[data-theme="light"] .panel:hover,
+html[data-theme="light"] .reference-panel:hover,
+html[data-theme="light"] .ai-insight-card:hover {
+  border-color: rgba(37, 99, 235, 0.34) !important;
+  box-shadow: 0 24px 56px rgba(30, 64, 175, 0.14), 0 10px 26px rgba(14, 165, 233, 0.08) !important;
 }
 
-html:not([data-theme="light"]) .panel::before {
-  background: linear-gradient(90deg, transparent, rgba(var(--page-accent, 34, 211, 238), 0.34), rgba(var(--page-accent-2, 139, 92, 246), 0.18), transparent);
+html[data-theme="light"] .dashboard-card::after {
+  height: 3px;
+  background: linear-gradient(90deg, #38bdf8, #2563eb 52%, #a855f7);
 }
 
-html:not([data-theme="light"]) .field,
-html:not([data-theme="light"]) form input,
-html:not([data-theme="light"]) form select,
-html:not([data-theme="light"]) form textarea {
-  background: rgba(2, 6, 23, 0.36) !important;
-  border-color: rgba(148, 163, 184, 0.13) !important;
-  color: #f8fafc !important;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.22);
+html[data-theme="light"] .dashboard-card [class*="bg-white"],
+html[data-theme="light"] .dashboard-card [class*="bg-purple"],
+html[data-theme="light"] .dashboard-card [class*="bg-cyan"],
+html[data-theme="light"] .dashboard-card [class*="bg-pink"] {
+  background: linear-gradient(135deg, #eff6ff, #f5f3ff) !important;
+  border-color: rgba(147, 197, 253, 0.5) !important;
 }
 
-html:not([data-theme="light"]) .field:focus,
-html:not([data-theme="light"]) form input:focus,
-html:not([data-theme="light"]) form select:focus,
-html:not([data-theme="light"]) form textarea:focus {
-  background: rgba(15, 23, 42, 0.7) !important;
-  border-color: rgba(var(--page-accent, 34, 211, 238), 0.48) !important;
-  box-shadow: 0 0 0 4px rgba(var(--page-accent, 34, 211, 238), 0.1) !important;
-}
-
-html:not([data-theme="light"]) .hero-panel {
+html[data-theme="light"] .reference-metric {
   background:
-    linear-gradient(135deg, rgba(34, 211, 238, 0.16), transparent 34%),
-    linear-gradient(315deg, rgba(124, 58, 237, 0.13), transparent 32%),
-    radial-gradient(circle at 88% 20%, rgba(16, 185, 129, 0.09), transparent 28%),
-    rgba(8, 13, 30, 0.82) !important;
-  border-color: rgba(34, 211, 238, 0.12) !important;
+    linear-gradient(135deg, #ffffff 0%, #f8fbff 48%, #eef6ff 100%) !important;
+  border-color: rgba(147, 197, 253, 0.42) !important;
+  box-shadow: 0 18px 42px rgba(30, 64, 175, 0.1) !important;
 }
 
-html:not([data-theme="light"]) .hero-stat,
-html:not([data-theme="light"]) .metric-tile {
-  background: rgba(15, 23, 42, 0.58) !important;
-  border-color: rgba(148, 163, 184, 0.13) !important;
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22) !important;
+html[data-theme="light"] .reference-metric::after {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(14, 165, 233, 0.05));
 }
 
-html:not([data-theme="light"]) .dashboard-card::after {
-  background: linear-gradient(90deg, rgba(34, 211, 238, 0.18), rgba(52, 211, 153, 0.62), rgba(139, 92, 246, 0.28));
+html[data-theme="light"] .reference-metric svg circle:first-child {
+  stroke: rgba(37, 99, 235, 0.14);
 }
 
-html:not([data-theme="light"]) .app-main table {
-  background: rgba(15, 23, 42, 0.36);
-  border-radius: 10px;
-  overflow: hidden;
+html[data-theme="light"] .reference-metric svg circle:nth-child(2) {
+  stroke: #2563eb;
 }
 
-html:not([data-theme="light"]) .app-main table thead,
-html:not([data-theme="light"]) .app-shell:not(.page-dashboard) table thead {
-  background: linear-gradient(90deg, rgba(var(--page-accent, 34, 211, 238), 0.16), rgba(15, 23, 42, 0.52)) !important;
+html[data-theme="light"] .reference-metric svg text {
+  fill: #1d4ed8;
 }
 
-html:not([data-theme="light"]) .app-main th {
-  color: rgba(226, 232, 240, 0.52) !important;
+html[data-theme="light"] .hero-panel {
+  background:
+    linear-gradient(135deg, rgba(239, 246, 255, 0.92), rgba(255, 255, 255, 0.94)),
+    #ffffff !important;
+  border-color: rgba(147, 197, 253, 0.42) !important;
 }
 
-html:not([data-theme="light"]) .app-main td {
-  color: rgba(226, 232, 240, 0.7) !important;
+html[data-theme="light"] .hero-stat,
+html[data-theme="light"] .metric-tile {
+  background: #ffffff !important;
+  border-color: rgba(147, 197, 253, 0.42) !important;
+  box-shadow: 0 14px 34px rgba(30, 64, 175, 0.08) !important;
 }
 
-html:not([data-theme="light"]) .app-main table tbody tr:hover {
-  background: rgba(var(--page-accent, 34, 211, 238), 0.08) !important;
+html[data-theme="light"] .field,
+html[data-theme="light"] form input,
+html[data-theme="light"] form select,
+html[data-theme="light"] form textarea {
+  background: #ffffff !important;
+  border-color: rgba(147, 197, 253, 0.52) !important;
+}
+
+html[data-theme="light"] .field:focus,
+html[data-theme="light"] form input:focus,
+html[data-theme="light"] form select:focus,
+html[data-theme="light"] form textarea:focus {
+  border-color: rgba(37, 99, 235, 0.52) !important;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1) !important;
+}
+
+html[data-theme="light"] .app-main table {
+  background: #ffffff;
+  box-shadow: 0 14px 34px rgba(30, 64, 175, 0.07);
+}
+
+html[data-theme="light"] .app-main table thead,
+html[data-theme="light"] .app-shell:not(.page-dashboard) table thead {
+  background: linear-gradient(90deg, #eff6ff, #f8fbff) !important;
+}
+
+html[data-theme="light"] .app-main table tbody tr:hover {
+  background: #f0f7ff !important;
+}
+
+html[data-theme="light"] .app-main .fixed.bottom-6.right-6,
+html[data-theme="light"] .app-main [class*="bottom-6"][class*="right-6"] {
+  box-shadow: 0 18px 42px rgba(124, 58, 237, 0.24) !important;
+}
+
+@media (max-width: 1023px) {
+  html[data-theme="light"] header {
+    min-height: 72px;
+    gap: 0.65rem;
+    padding-inline: 1rem !important;
+  }
+
+  html[data-theme="light"] header > div:first-child {
+    min-width: 0;
+  }
+
+  html[data-theme="light"] header form {
+    min-width: 0 !important;
+    max-width: none;
+  }
+
+  html[data-theme="light"] header input {
+    min-width: 0;
+    font-size: 0.95rem;
+  }
+
+  html[data-theme="light"] .app-main {
+    padding-bottom: 6rem;
+  }
+
+  html[data-theme="light"] .dashboard-card {
+    min-height: 138px;
+  }
+}
+
+@media (max-width: 767px) {
+  html[data-theme="light"] header {
+    flex-wrap: nowrap;
+    min-height: 68px;
+    padding-inline: 0.75rem !important;
+  }
+
+  html[data-theme="light"] header a,
+  html[data-theme="light"] header button:not(:last-child) {
+    height: 2.75rem;
+    width: 2.75rem;
+    padding-inline: 0 !important;
+  }
+
+  html[data-theme="light"] header form {
+    height: 2.75rem;
+    padding-inline: 0.8rem !important;
+  }
+
+  html[data-theme="light"] .app-main {
+    padding-inline: 1rem;
+  }
+
+  html[data-theme="light"] .app-main > .space-y-6 > div:first-child {
+    width: 100%;
+  }
+
+  html[data-theme="light"] .app-main h1,
+  html[data-theme="light"] .app-main h2 {
+    font-size: clamp(1.55rem, 6vw, 2rem) !important;
+    line-height: 1.16;
+  }
+
+  html[data-theme="light"] .dashboard-card {
+    min-height: 126px;
+    padding: 1.25rem !important;
+  }
+
+  html[data-theme="light"] .reference-metric {
+    min-height: 210px;
+  }
+}
+
+@media (max-width: 520px) {
+  html[data-theme="light"] header {
+    gap: 0.5rem;
+  }
+
+  html[data-theme="light"] header form {
+    max-width: none;
+  }
+
+  html[data-theme="light"] header input::placeholder {
+    font-size: 0.9rem;
+  }
+
+  html[data-theme="light"] header a,
+  html[data-theme="light"] header button:not(:last-child) {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
