@@ -1,6 +1,8 @@
 import { ClipboardCheck, Download, Edit3, Eye, Plus, Search, ShieldAlert, Stamp, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import api, { getAssetUrl } from "../api/axios.js";
+import ClaimTrackingTimeline from "../components/ClaimTrackingTimeline.jsx";
+import DragDropUpload from "../components/DragDropUpload.jsx";
 import Pagination from "../components/Pagination.jsx";
 import { getItems, getMeta } from "../utils/apiData.js";
 import { canManageRecords } from "../utils/auth.js";
@@ -83,6 +85,10 @@ const Claims = () => {
   const updateField = (event) => {
     const { name, value, files } = event.target;
     setForm((current) => ({ ...current, [name]: files ? (event.target.multiple ? Array.from(files) : files[0]) : value }));
+  };
+
+  const updateFiles = (name, files) => {
+    setForm((current) => ({ ...current, [name]: files }));
   };
 
   const resetForm = () => {
@@ -260,10 +266,12 @@ const Claims = () => {
             <option value="paid">Paid</option>
             <option value="settled">Settled</option>
           </select>
-          <input className="field" name="document" type="file" accept=".jpg,.jpeg,.png,.pdf" onChange={updateField} />
-          <input className="field" name="accidentPhotos" type="file" accept=".jpg,.jpeg,.png,.pdf" multiple onChange={updateField} title="Accident photos" />
-          <input className="field" name="repairBills" type="file" accept=".jpg,.jpeg,.png,.pdf" multiple onChange={updateField} title="Repair bills" />
-          <input className="field" name="firReports" type="file" accept=".jpg,.jpeg,.png,.pdf" multiple onChange={updateField} title="FIR or reports" />
+          <div className="grid gap-3 md:col-span-2 xl:col-span-4 md:grid-cols-2 xl:grid-cols-4">
+            <DragDropUpload label="Main document" name="document" files={form.document} onFilesChange={updateFiles} />
+            <DragDropUpload label="Accident photos" name="accidentPhotos" files={form.accidentPhotos} multiple onFilesChange={updateFiles} />
+            <DragDropUpload label="Repair bills" name="repairBills" files={form.repairBills} multiple onFilesChange={updateFiles} />
+            <DragDropUpload label="FIR or reports" name="firReports" files={form.firReports} multiple onFilesChange={updateFiles} />
+          </div>
           <textarea className="field md:col-span-2 xl:col-span-4" name="description" value={form.description} onChange={updateField} placeholder="Incident description" rows="3" required />
           <div className="flex gap-2">
             <button className="btn-primary" type="submit" disabled={loading}>
@@ -295,53 +303,52 @@ const Claims = () => {
             <tbody>
               {claims.map((claim) => (
                 <tr key={claim._id} className="border-b border-slate-100">
-                  <td className="px-4 py-3">
-                    <p className="font-semibold text-ink">{claim.claimNumber}</p>
-                    <p className="text-xs text-slate-500">{claim.incidentDate?.slice(0, 10)}</p>
-                  </td>
-                  <td className="px-4 py-3">{claim.policy?.policyNumber || "N/A"}</td>
-                  <td className="px-4 py-3">{claim.customer?.fullName || "N/A"}</td>
-                  <td className="px-4 py-3">{formatCurrency(claim.claimAmount)}</td>
-                  <td className="px-4 py-3">
-                    <p className="capitalize">{claim.status}</p>
-                    {claim.approvedAmount ? (
-                      <p className="text-xs text-slate-500">Approved {formatCurrency(claim.approvedAmount)}</p>
-                    ) : null}
-                    {claim.inspection?.scheduledAt ? (
-                      <p className="text-xs text-slate-500">Inspection {claim.inspection.scheduledAt.slice(0, 10)}</p>
-                    ) : null}
-                    {claim.fraud?.score ? (
-                      <p className={`text-xs ${claim.fraud.level === "high" ? "text-red-600" : claim.fraud.level === "medium" ? "text-amber-600" : "text-emerald-600"}`}>
-                        Fraud {claim.fraud.score}/100 {claim.fraud.level}
-                      </p>
-                    ) : null}
-                    {claim.repair?.garage?.name ? <p className="text-xs text-slate-500">{claim.repair.garage.name}</p> : null}
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex justify-end gap-2">
-                      {canManage ? (
-                        <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => openDecision(claim)} aria-label="Decide claim">
-                          <Stamp size={15} />
+                  <td colSpan="6" className="px-4 py-4">
+                    <div className="grid gap-4 xl:grid-cols-[0.75fr_1.25fr_auto] xl:items-start">
+                      <div>
+                        <p className="font-semibold text-ink">{claim.claimNumber}</p>
+                        <p className="text-xs text-slate-500">{claim.incidentDate?.slice(0, 10)}</p>
+                        <p className="mt-2 text-sm text-slate-500">{claim.policy?.policyNumber || "N/A"} | {claim.customer?.fullName || "N/A"}</p>
+                      </div>
+                      <div>
+                        <div className="flex flex-wrap gap-3 text-sm">
+                          <span>{formatCurrency(claim.claimAmount)}</span>
+                          <span className="capitalize">{claim.status}</span>
+                          {claim.approvedAmount ? <span>Approved {formatCurrency(claim.approvedAmount)}</span> : null}
+                          {claim.fraud?.score ? (
+                            <span className={claim.fraud.level === "high" ? "text-red-600" : claim.fraud.level === "medium" ? "text-amber-600" : "text-emerald-600"}>
+                              Fraud {claim.fraud.score}/100 {claim.fraud.level}
+                            </span>
+                          ) : null}
+                          {claim.repair?.garage?.name ? <span>{claim.repair.garage.name}</span> : null}
+                        </div>
+                        <ClaimTrackingTimeline claim={claim} />
+                      </div>
+                      <div className="flex justify-end gap-2">
+                        {canManage ? (
+                          <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => openDecision(claim)} aria-label="Decide claim">
+                            <Stamp size={15} />
+                          </button>
+                        ) : null}
+                        {canManage ? (
+                          <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => refreshFraudScore(claim)} aria-label="Refresh fraud score">
+                            <ShieldAlert size={15} />
+                          </button>
+                        ) : null}
+                        {claim.documentUrl || claim.documents?.length ? (
+                          <a className="btn-secondary h-9 w-9 px-0" href={getAssetUrl(claim.documentUrl || claim.documents[0]?.url)} target="_blank" rel="noreferrer" aria-label="View evidence">
+                            <Eye size={15} />
+                          </a>
+                        ) : null}
+                        <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => editClaim(claim)} aria-label="Edit claim">
+                          <Edit3 size={15} />
                         </button>
-                      ) : null}
-                      {canManage ? (
-                        <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => refreshFraudScore(claim)} aria-label="Refresh fraud score">
-                          <ShieldAlert size={15} />
-                        </button>
-                      ) : null}
-                      {claim.documentUrl || claim.documents?.length ? (
-                        <a className="btn-secondary h-9 w-9 px-0" href={getAssetUrl(claim.documentUrl || claim.documents[0]?.url)} target="_blank" rel="noreferrer" aria-label="View evidence">
-                          <Eye size={15} />
-                        </a>
-                      ) : null}
-                      <button className="btn-secondary h-9 w-9 px-0" type="button" onClick={() => editClaim(claim)} aria-label="Edit claim">
-                        <Edit3 size={15} />
-                      </button>
-                      {canManage ? (
-                        <button className="btn-danger h-9 w-9 px-0" type="button" onClick={() => deleteClaim(claim._id)} aria-label="Delete claim">
-                          <Trash2 size={15} />
-                        </button>
-                      ) : null}
+                        {canManage ? (
+                          <button className="btn-danger h-9 w-9 px-0" type="button" onClick={() => deleteClaim(claim._id)} aria-label="Delete claim">
+                            <Trash2 size={15} />
+                          </button>
+                        ) : null}
+                      </div>
                     </div>
                   </td>
                 </tr>

@@ -497,6 +497,9 @@ const Login = ({ onAuth }) => {
             <Link to="/customer-login" style={{ fontSize: "13px", fontWeight: 600, color: "#67e8f9", textDecoration: "none" }}>
               Customer sign in
             </Link>
+            <Link to="/portfolio" style={{ fontSize: "13px", fontWeight: 600, color: "#c4b5fd", textDecoration: "none" }}>
+              View project portfolio
+            </Link>
           </div>
         </div>
       </div>

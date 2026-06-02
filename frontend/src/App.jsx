@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
+import AIChatAssistant from "./components/AIChatAssistant.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Sidebar from "./components/Sidebar.jsx";
 import Claims from "./pages/Claims.jsx";
@@ -13,6 +14,7 @@ import Login from "./pages/Login.jsx";
 import Payments from "./pages/Payments.jsx";
 import Policies from "./pages/Policies.jsx";
 import Profile from "./pages/Profile.jsx";
+import ProjectPortfolio from "./pages/ProjectPortfolio.jsx";
 import Register from "./pages/Register.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import RbacReport from "./pages/RbacReport.jsx";
@@ -119,6 +121,7 @@ const AppLayout = ({ onLogout }) => {
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
+          <AIChatAssistant />
         </div>
       </div>
     </ProtectedRoute>
@@ -147,6 +150,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login onAuth={handleAuth} />} />
+      <Route path="/portfolio" element={<ProjectPortfolio />} />
       <Route path="/customer-login" element={<CustomerLogin />} />
       <Route path="/customer-portal" element={<CustomerPortal />} />
       <Route path="/register" element={<Register onAuth={handleAuth} />} />
