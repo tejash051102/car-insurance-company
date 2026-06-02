@@ -171,7 +171,7 @@ const projectModules = [
 ];
 
 const PortfolioMetric = ({ value, label, detail }) => (
-  <div className="group rounded-lg border border-white/10 bg-white/[0.065] px-5 py-4 shadow-xl shadow-black/10 backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/30 hover:bg-white/[0.09]">
+  <div className="portfolio-glass group rounded-2xl border border-white/10 bg-white/[0.065] px-5 py-4 shadow-xl shadow-black/10 backdrop-blur transition hover:-translate-y-1 hover:border-cyan-300/30 hover:bg-white/[0.09]">
     <p className="text-2xl font-black text-white">{value}</p>
     <p className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-cyan-100/70">{label}</p>
     {detail ? <p className="mt-2 text-xs leading-5 text-white/42">{detail}</p> : null}
@@ -184,12 +184,12 @@ const ProjectPortfolio = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#070315] text-white">
-      <section className="relative overflow-hidden border-b border-white/10">
+    <div className="portfolio-page min-h-screen bg-[#070315] text-white">
+      <section className="portfolio-hero relative overflow-hidden border-b border-white/10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_14%_10%,rgba(34,211,238,0.18),transparent_28%),radial-gradient(circle_at_86%_12%,rgba(168,85,247,0.24),transparent_32%),linear-gradient(135deg,#070315_0%,#11062d_48%,#071421_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(180deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:58px_58px] opacity-40" />
         <div className="absolute left-1/2 top-16 h-72 w-72 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-5 md:px-8">
+        <div className="portfolio-nav relative mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-5 md:px-8">
           <div className="flex items-center gap-3">
             <span className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/25 bg-cyan-300/10 shadow-lg shadow-cyan-950/30">
               <img src="/favicon.svg" alt="DriveSure" className="h-10 w-10 object-contain" />
@@ -205,13 +205,13 @@ const ProjectPortfolio = () => {
           </div>
         </div>
 
-        <div className="relative mx-auto grid min-h-[calc(100vh-82px)] max-w-7xl gap-10 px-5 pb-14 pt-8 md:px-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:pb-20">
-          <div className="max-w-3xl">
+        <div className="portfolio-hero-grid relative mx-auto grid min-h-[calc(100vh-82px)] max-w-7xl gap-10 px-5 pb-14 pt-8 md:px-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:pb-20">
+          <div className="portfolio-hero-copy max-w-3xl">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-cyan-100">
               <Sparkles size={14} />
               Full Stack Insurance Suite
             </div>
-            <h1 className="max-w-4xl text-5xl font-black leading-[0.96] tracking-tight text-white sm:text-6xl xl:text-8xl">
+            <h1 className="portfolio-title max-w-4xl text-5xl font-black leading-[0.96] tracking-tight text-white sm:text-6xl xl:text-8xl">
               DriveSure<span className="block bg-gradient-to-r from-cyan-200 via-white to-purple-200 bg-clip-text text-transparent">Insurance OS</span>
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-white/62 md:text-lg">
@@ -233,8 +233,8 @@ const ProjectPortfolio = () => {
             </div>
           </div>
 
-          <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.07] p-5 shadow-2xl shadow-black/35 backdrop-blur-xl">
+          <div className="portfolio-mockup mx-auto flex w-full max-w-2xl flex-col gap-5">
+            <div className="portfolio-glass relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.07] p-5 shadow-2xl shadow-black/35 backdrop-blur-xl">
               <div className="absolute -right-24 -top-24 h-56 w-56 rounded-full bg-cyan-300/10 blur-3xl" />
               <div className="flex items-center justify-between">
                 <div>
@@ -261,7 +261,7 @@ const ProjectPortfolio = () => {
                 <PortfolioMetric value="PDF" label="Reports" />
               </div>
             </div>
-            <div className="ml-auto w-full max-w-xl rounded-2xl border border-white/10 bg-[#211b3f]/95 p-5 shadow-2xl shadow-black/35 backdrop-blur-xl">
+            <div className="portfolio-glass ml-auto w-full max-w-xl rounded-3xl border border-white/10 bg-[#211b3f]/95 p-5 shadow-2xl shadow-black/35 backdrop-blur-xl">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                 <div className="flex h-16 w-20 items-center justify-center rounded-md bg-amber-400/15">
                   <img src="/module-art/claims.svg" alt="Claims module" className="h-14 w-16 object-contain" />
@@ -283,7 +283,7 @@ const ProjectPortfolio = () => {
       </section>
 
       <main className="mx-auto max-w-7xl px-5 py-14 md:px-8">
-        <section className="grid gap-6 rounded-2xl border border-white/10 bg-white/[0.045] p-6 shadow-2xl shadow-black/20 backdrop-blur lg:grid-cols-[0.9fr_1.1fr] lg:p-8">
+        <section className="portfolio-glass grid gap-6 rounded-3xl border border-white/10 bg-white/[0.045] p-6 shadow-2xl shadow-black/20 backdrop-blur lg:grid-cols-[0.9fr_1.1fr] lg:p-8">
           <div>
             <p className="label">Project Objective</p>
             <h2 className="mt-2 text-3xl font-black text-white">A practical insurance workflow from quotation to claim settlement</h2>
@@ -293,7 +293,7 @@ const ProjectPortfolio = () => {
           </p>
         </section>
 
-        <section id="modules" className="mt-12 overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.07),rgba(255,255,255,0.025))] p-5 shadow-2xl shadow-black/20 backdrop-blur-xl md:p-7">
+        <section id="modules" className="portfolio-glass mt-12 overflow-hidden rounded-3xl border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.07),rgba(255,255,255,0.025))] p-5 shadow-2xl shadow-black/20 backdrop-blur-xl md:p-7">
           <div className="mb-7 grid gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
             <div>
               <p className="label">Modules</p>
@@ -308,7 +308,7 @@ const ProjectPortfolio = () => {
             {modules.map((module) => {
               const Icon = module.icon;
               return (
-                <article key={module.title} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#120b2b]/86 p-5 shadow-xl shadow-black/20 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-cyan-300/30 hover:bg-[#181039]">
+                <article key={module.title} className="portfolio-module-card group relative overflow-hidden rounded-2xl border border-white/10 bg-[#120b2b]/86 p-5 shadow-xl shadow-black/20 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-cyan-300/30 hover:bg-[#181039]">
                   <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-cyan-300/8 blur-2xl transition group-hover:bg-purple-300/10" />
                   <div className="absolute right-4 top-4 opacity-12 transition group-hover:scale-110 group-hover:opacity-25">
                     <img src={module.art} alt="" className="h-28 w-32 object-contain" />
@@ -333,7 +333,7 @@ const ProjectPortfolio = () => {
             })}
           </div>
 
-          <div className="mt-7 grid gap-4 rounded-2xl border border-white/10 bg-white/[0.055] p-5 lg:grid-cols-4">
+          <div className="portfolio-glass mt-7 grid gap-4 rounded-2xl border border-white/10 bg-white/[0.055] p-5 lg:grid-cols-4">
             {[
               ["Users", "Admin, manager, agent, surveyor, customer"],
               ["Documents", "Policies, invoices, reports, evidence"],
@@ -347,7 +347,7 @@ const ProjectPortfolio = () => {
             ))}
           </div>
 
-          <div className="mt-7 rounded-2xl border border-white/10 bg-[#0d071f]/78 p-5 shadow-xl shadow-black/20">
+          <div className="portfolio-glass mt-7 rounded-3xl border border-white/10 bg-[#0d071f]/78 p-5 shadow-xl shadow-black/20">
             <div className="mb-5 flex flex-col justify-between gap-3 md:flex-row md:items-end">
               <div>
                 <p className="label">Complete Module List</p>
@@ -359,7 +359,7 @@ const ProjectPortfolio = () => {
             </div>
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
               {projectModules.map(([title, detail], index) => (
-                <article key={title} className="group rounded-xl border border-white/10 bg-white/[0.045] p-4 transition hover:-translate-y-0.5 hover:border-cyan-300/25 hover:bg-white/[0.07]">
+                <article key={title} className="portfolio-small-card group rounded-xl border border-white/10 bg-white/[0.045] p-4 transition hover:-translate-y-0.5 hover:border-cyan-300/25 hover:bg-white/[0.07]">
                   <div className="mb-3 flex items-center gap-3">
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-purple-500/16 text-sm font-black text-purple-100 transition group-hover:bg-cyan-400/16 group-hover:text-cyan-100">
                       {String(index + 1).padStart(2, "0")}
@@ -373,7 +373,7 @@ const ProjectPortfolio = () => {
           </div>
         </section>
 
-        <section className="mt-12 rounded-2xl border border-white/10 bg-white/[0.045] p-6 shadow-2xl shadow-black/15 backdrop-blur">
+        <section className="portfolio-glass mt-12 rounded-3xl border border-white/10 bg-white/[0.045] p-6 shadow-2xl shadow-black/15 backdrop-blur">
           <div className="mb-6">
             <p className="label">UI/UX Features</p>
             <h2 className="mt-2 text-3xl font-black text-white">Modern Project Experience</h2>
@@ -385,7 +385,7 @@ const ProjectPortfolio = () => {
             {uiFeatures.map((feature) => {
               const Icon = feature.icon;
               return (
-                <article key={feature.title} className="rounded-xl border border-white/10 bg-white/[0.04] p-4 transition hover:-translate-y-1 hover:border-purple-300/25 hover:bg-white/[0.065]">
+                <article key={feature.title} className="portfolio-small-card rounded-xl border border-white/10 bg-white/[0.04] p-4 transition hover:-translate-y-1 hover:border-purple-300/25 hover:bg-white/[0.065]">
                   <div className="flex items-start gap-3">
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-cyan-400/12 text-cyan-100">
                       <Icon size={19} />
@@ -402,7 +402,7 @@ const ProjectPortfolio = () => {
         </section>
 
         <section className="mt-12 grid gap-5 lg:grid-cols-2">
-          <article className="rounded-2xl border border-white/10 bg-white/[0.045] p-6 shadow-xl shadow-black/15">
+          <article className="portfolio-glass rounded-3xl border border-white/10 bg-white/[0.045] p-6 shadow-xl shadow-black/15">
             <div className="flex items-center gap-3">
               <Activity className="text-cyan-200" />
               <h2 className="text-2xl font-black text-white">System Workflow</h2>
@@ -417,7 +417,7 @@ const ProjectPortfolio = () => {
             </div>
           </article>
 
-          <article className="rounded-2xl border border-white/10 bg-white/[0.045] p-6 shadow-xl shadow-black/15">
+          <article className="portfolio-glass rounded-3xl border border-white/10 bg-white/[0.045] p-6 shadow-xl shadow-black/15">
             <div className="flex items-center gap-3">
               <Database className="text-emerald-200" />
               <h2 className="text-2xl font-black text-white">Technical Stack</h2>
@@ -440,7 +440,7 @@ const ProjectPortfolio = () => {
           </article>
         </section>
 
-        <section className="mt-12 overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(34,211,238,0.08),rgba(168,85,247,0.08)_46%,rgba(255,255,255,0.035))] p-6 shadow-2xl shadow-black/20">
+        <section className="portfolio-glass mt-12 overflow-hidden rounded-3xl border border-white/10 bg-[linear-gradient(135deg,rgba(34,211,238,0.08),rgba(168,85,247,0.08)_46%,rgba(255,255,255,0.035))] p-6 shadow-2xl shadow-black/20">
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
             <div>
               <p className="label">Viva Ready</p>
@@ -474,7 +474,7 @@ const ProjectPortfolio = () => {
           </div>
         </section>
 
-        <section className="mt-12 rounded-2xl border border-white/10 bg-[#0d071f] p-6 shadow-2xl shadow-black/20 md:p-8">
+        <section className="portfolio-glass mt-12 rounded-3xl border border-white/10 bg-[#0d071f] p-6 shadow-2xl shadow-black/20 md:p-8">
           <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
             <div>
               <p className="label">Presentation Highlights</p>
@@ -482,7 +482,7 @@ const ProjectPortfolio = () => {
             </div>
             <div className="grid gap-4 md:grid-cols-3">
               {proofCards.map(([title, detail]) => (
-                <article key={title} className="rounded-xl border border-white/10 bg-white/[0.045] p-5">
+                <article key={title} className="portfolio-small-card rounded-xl border border-white/10 bg-white/[0.045] p-5">
                   <CheckCircle2 className="text-emerald-200" />
                   <h3 className="mt-4 font-black text-white">{title}</h3>
                   <p className="mt-2 text-sm leading-6 text-white/52">{detail}</p>
