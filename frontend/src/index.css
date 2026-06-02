@@ -1496,6 +1496,130 @@ html[data-theme="light"] .app-main [class*="bottom-6"][class*="right-6"] {
   box-shadow: 0 18px 42px rgba(124, 58, 237, 0.24) !important;
 }
 
+.customer-login-field,
+html[data-theme="light"] .customer-login-field {
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.customer-login-field:focus,
+html[data-theme="light"] .customer-login-field:focus {
+  background: rgba(255, 255, 255, 0.035) !important;
+  border-color: rgba(34, 211, 238, 0.62) !important;
+  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.1) !important;
+}
+
+.customer-portal-page {
+  background:
+    radial-gradient(circle at 16% 8%, rgba(34, 211, 238, 0.18), transparent 30%),
+    radial-gradient(circle at 86% 12%, rgba(124, 58, 237, 0.18), transparent 32%),
+    linear-gradient(145deg, #050b18 0%, #0a1426 46%, #120724 100%);
+}
+
+.customer-portal-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: linear-gradient(180deg, #000, transparent 86%);
+}
+
+.customer-glass {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(255, 255, 255, 0.13) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.035)),
+    rgba(8, 19, 39, 0.62) !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(24px);
+}
+
+.customer-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.5), rgba(168, 85, 247, 0.22), transparent);
+  pointer-events: none;
+}
+
+.customer-stat-card {
+  min-height: 136px;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.customer-stat-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(34, 211, 238, 0.32) !important;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.38), 0 0 34px rgba(34, 211, 238, 0.08) !important;
+}
+
+.customer-portal-page .field,
+.customer-chat-input {
+  background: rgba(255, 255, 255, 0.045) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+.customer-portal-page .field:focus,
+.customer-chat-input:focus {
+  background: rgba(34, 211, 238, 0.08) !important;
+  border-color: rgba(34, 211, 238, 0.48) !important;
+  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.1) !important;
+}
+
+.customer-portal-page table {
+  min-width: 720px;
+}
+
+.customer-portal-page .rounded-md.border-slate-200 {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+html[data-theme="light"] .customer-portal-page {
+  background:
+    radial-gradient(circle at 16% 8%, rgba(14, 165, 233, 0.16), transparent 30%),
+    radial-gradient(circle at 86% 12%, rgba(99, 102, 241, 0.14), transparent 32%),
+    linear-gradient(145deg, #f7fbff 0%, #eef6ff 52%, #f4f0ff 100%);
+}
+
+html[data-theme="light"] .customer-glass {
+  border-color: rgba(147, 197, 253, 0.38) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.76), rgba(255, 255, 255, 0.42)),
+    rgba(255, 255, 255, 0.64) !important;
+  box-shadow: 0 24px 64px rgba(30, 64, 175, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+html[data-theme="light"] .customer-portal-page .field,
+html[data-theme="light"] .customer-chat-input {
+  background: rgba(255, 255, 255, 0.58) !important;
+  border-color: rgba(147, 197, 253, 0.5) !important;
+  color: #172033 !important;
+}
+
+html[data-theme="light"] .customer-chat section {
+  background: rgba(255, 255, 255, 0.74) !important;
+  border-color: rgba(147, 197, 253, 0.45) !important;
+}
+
+html[data-theme="light"] .customer-chat p {
+  color: #172033;
+}
+
+html[data-theme="light"] .customer-chat [class*="bg-white/"] {
+  background: rgba(37, 99, 235, 0.08) !important;
+}
+
 @media (max-width: 1023px) {
   html[data-theme="light"] header {
     min-height: 72px;
@@ -1523,6 +1647,10 @@ html[data-theme="light"] .app-main [class*="bottom-6"][class*="right-6"] {
 
   html[data-theme="light"] .dashboard-card {
     min-height: 138px;
+  }
+
+  .customer-portal-page .app-main {
+    padding-inline: 1rem;
   }
 }
 
@@ -1566,6 +1694,28 @@ html[data-theme="light"] .app-main [class*="bottom-6"][class*="right-6"] {
 
   html[data-theme="light"] .reference-metric {
     min-height: 210px;
+  }
+
+  .customer-portal-hero {
+    border-radius: 1.25rem;
+    padding: 1rem !important;
+  }
+
+  .customer-portal-hero h1 {
+    font-size: 1.25rem !important;
+  }
+
+  .customer-glass {
+    border-radius: 1.25rem !important;
+    padding: 1rem !important;
+  }
+
+  .customer-portal-page .grid {
+    gap: 1rem;
+  }
+
+  .customer-chat section {
+    max-height: calc(100vh - 2rem);
   }
 }
 

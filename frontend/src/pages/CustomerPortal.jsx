@@ -1,4 +1,4 @@
-import { BadgeIndianRupee, ClipboardCheck, Download, LogOut, Plus, Save, ShieldCheck, Upload, UserCircle } from "lucide-react";
+import { BadgeIndianRupee, Bot, ClipboardCheck, Download, LogOut, Plus, Save, Send, ShieldCheck, Upload, UserCircle, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import api, { getAssetUrl } from "../api/axios.js";
@@ -24,6 +24,97 @@ const statusClass = (status = "") => {
   if (["active", "paid", "approved", "settled"].includes(status)) return "bg-emerald-50 text-emerald-700";
   if (["pending", "submitted", "under-review"].includes(status)) return "bg-amber-50 text-amber-700";
   return "bg-red-50 text-red-700";
+};
+
+const customerAssistantReply = (message = "") => {
+  const text = message.toLowerCase();
+
+  if (text.includes("policy") || text.includes("pdf") || text.includes("document")) {
+    return "Open My Policies to view your assigned policies. Use the PDF button on the right side of a policy row to download the policy document.";
+  }
+
+  if (text.includes("claim") || text.includes("accident") || text.includes("incident")) {
+    return "Use Submit Claim to choose your policy, enter incident date, claim amount, and description. After submission, track it in My Claims.";
+  }
+
+  if (text.includes("payment") || text.includes("receipt") || text.includes("invoice") || text.includes("premium")) {
+    return "Open My Payments to see premium payments. Use the download button to get your receipt or invoice PDF.";
+  }
+
+  if (text.includes("ticket") || text.includes("support") || text.includes("help")) {
+    return "Use Support Ticket to send a request about policy, claim, payment, document, security, or general support.";
+  }
+
+  if (text.includes("profile") || text.includes("password") || text.includes("otp")) {
+    return "Use My Profile to update details or upload your image. For password change, enter a new password, request OTP, then save.";
+  }
+
+  return "I can help with policies, claims, payments, receipts, profile updates, OTP, and support tickets. Ask about any customer portal feature.";
+};
+
+const CustomerPortalChatBot = () => {
+  const [open, setOpen] = useState(false);
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState([
+    { role: "assistant", text: "Hi, I am your DriveSure customer assistant. Ask me about policy PDF, claims, payments, receipts, profile, or support tickets." }
+  ]);
+
+  const sendMessage = (event) => {
+    event.preventDefault();
+    const question = input.trim();
+    if (!question) return;
+    setMessages((current) => [
+      ...current,
+      { role: "user", text: question },
+      { role: "assistant", text: customerAssistantReply(question) }
+    ]);
+    setInput("");
+  };
+
+  return (
+    <div className="customer-chat fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6">
+      {open ? (
+        <section className="w-[min(380px,calc(100vw-32px))] overflow-hidden rounded-2xl border border-white/14 bg-[#08172f]/82 shadow-2xl shadow-black/40 backdrop-blur-2xl">
+          <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400/14 text-cyan-100">
+                <Bot size={19} />
+              </span>
+              <div>
+                <p className="text-sm font-bold text-white">Customer Assistant</p>
+                <p className="text-xs text-white/45">Policy, claim, payment help</p>
+              </div>
+            </div>
+            <button className="btn-secondary h-8 w-8 px-0" type="button" onClick={() => setOpen(false)} aria-label="Close customer assistant">
+              <X size={15} />
+            </button>
+          </div>
+
+          <div className="max-h-80 space-y-3 overflow-y-auto p-4">
+            {messages.map((message, index) => (
+              <div key={`${message.role}-${index}`} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
+                <p className={`max-w-[84%] rounded-2xl px-3 py-2 text-sm leading-6 ${message.role === "user" ? "bg-cyan-500 text-white" : "bg-white/[0.08] text-white/72"}`}>
+                  {message.text}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <form className="flex gap-2 border-t border-white/10 p-3" onSubmit={sendMessage}>
+            <input className="field customer-chat-input" value={input} onChange={(event) => setInput(event.target.value)} placeholder="Ask your query" />
+            <button className="btn-primary px-3" type="submit" aria-label="Send customer query">
+              <Send size={16} />
+            </button>
+          </form>
+        </section>
+      ) : (
+        <button className="btn-primary h-12 rounded-full px-4 shadow-2xl shadow-cyan-950/40 sm:h-14 sm:px-5" type="button" onClick={() => setOpen(true)}>
+          <Bot size={18} />
+          Help
+        </button>
+      )}
+    </div>
+  );
 };
 
 const CustomerPortal = () => {
@@ -203,16 +294,21 @@ const CustomerPortal = () => {
   };
 
   return (
-    <div className="auth-visual-shell relative min-h-screen overflow-hidden text-white">
+    <div className="customer-portal-page auth-visual-shell relative min-h-screen overflow-x-hidden text-white">
       <AnimatedAuthBackground />
-      <main className="app-main relative z-10 mx-auto max-w-7xl space-y-6 px-4 py-6 lg:px-8">
-        <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
-          <div>
-            <p className="label">Customer portal</p>
-            <h1 className="mt-1 text-2xl font-bold text-ink">Welcome, {customer.fullName}</h1>
-            <p className="mt-1 text-sm text-slate-500">{customer.email}</p>
+      <main className="app-main relative z-10 mx-auto max-w-7xl space-y-5 px-4 pb-28 pt-5 sm:space-y-6 sm:py-6 sm:pb-28 lg:px-8">
+        <div className="customer-glass customer-portal-hero flex flex-col justify-between gap-4 rounded-3xl border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/20 backdrop-blur-xl sm:flex-row sm:items-center">
+          <div className="flex min-w-0 items-center gap-4">
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-cyan-300/25 bg-cyan-300/10 shadow-lg shadow-cyan-950/30">
+              <img src="/favicon.svg" alt="DriveSure Customer Portal" className="h-14 w-14 object-contain" />
+            </div>
+            <div className="min-w-0">
+              <p className="label">Customer portal</p>
+              <h1 className="mt-1 truncate text-2xl font-bold text-ink">Welcome, {customer.fullName}</h1>
+              <p className="mt-1 truncate text-sm text-slate-500">{customer.email}</p>
+            </div>
           </div>
-          <button className="btn-secondary" type="button" onClick={logout}>
+          <button className="btn-secondary shrink-0" type="button" onClick={logout}>
             <LogOut size={16} />
             Logout
           </button>
@@ -222,17 +318,17 @@ const CustomerPortal = () => {
         {notice ? <div className="rounded-md bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{notice}</div> : null}
 
         <div className="grid gap-4 md:grid-cols-3">
-          <section className="panel p-5">
+          <section className="panel customer-glass customer-stat-card p-5">
             <ShieldCheck className="mb-3 text-cyan-300" size={24} />
             <p className="text-sm text-slate-500">Policies</p>
             <p className="mt-1 text-2xl font-bold text-ink">{policies.length}</p>
           </section>
-          <section className="panel p-5">
+          <section className="panel customer-glass customer-stat-card p-5">
             <ClipboardCheck className="mb-3 text-orange-300" size={24} />
             <p className="text-sm text-slate-500">Claims</p>
             <p className="mt-1 text-2xl font-bold text-ink">{claims.length}</p>
           </section>
-          <section className="panel p-5">
+          <section className="panel customer-glass customer-stat-card p-5">
             <BadgeIndianRupee className="mb-3 text-emerald-300" size={24} />
             <p className="text-sm text-slate-500">Paid Premium</p>
             <p className="mt-1 text-2xl font-bold text-ink">
@@ -241,13 +337,13 @@ const CustomerPortal = () => {
           </section>
         </div>
 
-        <section className="panel p-5">
+        <section className="panel customer-glass p-5">
           <div className="mb-4 flex items-center gap-2">
             <UserCircle size={20} className="text-cyan-300" />
             <h2 className="text-lg font-bold text-ink">My Profile</h2>
           </div>
           <form onSubmit={submitProfile} className="grid gap-5 xl:grid-cols-[220px_1fr]">
-            <div className="flex flex-col items-center rounded-md border border-white/10 bg-white/5 p-4">
+            <div className="flex flex-col items-center rounded-2xl border border-white/10 bg-white/5 p-4">
               <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl border border-cyan-300/20 bg-cyan-400/10 text-cyan-300">
                 {profilePreview ? <img src={profilePreview} alt="Customer profile" className="h-full w-full object-cover" /> : <UserCircle size={54} strokeWidth={1.5} />}
               </div>
@@ -288,7 +384,7 @@ const CustomerPortal = () => {
           </form>
         </section>
 
-        <section className="panel p-5">
+        <section className="panel customer-glass p-5">
           <div className="mb-4 flex items-center gap-2">
             <ShieldCheck size={20} className="text-brand" />
             <h2 className="text-lg font-bold text-ink">My Policies</h2>
@@ -334,7 +430,7 @@ const CustomerPortal = () => {
           </div>
         </section>
 
-        <section className="panel p-5">
+        <section className="panel customer-glass p-5">
           <div className="mb-4 flex items-center gap-2">
             <Plus size={20} className="text-coral" />
             <h2 className="text-lg font-bold text-ink">Submit Claim</h2>
@@ -358,7 +454,7 @@ const CustomerPortal = () => {
           </form>
         </section>
 
-        <section className="panel p-5">
+        <section className="panel customer-glass p-5">
           <div className="mb-4 flex items-center gap-2">
             <Plus size={20} className="text-cyan-300" />
             <h2 className="text-lg font-bold text-ink">Support Ticket</h2>
@@ -380,7 +476,7 @@ const CustomerPortal = () => {
         </section>
 
         <div className="grid gap-6 xl:grid-cols-2">
-          <section className="panel p-5">
+          <section className="panel customer-glass p-5">
             <div className="mb-4 flex items-center gap-2">
               <ClipboardCheck size={20} className="text-coral" />
               <h2 className="text-lg font-bold text-ink">My Claims</h2>
@@ -402,7 +498,7 @@ const CustomerPortal = () => {
             </div>
           </section>
 
-          <section className="panel p-5">
+          <section className="panel customer-glass p-5">
             <div className="mb-4 flex items-center gap-2">
               <ClipboardCheck size={20} className="text-cyan-300" />
               <h2 className="text-lg font-bold text-ink">My Tickets</h2>
@@ -424,7 +520,7 @@ const CustomerPortal = () => {
             </div>
           </section>
 
-          <section className="panel p-5">
+          <section className="panel customer-glass p-5">
             <div className="mb-4 flex items-center gap-2">
               <BadgeIndianRupee size={20} className="text-mint" />
               <h2 className="text-lg font-bold text-ink">My Payments</h2>
@@ -447,6 +543,7 @@ const CustomerPortal = () => {
           </section>
         </div>
       </main>
+      <CustomerPortalChatBot />
     </div>
   );
 };

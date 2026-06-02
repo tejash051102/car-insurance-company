@@ -1,4 +1,4 @@
-import { Eye, EyeOff, ShieldCheck, Sparkles } from "lucide-react";
+import { Eye, EyeOff, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/axios.js";
@@ -37,8 +37,8 @@ const CustomerLogin = () => {
       <AnimatedAuthBackground />
 
       <div className="relative z-10 mb-7 flex flex-col items-center gap-3 text-center">
-        <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-400/15 shadow-lg shadow-cyan-950/30">
-          <ShieldCheck size={26} className="text-cyan-300" strokeWidth={1.6} />
+        <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-cyan-400/30 bg-cyan-400/10 shadow-lg shadow-cyan-950/30">
+          <img src="/favicon.svg" alt="DriveSure Customer Portal" className="h-14 w-14 object-contain" />
         </div>
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-300">
           Customer portal
@@ -50,8 +50,8 @@ const CustomerLogin = () => {
 
         <div className="mb-7">
           <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-cyan-400/25 bg-cyan-400/15">
-              <ShieldCheck size={20} className="text-cyan-300" strokeWidth={1.6} />
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-cyan-400/25 bg-cyan-400/10">
+              <img src="/favicon.svg" alt="DriveSure" className="h-10 w-10 object-contain" />
             </div>
             <div>
               <p className="mb-1 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">
@@ -84,7 +84,7 @@ const CustomerLogin = () => {
               Email address
             </label>
             <input
-              className="w-full rounded-lg border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-400/60 focus:bg-cyan-400/10"
+              className="customer-login-field w-full rounded-lg border border-white/12 bg-transparent px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-cyan-400/60 focus:bg-white/[0.035]"
               id="customer-email"
               name="email"
               type="email"
@@ -100,7 +100,7 @@ const CustomerLogin = () => {
             </label>
             <div className="relative">
               <input
-                className="w-full rounded-lg border border-white/10 bg-white/[0.04] px-4 py-3 pr-12 text-sm text-white outline-none transition focus:border-cyan-400/60 focus:bg-cyan-400/10"
+                className="customer-login-field w-full rounded-lg border border-white/12 bg-transparent px-4 py-3 pr-12 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-cyan-400/60 focus:bg-white/[0.035]"
                 id="customer-password"
                 name="password"
                 type={showPassword ? "text" : "password"}
