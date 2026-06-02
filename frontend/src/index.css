@@ -1038,7 +1038,7 @@ html::-webkit-scrollbar-thumb,
 body::-webkit-scrollbar-thumb {
   border: 2px solid transparent;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.36);
+  background: rgba(255, 255, 255, 0.24);
   background-clip: content-box;
 }
 
@@ -1612,6 +1612,80 @@ html[data-theme="light"] .customer-login-field:focus {
   z-index: 1;
 }
 
+.portfolio-page,
+.portfolio-page h1,
+.portfolio-page h2,
+.portfolio-page h3,
+.portfolio-page h4,
+.portfolio-page p,
+.portfolio-page span,
+.portfolio-page a,
+.portfolio-page button {
+  color: #f8fbff;
+}
+
+.portfolio-page h1,
+.portfolio-page h2,
+.portfolio-page h3,
+.portfolio-page h4 {
+  text-shadow: 0 14px 42px rgba(0, 0, 0, 0.26);
+}
+
+.portfolio-page p {
+  color: rgba(226, 242, 255, 0.68);
+}
+
+.portfolio-page .label,
+.portfolio-page [class*="text-cyan-100"],
+.portfolio-page [class*="text-cyan-200"],
+.portfolio-page [class*="text-cyan-300"] {
+  color: #a5f3fc !important;
+}
+
+.portfolio-page [class*="text-white/42"],
+.portfolio-page [class*="text-white/45"],
+.portfolio-page [class*="text-white/48"],
+.portfolio-page [class*="text-white/50"],
+.portfolio-page [class*="text-white/52"],
+.portfolio-page [class*="text-white/54"],
+.portfolio-page [class*="text-white/56"],
+.portfolio-page [class*="text-white/58"],
+.portfolio-page [class*="text-white/62"],
+.portfolio-page [class*="text-white/68"],
+.portfolio-page [class*="text-white/72"] {
+  color: rgba(226, 242, 255, 0.7) !important;
+}
+
+.portfolio-page .btn-secondary {
+  color: #15304f !important;
+}
+
+.portfolio-page .btn-primary,
+.portfolio-page .btn-primary * {
+  color: #ffffff !important;
+}
+
+.portfolio-page::-webkit-scrollbar,
+.portfolio-page *::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.portfolio-page::-webkit-scrollbar-track,
+.portfolio-page *::-webkit-scrollbar-track,
+.portfolio-page::-webkit-scrollbar-corner,
+.portfolio-page *::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.portfolio-page::-webkit-scrollbar-thumb,
+.portfolio-page *::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: rgba(165, 243, 252, 0.22);
+  background-clip: content-box;
+}
+
 .portfolio-glass {
   position: relative;
   border-color: rgba(255, 255, 255, 0.14) !important;
@@ -1651,6 +1725,19 @@ html[data-theme="light"] .customer-login-field:focus {
 
 .portfolio-title {
   text-wrap: balance;
+  color: transparent !important;
+  background: linear-gradient(90deg, #9ef3ff 0%, #d7fbff 35%, #fff9ff 68%, #f0dcff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: none !important;
+}
+
+.portfolio-title span {
+  color: transparent !important;
+  background: linear-gradient(90deg, #9ef3ff 0%, #c9fbff 42%, #f8f0ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: none !important;
 }
 
 @media (max-width: 1023px) {
