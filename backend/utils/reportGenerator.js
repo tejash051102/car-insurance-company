@@ -12,7 +12,7 @@ export const createReportPdf = ({ title, subtitle, cards = [], rows = [] }) =>
 
     addBrandHeader(doc, {
       title,
-      subtitle: subtitle || "Operational report generated from AutoSure insurance records.",
+      subtitle: subtitle || "Operational report generated from DriveSure insurance records.",
       badge: "report"
     });
 

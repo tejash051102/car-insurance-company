@@ -50,18 +50,18 @@ export const buildPolicyExpiryMessage = (policy) => {
   return {
     to: policy.customer?.email,
     subject: `Policy expiry reminder: ${policy.policyNumber}`,
-    text: `Hello ${customerName},\n\nYour policy ${policy.policyNumber} is scheduled to expire on ${endDate}. Please contact the insurance team to renew or review your policy.\n\nInsurance Management System`
+    text: `Hello ${customerName},\n\nYour policy ${policy.policyNumber} is scheduled to expire on ${endDate}. Please contact the insurance team to renew or review your policy.\n\nDriveSure`
   };
 };
 
 export const buildPaymentReceiptMessage = (payment) => ({
   to: payment.customer?.email,
   subject: `Payment receipt: ${payment.paymentNumber}`,
-  text: `Hello ${payment.customer?.fullName || "Customer"},\n\nYour payment ${payment.paymentNumber} for policy ${payment.policy?.policyNumber || ""} has been recorded with status ${payment.status}. Amount: ${payment.amount}.\n\nInsurance Management System`
+  text: `Hello ${payment.customer?.fullName || "Customer"},\n\nYour payment ${payment.paymentNumber} for policy ${payment.policy?.policyNumber || ""} has been recorded with status ${payment.status}. Amount: ${payment.amount}.\n\nDriveSure`
 });
 
 export const buildClaimStatusMessage = (claim) => ({
   to: claim.customer?.email,
   subject: `Claim status update: ${claim.claimNumber}`,
-  text: `Hello ${claim.customer?.fullName || "Customer"},\n\nYour claim ${claim.claimNumber} is now marked as ${claim.status}. ${claim.decisionNote || ""}\n\nInsurance Management System`
+  text: `Hello ${claim.customer?.fullName || "Customer"},\n\nYour claim ${claim.claimNumber} is now marked as ${claim.status}. ${claim.decisionNote || ""}\n\nDriveSure`
 });

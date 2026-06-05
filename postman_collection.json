@@ -1,8 +1,8 @@
 {
   "info": {
-    "name": "Car Insurance Management System",
+    "name": "DriveSure",
     "_postman_id": "b0c5f3c8-4f83-4a3f-bd41-cd6c0b772001",
-    "description": "API collection for the MERN Car Insurance Company Management System.",
+    "description": "API collection for the MERN DriveSure.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [

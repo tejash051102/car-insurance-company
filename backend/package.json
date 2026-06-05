@@ -1,7 +1,7 @@
 {
   "name": "car-insurance-management-backend",
   "version": "1.0.0",
-  "description": "Backend API for the Car Insurance Company Management System",
+  "description": "Backend API for the DriveSure",
   "main": "server.js",
   "type": "module",
   "scripts": {

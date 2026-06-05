@@ -60,7 +60,7 @@ const sendVerificationEmail = async (user, rawToken) => {
   const result = await sendEmail({
     to: user.email,
     subject: "Verify your email address",
-    text: `Hello ${user.name},\n\nPlease verify your email address for Insurance Management System:\n${verificationUrl}\n\nThis link expires in 24 hours.\n\nIf you did not create this account, you can ignore this email.`
+    text: `Hello ${user.name},\n\nPlease verify your email address for DriveSure:\n${verificationUrl}\n\nThis link expires in 24 hours.\n\nIf you did not create this account, you can ignore this email.`
   });
 
   return {
@@ -74,7 +74,7 @@ const sendPasswordResetEmail = async (user, rawToken) => {
   const result = await sendEmail({
     to: user.email,
     subject: "Reset your password",
-    text: `Hello ${user.name},\n\nUse this link to reset your Insurance Management System password:\n${resetUrl}\n\nThis link expires in 1 hour.\n\nIf you did not request this, you can ignore this email.`
+    text: `Hello ${user.name},\n\nUse this link to reset your DriveSure password:\n${resetUrl}\n\nThis link expires in 1 hour.\n\nIf you did not request this, you can ignore this email.`
   });
 
   return {

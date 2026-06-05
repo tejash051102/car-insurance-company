@@ -1,4 +1,4 @@
--- Car Insurance Company Management System
+-- DriveSure
 -- The application uses MongoDB through Mongoose models.
 -- This SQL file is included as a relational reference for the requested project structure.
 

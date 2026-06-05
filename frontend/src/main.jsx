@@ -33,6 +33,7 @@ window.addEventListener("unhandledrejection", (event) => {
 try {
   window.history.replaceState(null, "", window.location.href);
 } catch {
+  // Ignore browsers that reject history state cleanup.
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(

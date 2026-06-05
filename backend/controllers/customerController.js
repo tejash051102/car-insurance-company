@@ -28,7 +28,7 @@ const sendCustomerOtpEmail = async (customer, otp) => {
   const result = await sendEmail({
     to: customer.email,
     subject: "Verify your customer contact",
-    text: `Hello ${customer.fullName},\n\nYour Insurance Management System customer verification code is ${otp}.\n\nThis code expires in 10 minutes.\n\nIf you did not request this, please ignore this email.`
+    text: `Hello ${customer.fullName},\n\nYour DriveSure customer verification code is ${otp}.\n\nThis code expires in 10 minutes.\n\nIf you did not request this, please ignore this email.`
   });
 
   return { skipped: Boolean(result?.skipped) };

@@ -53,7 +53,7 @@ const Navbar = ({ onLogout, onMenuClick }) => {
           <Menu size={18} />
         </button>
         <div className="hidden shrink-0 md:block lg:hidden">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-purple-200/80">AI Insurance OS</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-purple-200/80">DriveSure AI OS</p>
           <h1 className="text-lg font-black text-white">Analytics Dashboard</h1>
         </div>
         <form

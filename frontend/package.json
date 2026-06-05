@@ -1,7 +1,7 @@
 {
   "name": "car-insurance-management-frontend",
   "version": "1.0.0",
-  "description": "React frontend for the Car Insurance Company Management System",
+  "description": "React frontend for the DriveSure",
   "type": "module",
   "scripts": {
     "dev": "vite",
