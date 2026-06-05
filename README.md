@@ -87,6 +87,13 @@ DNS_SERVERS=8.8.8.8,1.1.1.1
 JWT_SECRET=change_this_secret_for_production
 JWT_EXPIRES_IN=7d
 CLIENT_URL=http://localhost:5173,http://127.0.0.1:5173
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-gmail-address@gmail.com
+SMTP_PASS=your-gmail-app-password
+SMTP_FROM=your-gmail-address@gmail.com
+SMTP_FROM_NAME=DriveSure
 ```
 
 Optional frontend `.env`:
@@ -94,6 +101,25 @@ Optional frontend `.env`:
 ```env
 VITE_API_URL=http://localhost:5000/api
 ```
+
+Render deployment variables:
+
+```env
+CLIENT_URL=https://car-insurance-frontend-4x9z.onrender.com
+VITE_API_URL=https://car-insurance-backend-bxnz.onrender.com/api
+MONGO_URI=<your MongoDB Atlas connection string>
+JWT_SECRET=<long random secret>
+FIELD_ENCRYPTION_KEY=<long random encryption key>
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=<your Gmail address>
+SMTP_PASS=<your Gmail app password>
+SMTP_FROM=<your Gmail address>
+SMTP_FROM_NAME=DriveSure
+```
+
+For Gmail SMTP, use a Google App Password, not the normal Gmail login password.
 
 ## API Modules
 

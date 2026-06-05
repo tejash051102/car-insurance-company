@@ -43,7 +43,10 @@ const createAndSendCustomerOtp = async (customer) => {
   const result = await sendCustomerOtpEmail(customer, otp.otp);
 
   if (result.skipped) {
-    throw new Error(`Verification email could not be sent: ${result.reason || "Email service unavailable"}`);
+    const error = new Error(`Verification email could not be sent: ${result.reason || "Email service unavailable"}`);
+    error.statusCode = 503;
+    error.isEmailDeliveryError = true;
+    throw error;
   }
 
   return {
