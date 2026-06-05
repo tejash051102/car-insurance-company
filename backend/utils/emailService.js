@@ -28,6 +28,7 @@ export const sendEmail = async ({ to, subject, text }) => {
     connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 20000),
     greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT || 20000),
     socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT || 20000),
+    family: 4,
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS
