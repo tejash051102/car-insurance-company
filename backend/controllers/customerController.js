@@ -42,9 +42,12 @@ const createAndSendCustomerOtp = async (customer) => {
 
   const result = await sendCustomerOtpEmail(customer, otp.otp);
 
+  if (result.skipped) {
+    throw new Error(`Verification email could not be sent: ${result.reason || "Email service unavailable"}`);
+  }
+
   return {
-    sent: !result.skipped,
-    otp: result.skipped ? otp.otp : undefined,
+    sent: true,
     skippedReason: result.reason
   };
 };
@@ -181,10 +184,7 @@ export const createCustomer = asyncHandler(async (req, res) => {
   res.status(201).json({
     customer: await customer.populate("createdBy", "name email role"),
     contactOtpSent: otpResult.sent,
-    ...(otpResult.otp ? { verificationOtp: otpResult.otp } : {}),
-    message: otpResult.sent
-      ? "Customer created. Verification code sent to customer email."
-      : "Customer created. Email could not be sent, so use the verification OTP shown in the app."
+    message: "Customer created. Verification code sent to customer email."
   });
 });
 
@@ -327,11 +327,8 @@ export const resendCustomerOtp = asyncHandler(async (req, res) => {
   const otpResult = await createAndSendCustomerOtp(customer);
 
   res.json({
-    message: otpResult.sent
-      ? "Verification code sent to customer email"
-      : "Email could not be sent, so use the verification OTP shown in the app.",
-    contactOtpSent: otpResult.sent,
-    ...(otpResult.otp ? { verificationOtp: otpResult.otp } : {})
+    message: "Verification code sent to customer email",
+    contactOtpSent: otpResult.sent
   });
 });
 
