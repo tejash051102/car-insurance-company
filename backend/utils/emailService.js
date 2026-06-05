@@ -35,12 +35,17 @@ export const sendEmail = async ({ to, subject, text }) => {
     }
   });
 
-  return transporter.sendMail({
-    from: process.env.SMTP_FROM || process.env.SMTP_USER,
-    to,
-    subject,
-    text
-  });
+  try {
+    return await transporter.sendMail({
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      to,
+      subject,
+      text
+    });
+  } catch (error) {
+    console.warn(`[email:skipped] ${subject} -> ${to}: ${error.message}`);
+    return { skipped: true, reason: error.message || "Email service unavailable" };
+  }
 };
 
 export const buildPolicyExpiryMessage = (policy) => {

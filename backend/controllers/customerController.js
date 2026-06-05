@@ -31,7 +31,7 @@ const sendCustomerOtpEmail = async (customer, otp) => {
     text: `Hello ${customer.fullName},\n\nYour DriveSure customer verification code is ${otp}.\n\nThis code expires in 10 minutes.\n\nIf you did not request this, please ignore this email.`
   });
 
-  return { skipped: Boolean(result?.skipped) };
+  return { skipped: Boolean(result?.skipped), reason: result?.reason };
 };
 
 const createAndSendCustomerOtp = async (customer) => {
@@ -184,7 +184,7 @@ export const createCustomer = asyncHandler(async (req, res) => {
     ...(otpResult.otp ? { verificationOtp: otpResult.otp } : {}),
     message: otpResult.sent
       ? "Customer created. Verification code sent to customer email."
-      : "Customer created. SMTP is not configured, so use the verification OTP shown in the app."
+      : "Customer created. Email could not be sent, so use the verification OTP shown in the app."
   });
 });
 
@@ -329,7 +329,7 @@ export const resendCustomerOtp = asyncHandler(async (req, res) => {
   res.json({
     message: otpResult.sent
       ? "Verification code sent to customer email"
-      : "SMTP is not configured, so use the verification OTP shown in the app.",
+      : "Email could not be sent, so use the verification OTP shown in the app.",
     contactOtpSent: otpResult.sent,
     ...(otpResult.otp ? { verificationOtp: otpResult.otp } : {})
   });
