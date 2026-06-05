@@ -1,3 +1,7 @@
+import dns from "dns";
+
+dns.setDefaultResultOrder?.("ipv4first");
+
 const isPlaceholder = (value = "") =>
   ["yourgmail@gmail.com", "your_google_app_password", "your-email@gmail.com"].includes(value.trim().toLowerCase());
 
@@ -21,14 +25,29 @@ export const sendEmail = async ({ to, subject, text }) => {
   }
 
   const nodemailer = await import("nodemailer");
+  const configuredHost = process.env.SMTP_HOST;
+  let smtpHost = configuredHost;
+
+  try {
+    const [ipv4Address] = await dns.promises.resolve4(configuredHost);
+    if (ipv4Address) {
+      smtpHost = ipv4Address;
+    }
+  } catch {
+    smtpHost = configuredHost;
+  }
+
   const transporter = nodemailer.default.createTransport({
-    host: process.env.SMTP_HOST,
+    host: smtpHost,
     port: Number(process.env.SMTP_PORT),
     secure: process.env.SMTP_SECURE === "true",
     family: 4,
     connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 8000),
     greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT || 8000),
     socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT || 10000),
+    tls: {
+      servername: configuredHost
+    },
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS
