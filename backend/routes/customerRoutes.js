@@ -6,6 +6,7 @@ import {
   getCustomerById,
   getCustomers,
   resendCustomerOtp,
+  adminSendCustomerVerificationOtp,
   updateCustomer,
   updateDocumentVerification,
   uploadCustomerDocuments,
@@ -21,6 +22,7 @@ router.get("/export/csv", protect, authorize("admin", "manager"), exportCustomer
 router.post("/:id/documents", protect, upload.array("documents", 5), uploadCustomerDocuments);
 router.patch("/:id/documents/:documentId/verification", protect, authorize("admin", "manager"), updateDocumentVerification);
 router.post("/:id/send-otp", protect, resendCustomerOtp);
+router.post("/:id/admin-send-verification", protect, authorize("admin", "manager"), adminSendCustomerVerificationOtp);
 router.post("/:id/verify-otp", protect, verifyCustomerOtp);
 router
   .route("/:id")

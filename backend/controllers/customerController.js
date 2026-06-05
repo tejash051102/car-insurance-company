@@ -335,6 +335,33 @@ export const resendCustomerOtp = asyncHandler(async (req, res) => {
   });
 });
 
+export const adminSendCustomerVerificationOtp = asyncHandler(async (req, res) => {
+  const filter = await getAccessibleCustomerFilter(req, { _id: req.params.id });
+  const customer = await Customer.findOne(filter).select("+contactVerificationOtpHash +contactVerificationExpires");
+
+  if (!customer) {
+    res.status(404);
+    throw new Error("Customer not found");
+  }
+
+  const otpResult = await createAndSendCustomerOtp(customer);
+
+  await logActivity({
+    req,
+    action: "sent_verification_code",
+    entityType: "Customer",
+    entityId: customer._id,
+    message: `Sent verification code to ${customer.fullName} (${customer.email})`
+  });
+
+  res.json({
+    message: "Verification code sent to customer email",
+    contactOtpSent: otpResult.sent,
+    customerEmail: customer.email,
+    customerName: customer.fullName
+  });
+});
+
 export const verifyCustomerOtp = asyncHandler(async (req, res) => {
   const { otp } = req.body;
 

@@ -9,6 +9,61 @@ const hasSmtpConfig = () =>
   !isPlaceholder(process.env.SMTP_USER) &&
   !isPlaceholder(process.env.SMTP_PASS);
 
+export const validateSmtpConfig = () => {
+  if (!hasSmtpConfig()) {
+    console.log("[email] SMTP not configured. Using dev mode (emails logged to console)");
+    return false;
+  }
+  console.log(`[email] SMTP configured: ${process.env.SMTP_HOST}:${process.env.SMTP_PORT}`);
+  return true;
+};
+
+const createTransporter = () => {
+  const nodemailer = require("nodemailer");
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT),
+    secure: process.env.SMTP_SECURE === "true",
+    connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 30000),
+    greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT || 30000),
+    socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT || 30000),
+    maxConnections: 1,
+    family: 4,
+    pool: {
+      maxConnections: 1,
+      maxMessages: 10
+    },
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS
+    }
+  });
+};
+
+const retryEmail = async (transporter, mailOptions, retries = 2) => {
+  let lastError;
+  
+  for (let attempt = 1; attempt <= retries + 1; attempt++) {
+    try {
+      const result = await transporter.sendMail(mailOptions);
+      if (attempt > 1) {
+        console.log(`[email:retry] Successfully sent after ${attempt - 1} retry attempt(s)`);
+      }
+      return result;
+    } catch (error) {
+      lastError = error;
+      console.warn(`[email:retry] Attempt ${attempt} failed: ${error.message}`);
+      
+      if (attempt < retries + 1) {
+        const delay = Math.min(1000 * Math.pow(2, attempt - 1), 5000);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+  }
+  
+  throw lastError;
+};
+
 export const sendEmail = async ({ to, subject, text }) => {
   if (!to) {
     return { skipped: true, reason: "Missing recipient" };
@@ -20,34 +75,47 @@ export const sendEmail = async ({ to, subject, text }) => {
     return { skipped: true, reason: "SMTP not configured" };
   }
 
-  const nodemailer = await import("nodemailer");
-  const transporter = nodemailer.default.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT),
-    secure: process.env.SMTP_SECURE === "true",
-    connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 20000),
-    greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT || 20000),
-    socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT || 20000),
-    family: 4,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
-    }
-  });
-
   try {
+    const nodemailer = await import("nodemailer");
+    const transporter = nodemailer.default.createTransport({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT),
+      secure: process.env.SMTP_SECURE === "true",
+      connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 30000),
+      greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT || 30000),
+      socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT || 30000),
+      maxConnections: 1,
+      family: 4,
+      logger: process.env.NODE_ENV === "development",
+      debug: process.env.NODE_ENV === "development",
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+      }
+    });
+
     const fromName = process.env.SMTP_FROM_NAME || "DriveSure";
     const fromAddress = process.env.SMTP_FROM || process.env.SMTP_USER;
 
-    return await transporter.sendMail({
+    const mailOptions = {
       from: `"${fromName}" <${fromAddress}>`,
       to,
       subject,
       text
-    });
+    };
+
+    return await retryEmail(transporter, mailOptions, 2);
   } catch (error) {
-    console.warn(`[email:skipped] ${subject} -> ${to}: ${error.message}`);
-    return { skipped: true, reason: error.message || "Email service unavailable" };
+    const errorMessage = error.message || "Email service unavailable";
+    console.error(`[email:failed] ${subject} -> ${to}: ${errorMessage}`);
+    console.error(`[email:error_details]`, {
+      code: error.code,
+      errno: error.errno,
+      syscall: error.syscall,
+      hostname: error.hostname,
+      message: error.message
+    });
+    return { skipped: true, reason: errorMessage };
   }
 };
 
