@@ -1,7 +1,3 @@
-import dns from "dns";
-
-dns.setDefaultResultOrder?.("ipv4first");
-
 const isPlaceholder = (value = "") =>
   ["yourgmail@gmail.com", "your_google_app_password", "your-email@gmail.com"].includes(value.trim().toLowerCase());
 
@@ -25,29 +21,13 @@ export const sendEmail = async ({ to, subject, text }) => {
   }
 
   const nodemailer = await import("nodemailer");
-  const configuredHost = process.env.SMTP_HOST;
-  let smtpHost = configuredHost;
-
-  try {
-    const [ipv4Address] = await dns.promises.resolve4(configuredHost);
-    if (ipv4Address) {
-      smtpHost = ipv4Address;
-    }
-  } catch {
-    smtpHost = configuredHost;
-  }
-
   const transporter = nodemailer.default.createTransport({
-    host: smtpHost,
+    host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT),
     secure: process.env.SMTP_SECURE === "true",
-    family: 4,
-    connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 8000),
-    greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT || 8000),
-    socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT || 10000),
-    tls: {
-      servername: configuredHost
-    },
+    connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 20000),
+    greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT || 20000),
+    socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT || 20000),
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS
@@ -55,8 +35,11 @@ export const sendEmail = async ({ to, subject, text }) => {
   });
 
   try {
+    const fromName = process.env.SMTP_FROM_NAME || "DriveSure";
+    const fromAddress = process.env.SMTP_FROM || process.env.SMTP_USER;
+
     return await transporter.sendMail({
-      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      from: `"${fromName}" <${fromAddress}>`,
       to,
       subject,
       text
