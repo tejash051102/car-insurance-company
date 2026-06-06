@@ -20,19 +20,22 @@ export const validateSmtpConfig = () => {
   return true;
 };
 
-const getSmtpTarget = async () => {
+const getSmtpTargets = async () => {
   const smtpHost = process.env.SMTP_HOST;
 
   if (process.env.SMTP_FORCE_IPV4 === "false") {
-    return { host: smtpHost, servername: smtpHost };
+    return [{ host: smtpHost, servername: smtpHost }];
   }
 
   try {
     const { address } = await dns.lookup(smtpHost, { family: 4 });
-    return { host: address, servername: smtpHost };
+    return [
+      { host: address, servername: smtpHost },
+      { host: smtpHost, servername: smtpHost }
+    ];
   } catch (error) {
     console.warn(`[email:dns] IPv4 lookup failed for ${smtpHost}: ${error.message}`);
-    return { host: smtpHost, servername: smtpHost };
+    return [{ host: smtpHost, servername: smtpHost }];
   }
 };
 
@@ -60,27 +63,14 @@ const retryEmail = async (transporter, mailOptions, retries = 2) => {
   throw lastError;
 };
 
-export const sendEmail = async ({ to, subject, text }) => {
-  if (!to) {
-    return { skipped: true, reason: "Missing recipient" };
-  }
-
-  if (!hasSmtpConfig()) {
-    console.log(`[email:dev] ${subject} -> ${to}`);
-    console.log(text);
-    return { skipped: true, reason: "SMTP not configured" };
-  }
-
-  try {
-    const nodemailer = await import("nodemailer");
-    const smtpTarget = await getSmtpTarget();
-    const transporter = nodemailer.default.createTransport({
+const createTransporter = (nodemailer, smtpTarget) =>
+  nodemailer.default.createTransport({
       host: smtpTarget.host,
       port: Number(process.env.SMTP_PORT),
       secure: process.env.SMTP_SECURE === "true",
-      connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 30000),
-      greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT || 30000),
-      socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT || 30000),
+      connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 12000),
+      greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT || 12000),
+      socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT || 20000),
       maxConnections: 1,
       family: 4,
       logger: process.env.SMTP_DEBUG === "true",
@@ -94,6 +84,21 @@ export const sendEmail = async ({ to, subject, text }) => {
       }
     });
 
+export const sendEmail = async ({ to, subject, text }) => {
+  if (!to) {
+    return { skipped: true, reason: "Missing recipient" };
+  }
+
+  if (!hasSmtpConfig()) {
+    console.log(`[email:dev] ${subject} -> ${to}`);
+    console.log(text);
+    return { skipped: true, reason: "SMTP not configured" };
+  }
+
+  try {
+    const nodemailer = await import("nodemailer");
+    const smtpTargets = await getSmtpTargets();
+
     const fromName = process.env.SMTP_FROM_NAME || "DriveSure";
     const fromAddress = process.env.SMTP_FROM || process.env.SMTP_USER;
 
@@ -104,7 +109,22 @@ export const sendEmail = async ({ to, subject, text }) => {
       text
     };
 
-    return await retryEmail(transporter, mailOptions, 2);
+    let lastError;
+
+    for (const smtpTarget of smtpTargets) {
+      const transporter = createTransporter(nodemailer, smtpTarget);
+
+      try {
+        return await retryEmail(transporter, mailOptions, 1);
+      } catch (error) {
+        lastError = error;
+        console.warn(`[email:target] Failed via ${smtpTarget.host}: ${error.message}`);
+      } finally {
+        transporter.close();
+      }
+    }
+
+    throw lastError || new Error("Email service unavailable");
   } catch (error) {
     const errorMessage = error.message || "Email service unavailable";
     console.error(`[email:failed] ${subject} -> ${to}: ${errorMessage}`);
