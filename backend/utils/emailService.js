@@ -1,3 +1,5 @@
+import dns from "node:dns/promises";
+
 const isPlaceholder = (value = "") =>
   ["yourgmail@gmail.com", "your_google_app_password", "your-email@gmail.com"].includes(value.trim().toLowerCase());
 
@@ -18,26 +20,20 @@ export const validateSmtpConfig = () => {
   return true;
 };
 
-const createTransporter = () => {
-  const nodemailer = require("nodemailer");
-  return nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT),
-    secure: process.env.SMTP_SECURE === "true",
-    connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 30000),
-    greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT || 30000),
-    socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT || 30000),
-    maxConnections: 1,
-    family: 4,
-    pool: {
-      maxConnections: 1,
-      maxMessages: 10
-    },
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
-    }
-  });
+const getSmtpTarget = async () => {
+  const smtpHost = process.env.SMTP_HOST;
+
+  if (process.env.SMTP_FORCE_IPV4 === "false") {
+    return { host: smtpHost, servername: smtpHost };
+  }
+
+  try {
+    const { address } = await dns.lookup(smtpHost, { family: 4 });
+    return { host: address, servername: smtpHost };
+  } catch (error) {
+    console.warn(`[email:dns] IPv4 lookup failed for ${smtpHost}: ${error.message}`);
+    return { host: smtpHost, servername: smtpHost };
+  }
 };
 
 const retryEmail = async (transporter, mailOptions, retries = 2) => {
@@ -77,8 +73,9 @@ export const sendEmail = async ({ to, subject, text }) => {
 
   try {
     const nodemailer = await import("nodemailer");
+    const smtpTarget = await getSmtpTarget();
     const transporter = nodemailer.default.createTransport({
-      host: process.env.SMTP_HOST,
+      host: smtpTarget.host,
       port: Number(process.env.SMTP_PORT),
       secure: process.env.SMTP_SECURE === "true",
       connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 30000),
@@ -86,11 +83,14 @@ export const sendEmail = async ({ to, subject, text }) => {
       socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT || 30000),
       maxConnections: 1,
       family: 4,
-      logger: process.env.NODE_ENV === "development",
-      debug: process.env.NODE_ENV === "development",
+      logger: process.env.SMTP_DEBUG === "true",
+      debug: process.env.SMTP_DEBUG === "true",
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS
+      },
+      tls: {
+        servername: smtpTarget.servername
       }
     });
 
