@@ -117,9 +117,13 @@ SMTP_USER=<your Gmail address>
 SMTP_PASS=<your Gmail app password>
 SMTP_FROM=<your Gmail address>
 SMTP_FROM_NAME=DriveSure
+BREVO_API_KEY=<your Brevo transactional API key>
+BREVO_FROM_EMAIL=<verified Brevo sender email>
+BREVO_FROM_NAME=DriveSure
 ```
 
-For Gmail SMTP, use a Google App Password, not the normal Gmail login password.
+For local Gmail SMTP, use a Google App Password, not the normal Gmail login password.
+On Render, use Brevo API variables because Render free services can time out on SMTP ports 465/587.
 
 ## API Modules
 

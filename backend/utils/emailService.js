@@ -19,7 +19,16 @@ const hasSmtpConfig = () =>
   !isPlaceholder(process.env.SMTP_USER) &&
   !isPlaceholder(process.env.SMTP_PASS);
 
+const hasBrevoConfig = () =>
+  process.env.BREVO_API_KEY &&
+  (process.env.BREVO_FROM_EMAIL || process.env.SMTP_FROM || process.env.SMTP_USER);
+
 export const validateSmtpConfig = () => {
+  if (hasBrevoConfig()) {
+    console.log("[email] Brevo API configured");
+    return true;
+  }
+
   if (!hasSmtpConfig()) {
     console.log(
       "[email] SMTP not configured. Using dev mode (emails logged to console)"
@@ -129,9 +138,49 @@ const createTransporter = (nodemailer, smtpTarget) =>
     }
   });
 
+const sendBrevoEmail = async ({ to, subject, text }) => {
+  const fromName = process.env.BREVO_FROM_NAME || process.env.SMTP_FROM_NAME || "DriveSure";
+  const fromEmail = process.env.BREVO_FROM_EMAIL || process.env.SMTP_FROM || process.env.SMTP_USER;
+  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      "api-key": process.env.BREVO_API_KEY,
+      "content-type": "application/json"
+    },
+    body: JSON.stringify({
+      sender: {
+        name: fromName,
+        email: fromEmail
+      },
+      to: [{ email: to }],
+      subject,
+      textContent: text
+    })
+  });
+
+  const body = await response.text();
+
+  if (!response.ok) {
+    throw new Error(`Brevo API failed with status ${response.status}: ${body}`);
+  }
+
+  return body ? JSON.parse(body) : { sent: true };
+};
+
 export const sendEmail = async ({ to, subject, text }) => {
   if (!to) {
     return { skipped: true, reason: "Missing recipient" };
+  }
+
+  if (hasBrevoConfig()) {
+    try {
+      return await sendBrevoEmail({ to, subject, text });
+    } catch (error) {
+      const errorMessage = error.message || "Brevo email API unavailable";
+      console.error(`[email:brevo_failed] ${subject} -> ${to}: ${errorMessage}`);
+      return { skipped: true, reason: errorMessage };
+    }
   }
 
   if (!hasSmtpConfig()) {
