@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler";
 import crypto from "crypto";
 import User from "../models/User.js";
-import { sendEmail } from "../utils/emailService.js";
+import sendEmail from "../utils/emailService.js";
 import generateToken from "../utils/generateToken.js";
 import { createSecurityAlert, detectSuspiciousLogin, recordLoginHistory } from "../utils/securityAudit.js";
 
