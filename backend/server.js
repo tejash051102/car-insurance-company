@@ -28,7 +28,9 @@ import serviceRoutes from "./routes/serviceRoutes.js";
 
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import { authRateLimit, securityHeaders } from "./middleware/securityMiddleware.js";
+import dns from "node:dns";
 
+dns.setDefaultResultOrder("ipv4first");
 dotenv.config();
 
 const startServer = async () => {
