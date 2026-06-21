@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Vehicle and Policy Management">
+  <defs>
+    <linearGradient id="card" x1="9" y1="8" x2="88" y2="88" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#123F3C"/>
+      <stop offset="1" stop-color="#101B31"/>
+    </linearGradient>
+    <linearGradient id="shield" x1="28" y1="14" x2="73" y2="82" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#34D399"/>
+      <stop offset="1" stop-color="#06B6D4"/>
+    </linearGradient>
+    <linearGradient id="car" x1="22" y1="43" x2="75" y2="66" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#60A5FA"/>
+      <stop offset="1" stop-color="#2563EB"/>
+    </linearGradient>
+  </defs>
+  <rect x="5" y="5" width="86" height="86" rx="24" fill="url(#card)" stroke="#38527E" stroke-width="2"/>
+  <path d="M50 13l25 9v16c0 19.5-9.8 33.4-25 42-15.2-8.6-25-22.5-25-42V22l25-9Z" fill="url(#shield)" opacity=".95"/>
+  <path d="M39 48h25l7 10H28l7-10h4Z" fill="url(#car)"/>
+  <path d="M36 45h24l6 11H28l8-11Z" fill="#E0F2FE"/>
+  <path d="M40 49h17" stroke="#0F172A" stroke-width="3" stroke-linecap="round" opacity=".72"/>
+  <circle cx="36" cy="63" r="6" fill="#0F172A"/>
+  <circle cx="64" cy="63" r="6" fill="#0F172A"/>
+  <path d="M43 34l5 5 12-13" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

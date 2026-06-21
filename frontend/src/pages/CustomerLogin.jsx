@@ -38,7 +38,7 @@ const CustomerLogin = () => {
 
       <div className="relative z-10 mb-7 flex flex-col items-center gap-3 text-center">
         <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-cyan-400/30 bg-cyan-400/10 shadow-lg shadow-cyan-950/30">
-          <img src="/favicon.svg" alt="DriveSure Customer Portal" className="h-14 w-14 object-contain" />
+          <img src="/drivesure-logo.png" alt="DriveSure Customer Portal" className="h-14 w-14 object-contain" />
         </div>
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-300">
           Customer portal
@@ -51,7 +51,7 @@ const CustomerLogin = () => {
         <div className="mb-7">
           <div className="mb-4 flex items-center gap-3">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-cyan-400/25 bg-cyan-400/10">
-              <img src="/favicon.svg" alt="DriveSure" className="h-10 w-10 object-contain" />
+              <img src="/drivesure-logo.png" alt="DriveSure" className="h-10 w-10 object-contain" />
             </div>
             <div>
               <p className="mb-1 text-xs font-bold uppercase tracking-[0.15em] text-cyan-300">

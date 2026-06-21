@@ -383,7 +383,7 @@ const Register = ({ onAuth }) => {
           display: "flex", alignItems: "center", justifyContent: "center",
           boxShadow: "0 0 28px rgba(14,165,233,0.18)",
         }}>
-          <ShieldPlus size={24} color="#0ea5e9" strokeWidth={1.5} />
+          <img src="/drivesure-logo.png" alt="DriveSure" style={{ width: "42px", height: "42px", objectFit: "contain" }} />
         </div>
         <p style={{ fontSize: "11px", fontWeight: 600, letterSpacing: "0.2em", color: "#0ea5e9", textTransform: "uppercase" }}>
           DriveSure

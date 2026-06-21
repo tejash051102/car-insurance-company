@@ -300,7 +300,7 @@ const CustomerPortal = () => {
         <div className="customer-glass customer-portal-hero flex flex-col justify-between gap-4 rounded-3xl border border-white/10 bg-white/[0.045] p-5 shadow-2xl shadow-black/20 backdrop-blur-xl sm:flex-row sm:items-center">
           <div className="flex min-w-0 items-center gap-4">
             <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-cyan-300/25 bg-cyan-300/10 shadow-lg shadow-cyan-950/30">
-              <img src="/favicon.svg" alt="DriveSure Customer Portal" className="h-14 w-14 object-contain" />
+              <img src="/drivesure-logo.png" alt="DriveSure Customer Portal" className="h-14 w-14 object-contain" />
             </div>
             <div className="min-w-0">
               <p className="label">Customer portal</p>

@@ -10,12 +10,9 @@ import {
   FileText,
   Gauge,
   LockKeyhole,
-  MessageSquare,
   Moon,
-  ShieldCheck,
   Smartphone,
   UploadCloud,
-  Users
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -23,38 +20,38 @@ const modules = [
   {
     title: "Customer Registry",
     detail: "Customer profiles, OTP verification, document uploads, and secure customer portal access.",
-    art: "/module-art/customers.svg",
-    icon: Users
+    art: "/module-logos/customer-registry.svg",
+    logo: "/module-logos/customer-registry.svg"
   },
   {
     title: "Vehicle & Policy Management",
     detail: "Vehicle records, policy creation, add-ons, premium calculator, quotation PDF, renewals, and cancellation refunds.",
-    art: "/module-art/policies.svg",
-    icon: ShieldCheck
+    art: "/module-logos/vehicle-policy.svg",
+    logo: "/module-logos/vehicle-policy.svg"
   },
   {
     title: "Claims Workflow",
     detail: "Claim registration, evidence uploads, approval stages, fraud score refresh, inspection scheduling, and repair tracking.",
-    art: "/module-art/claims.svg",
-    icon: ClipboardCheck
+    art: "/module-logos/claims-workflow.svg",
+    logo: "/module-logos/claims-workflow.svg"
   },
   {
     title: "Payments & EMI Plans",
     detail: "Premium payments, receipts, invoice PDFs, payment status tracking, and installment payment plans.",
-    art: "/module-art/payments.svg",
-    icon: BarChart3
+    art: "/module-logos/payments-emi.svg",
+    logo: "/module-logos/payments-emi.svg"
   },
   {
     title: "Service Hub",
     detail: "Garage partners, customer feedback, internal messaging, live chat-style threads, and audit timelines.",
-    art: "/module-art/portal.svg",
-    icon: MessageSquare
+    art: "/module-logos/service-hub.svg",
+    logo: "/module-logos/service-hub.svg"
   },
   {
     title: "Security Center",
     detail: "JWT access control, RBAC reporting, activity logs, failed-login monitoring, and security alerts.",
-    art: "/module-art/security.svg",
-    icon: LockKeyhole
+    art: "/module-logos/security-center.svg",
+    logo: "/module-logos/security-center.svg"
   }
 ];
 
@@ -185,10 +182,10 @@ const ProjectPortfolio = () => {
         <div className="portfolio-nav relative mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-5 md:px-8">
           <div className="flex items-center gap-3">
             <span className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/25 bg-cyan-300/10 shadow-lg shadow-cyan-950/30">
-              <img src="/favicon.svg" alt="DriveSure" className="h-10 w-10 object-contain" />
+              <img src="/drivesure-logo.png" alt="DriveSure" className="h-10 w-10 object-contain" />
             </span>
             <div>
-              <p className="text-base font-black tracking-tight text-white">DriveSure</p>
+              <p className="text-base font-black tracking-tight text-black">DriveSure</p>
               <p className="text-xs font-semibold text-cyan-100/52">Insurance Operations Platform</p>
             </div>
           </div>
@@ -296,20 +293,16 @@ const ProjectPortfolio = () => {
 
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {modules.map((module) => {
-              const Icon = module.icon;
               return (
                 <article key={module.title} className="portfolio-module-card group relative overflow-hidden rounded-2xl border border-white/10 bg-[#120b2b]/86 p-5 shadow-xl shadow-black/20 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-cyan-300/30 hover:bg-[#181039]">
                   <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-cyan-300/8 blur-2xl transition group-hover:bg-purple-300/10" />
-                  <div className="absolute right-4 top-4 opacity-12 transition group-hover:scale-110 group-hover:opacity-25">
-                    <img src={module.art} alt="" className="h-28 w-32 object-contain" />
+                  <div className="absolute right-4 top-4 opacity-30 transition group-hover:scale-110 group-hover:opacity-45">
+                    <img src={module.art} alt="" className="h-24 w-24 object-contain" />
                   </div>
                   <div className="relative">
                     <div className="flex items-start justify-between gap-4">
-                      <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400/16 to-purple-500/18 text-cyan-100 ring-1 ring-white/10">
-                        <Icon size={22} />
-                      </span>
-                      <span className="rounded-full border border-cyan-300/15 bg-cyan-300/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-cyan-100">
-                        {module.outcome}
+                      <span className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-cyan-400/16 to-purple-500/18 ring-1 ring-white/10">
+                        <img src={module.logo} alt={`${module.title} logo`} className="h-10 w-10 object-contain" />
                       </span>
                     </div>
                     <h3 className="mt-5 text-xl font-bold text-white">{module.title}</h3>

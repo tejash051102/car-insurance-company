@@ -47,7 +47,7 @@ const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
     >
       <div className="flex items-center gap-3 overflow-hidden">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-blue-50 text-blue-700 ring-1 ring-blue-200">
-          <img src="/favicon.svg" alt="DriveSure" className="h-8 w-8 object-contain" />
+          <img src="/drivesure-logo.png" alt="DriveSure" className="h-8 w-8 object-contain" />
         </div>
         {isExpanded && (
           <div className="min-w-0 overflow-hidden">
@@ -76,6 +76,7 @@ const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
           <NavLink
             key={item.to}
             to={item.to}
+            end={item.to === "/app"}
             onClick={onClose}
             title={!isExpanded ? item.label : undefined}
             className={({ isActive }) =>

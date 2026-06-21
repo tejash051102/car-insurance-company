@@ -26,6 +26,10 @@ const hasBrevoConfig = () =>
 const isRenderProduction = () =>
   process.env.NODE_ENV === "production" || Boolean(process.env.RENDER);
 
+const getSmtpUser = () => process.env.SMTP_USER?.trim();
+
+const getSmtpPassword = () => process.env.SMTP_PASS?.replace(/\s+/g, "");
+
 export const validateSmtpConfig = () => {
   if (hasBrevoConfig()) {
     console.log("[email] Brevo API configured");
@@ -123,8 +127,8 @@ const createTransporter = (nodemailer, smtpTarget) =>
     secure: process.env.SMTP_SECURE === "true",
 
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
+      user: getSmtpUser(),
+      pass: getSmtpPassword()
     },
 
     connectionTimeout: 30000,
@@ -227,7 +231,10 @@ export const sendEmail = async ({ to, subject, text }) => {
 
     throw lastError || new Error("Email service unavailable");
   } catch (error) {
-    const errorMessage = error.message || "Email service unavailable";
+    const errorMessage =
+      error.code === "EAUTH"
+        ? "Gmail rejected SMTP credentials. Regenerate a Google App Password and update SMTP_PASS."
+        : error.message || "Email service unavailable";
     console.error(`[email:failed] ${subject} -> ${to}: ${errorMessage}`);
     console.error("[email:error_details]", {
       code: error.code,

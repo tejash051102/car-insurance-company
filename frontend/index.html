@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
     <meta name="theme-color" content="#0f172a" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DriveSure</title>
@@ -69,6 +71,13 @@
         line-height: 1.15;
       }
 
+      .initial-screen-card img {
+        width: 84px;
+        height: 84px;
+        object-fit: contain;
+        margin-bottom: 14px;
+      }
+
       .initial-screen-card p {
         margin: 0;
         color: rgba(255, 255, 255, 0.58);
@@ -80,6 +89,7 @@
     <div id="root">
       <div class="initial-screen">
         <div class="initial-screen-card">
+          <img src="/drivesure-logo.png" alt="DriveSure" />
           <h1>DriveSure</h1>
           <p>Loading dashboard...</p>
         </div>

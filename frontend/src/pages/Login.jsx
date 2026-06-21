@@ -347,7 +347,7 @@ const Login = ({ onAuth }) => {
             boxShadow: "0 0 32px rgba(14,165,233,0.15)",
             overflow: "hidden",
           }}>
-            <img src="/favicon.svg" alt="DriveSure" style={{ width: "44px", height: "44px", objectFit: "contain" }} />
+            <img src="/drivesure-logo.png" alt="DriveSure" style={{ width: "44px", height: "44px", objectFit: "contain" }} />
           </div>
           <div>
             <p style={{ fontSize: "22px", fontWeight: 900, color: "#fff", lineHeight: 1 }}>DriveSure</p>
@@ -413,7 +413,7 @@ const Login = ({ onAuth }) => {
               display: "flex", alignItems: "center", justifyContent: "center",
               flexShrink: 0,
             }}>
-              <img src="/favicon.svg" alt="DriveSure" style={{ width: "34px", height: "34px", objectFit: "contain" }} />
+              <img src="/drivesure-logo.png" alt="DriveSure" style={{ width: "34px", height: "34px", objectFit: "contain" }} />
             </div>
             <div>
               <p style={{ fontSize: "11px", fontWeight: 600, color: "#0ea5e9", letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "4px" }}>
