@@ -1,13 +1,13 @@
 const DashboardCard = ({ title, value, icon: Icon, accent = "brand", subtitle }) => {
   const accents = {
-    brand: "bg-purple-400/10 text-purple-100 ring-purple-300/20",
-    coral: "bg-pink-400/10 text-pink-100 ring-pink-300/20",
-    mint: "bg-violet-400/10 text-violet-100 ring-violet-300/20",
-    slate: "bg-fuchsia-400/10 text-fuchsia-100 ring-fuchsia-300/20"
+    brand: "bg-blue-50 text-blue-700 ring-blue-100",
+    coral: "bg-amber-50 text-amber-700 ring-amber-100",
+    mint: "bg-emerald-50 text-emerald-700 ring-emerald-100",
+    slate: "bg-slate-100 text-slate-700 ring-slate-200"
   };
 
   return (
-    <div className="panel dashboard-card group p-5 transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-purple-950/30">
+    <div className="panel dashboard-card group p-5 transition duration-200 hover:-translate-y-0.5">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="label">{title}</p>

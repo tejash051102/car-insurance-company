@@ -45,7 +45,7 @@ const startServer = async () => {
 
     const allowedOrigins = (
       process.env.CLIENT_URL ||
-      "http://localhost:5173,http://127.0.0.1:5173,https://car-insurance-frontend-4x9z.onrender.com"
+      "http://localhost:5173,http://127.0.0.1:5173,https://car-insurance-frontend-4x9z.onrender.com,https://car-insurance-company.vercel.app"
     )
       .split(",")
       .map((origin) => origin.trim().replace(/\/+$/, ""))

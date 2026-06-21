@@ -2021,3 +2021,846 @@ html[data-theme="light"] .customer-chat [class*="bg-white/"] {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Professional enterprise UI refresh */
+:root {
+  color: #172033;
+  background: #f4f7fb;
+}
+
+body {
+  background: #f4f7fb !important;
+  color: #172033;
+}
+
+.app-shell,
+html[data-theme="light"] .app-shell {
+  background:
+    linear-gradient(180deg, #f8fbff 0%, #f4f7fb 44%, #eef3f8 100%),
+    #f4f7fb !important;
+  color: #172033;
+}
+
+.app-shell::before,
+.app-shell::after,
+.auth-shell::before,
+.auth-shell::after,
+.portfolio-page::before,
+.customer-portal-page::before {
+  display: none !important;
+}
+
+.app-main {
+  padding-top: 1.5rem;
+}
+
+.app-sidebar,
+html[data-theme="light"] .app-sidebar {
+  background: #ffffff !important;
+  border-right-color: #dbe4ef !important;
+  box-shadow: 12px 0 30px rgba(15, 23, 42, 0.06) !important;
+}
+
+.app-sidebar > div > div:first-child {
+  border-bottom-color: #e2e8f0 !important;
+}
+
+.app-sidebar nav::-webkit-scrollbar {
+  width: 5px;
+}
+
+.app-sidebar nav::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
+header,
+html[data-theme="light"] header {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-bottom-color: #dbe4ef !important;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06) !important;
+}
+
+.panel,
+.reference-panel,
+.ai-insight-card,
+.customer-glass,
+.portfolio-glass,
+.portfolio-module-card,
+.portfolio-small-card,
+html[data-theme="light"] .panel,
+html[data-theme="light"] .reference-panel,
+html[data-theme="light"] .ai-insight-card {
+  border: 1px solid #dbe4ef !important;
+  background: #ffffff !important;
+  box-shadow: 0 16px 42px rgba(15, 23, 42, 0.07) !important;
+  backdrop-filter: none !important;
+}
+
+.panel::before,
+.panel::after,
+.reference-panel::before,
+.reference-panel::after,
+.portfolio-glass::before,
+.customer-glass::before {
+  display: none !important;
+}
+
+.panel:hover,
+.reference-panel:hover,
+.ai-insight-card:hover,
+html[data-theme="light"] .panel:hover,
+html[data-theme="light"] .reference-panel:hover,
+html[data-theme="light"] .ai-insight-card:hover {
+  border-color: #b8c7d9 !important;
+  box-shadow: 0 20px 46px rgba(15, 23, 42, 0.1) !important;
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background: #1d4ed8 !important;
+  border: 1px solid #1d4ed8;
+  color: #ffffff !important;
+  box-shadow: 0 10px 24px rgba(29, 78, 216, 0.18) !important;
+}
+
+.btn-primary:hover {
+  background: #1e40af !important;
+  border-color: #1e40af;
+  box-shadow: 0 14px 30px rgba(29, 78, 216, 0.22) !important;
+}
+
+.btn-secondary,
+html[data-theme="light"] .btn-secondary {
+  background: #ffffff !important;
+  border-color: #dbe4ef !important;
+  color: #334155 !important;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05) !important;
+}
+
+.btn-secondary:hover,
+html[data-theme="light"] .btn-secondary:hover {
+  background: #f1f6fd !important;
+  border-color: #9eb8d8 !important;
+  color: #1d4ed8 !important;
+}
+
+.btn-danger {
+  background: #fff1f2 !important;
+  border-color: #fecdd3 !important;
+  color: #be123c !important;
+}
+
+.field,
+form input,
+form select,
+form textarea,
+html[data-theme="light"] .field,
+html[data-theme="light"] form input,
+html[data-theme="light"] form select,
+html[data-theme="light"] form textarea {
+  background: #ffffff !important;
+  border-color: #cfd9e6 !important;
+  color: #172033 !important;
+  box-shadow: none !important;
+}
+
+.field::placeholder,
+form input::placeholder,
+form textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+.field:focus,
+form input:focus,
+form select:focus,
+form textarea:focus,
+html[data-theme="light"] .field:focus,
+html[data-theme="light"] form input:focus,
+html[data-theme="light"] form select:focus,
+html[data-theme="light"] form textarea:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1) !important;
+}
+
+select.field option {
+  background: #ffffff;
+  color: #172033;
+}
+
+.label,
+.app-main .label,
+html[data-theme="light"] .app-main > .space-y-6 > div:first-child p {
+  color: #64748b !important;
+  letter-spacing: 0.1em;
+}
+
+.app-main,
+.app-main h1,
+.app-main h2,
+.app-main h3,
+.app-main h4,
+.app-main .text-ink,
+.app-main .text-slate-700,
+.app-main .font-semibold.text-ink,
+html[data-theme="light"] .app-main h1,
+html[data-theme="light"] .app-main h2,
+html[data-theme="light"] .app-main h3 {
+  color: #172033 !important;
+}
+
+.app-main p,
+.app-main .text-slate-500,
+.app-main .text-slate-600,
+.app-main td {
+  color: #64748b !important;
+}
+
+.app-main .text-white,
+.app-main .text-white\/82,
+.app-main .text-white\/75,
+.app-main .text-white\/58,
+.app-main .text-white\/55,
+.app-main .text-white\/48,
+.app-main .text-white\/42,
+.app-main .text-cyan-100,
+.app-main .text-cyan-200,
+.app-main .text-cyan-300,
+.app-main .text-purple-200 {
+  color: #172033 !important;
+}
+
+.dashboard-card {
+  min-height: 136px;
+}
+
+.dashboard-card::after {
+  display: none !important;
+}
+
+.reference-metric,
+html[data-theme="light"] .reference-metric {
+  min-height: 148px;
+  border: 1px solid #dbe4ef !important;
+  background: #ffffff !important;
+  box-shadow: 0 16px 42px rgba(15, 23, 42, 0.07) !important;
+}
+
+.reference-metric::after {
+  display: none !important;
+}
+
+.reference-metric-purple {
+  border-top: 4px solid #2563eb !important;
+}
+
+.reference-metric-blue {
+  border-top: 4px solid #0891b2 !important;
+}
+
+.reference-metric-violet {
+  border-top: 4px solid #7c3aed !important;
+}
+
+.reference-metric-pink {
+  border-top: 4px solid #db2777 !important;
+}
+
+.reference-metric svg circle:first-child {
+  stroke: #e2e8f0 !important;
+}
+
+.reference-metric svg circle:nth-child(2) {
+  stroke: #2563eb !important;
+}
+
+.reference-metric svg text {
+  fill: #172033 !important;
+}
+
+.hero-panel {
+  background: #ffffff !important;
+  border-color: #dbe4ef !important;
+}
+
+.hero-panel::before,
+.hero-panel::after {
+  display: none !important;
+}
+
+.hero-stat,
+.metric-tile {
+  background: #f8fafc !important;
+  border-color: #dbe4ef !important;
+  color: #172033 !important;
+}
+
+.app-main table,
+html[data-theme="light"] .app-main table {
+  overflow: hidden;
+  border: 1px solid #dbe4ef;
+  border-radius: 8px;
+  background: #ffffff !important;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.05) !important;
+}
+
+.app-main table thead,
+.app-main thead.bg-slate-100,
+.app-shell:not(.page-dashboard) table thead,
+html[data-theme="light"] .app-main table thead,
+html[data-theme="light"] .app-shell:not(.page-dashboard) table thead {
+  background: #f1f5f9 !important;
+}
+
+.app-main th {
+  color: #475569 !important;
+  letter-spacing: 0.06em;
+}
+
+.app-main table tbody tr:hover,
+html[data-theme="light"] .app-main table tbody tr:hover {
+  background: #f8fbff !important;
+}
+
+.app-main .bg-white,
+.app-main .bg-slate-100,
+.app-main .bg-cyan-50,
+.app-main .bg-cyan-400\/10,
+.app-main .bg-cyan-400\/15,
+.app-main .bg-emerald-400\/10 {
+  background: #ffffff !important;
+}
+
+.app-main .border-slate-100,
+.app-main .border-slate-200,
+.app-main .border-cyan-300\/20,
+.app-main .border-cyan-300\/25,
+.app-main .border-cyan-300\/50,
+.app-main .border-cyan-400\/20,
+.app-main .border-cyan-400\/25 {
+  border-color: #dbe4ef !important;
+}
+
+.auth-shell,
+.customer-portal-page,
+.portfolio-page,
+html[data-theme="light"] .customer-portal-page {
+  background: #f4f7fb !important;
+  color: #172033 !important;
+}
+
+.auth-card {
+  background: #ffffff !important;
+  border-color: #dbe4ef !important;
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.12) !important;
+}
+
+.portfolio-page,
+.portfolio-page h1,
+.portfolio-page h2,
+.portfolio-page h3,
+.portfolio-page h4,
+.portfolio-page p,
+.portfolio-page span,
+.portfolio-page a,
+.portfolio-page button {
+  color: #172033 !important;
+  text-shadow: none !important;
+}
+
+.portfolio-title,
+.portfolio-title span {
+  color: #0f172a !important;
+  background: none !important;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+}
+
+.portfolio-page p {
+  color: #64748b !important;
+}
+
+.customer-login-field,
+html[data-theme="light"] .customer-login-field,
+.customer-portal-page .field,
+.customer-chat-input {
+  background: #ffffff !important;
+  border-color: #cfd9e6 !important;
+  color: #172033 !important;
+}
+
+/* Final readable font color pass */
+.app-main,
+.portfolio-page,
+.customer-portal-page,
+.auth-shell {
+  color: #1e293b !important;
+}
+
+.app-main h1,
+.app-main h2,
+.app-main h3,
+.app-main h4,
+.portfolio-page h1,
+.portfolio-page h2,
+.portfolio-page h3,
+.portfolio-page h4,
+.customer-portal-page h1,
+.customer-portal-page h2,
+.customer-portal-page h3,
+.customer-portal-page h4,
+.auth-shell h1,
+.auth-shell h2,
+.auth-shell h3 {
+  color: #0f172a !important;
+}
+
+.app-main p,
+.app-main span,
+.portfolio-page p,
+.customer-portal-page p,
+.auth-shell p {
+  color: #475569 !important;
+}
+
+.app-main .label,
+.portfolio-page .label,
+.customer-portal-page .label,
+.auth-shell .label {
+  color: #2563eb !important;
+}
+
+.app-main a,
+.portfolio-page a,
+.customer-portal-page a,
+.auth-shell a {
+  color: #1d4ed8 !important;
+}
+
+.btn-primary,
+.btn-primary *,
+.portfolio-page .btn-primary,
+.portfolio-page .btn-primary *,
+.customer-portal-page .btn-primary,
+.customer-portal-page .btn-primary *,
+.auth-shell .btn-primary,
+.auth-shell .btn-primary * {
+  color: #ffffff !important;
+}
+
+.btn-secondary,
+.btn-secondary *,
+.portfolio-page .btn-secondary,
+.portfolio-page .btn-secondary *,
+.customer-portal-page .btn-secondary,
+.customer-portal-page .btn-secondary *,
+.auth-shell .btn-secondary,
+.auth-shell .btn-secondary * {
+  color: #334155 !important;
+}
+
+.btn-secondary:hover,
+.btn-secondary:hover *,
+.portfolio-page .btn-secondary:hover,
+.portfolio-page .btn-secondary:hover *,
+.customer-portal-page .btn-secondary:hover,
+.customer-portal-page .btn-secondary:hover *,
+.auth-shell .btn-secondary:hover,
+.auth-shell .btn-secondary:hover * {
+  color: #1d4ed8 !important;
+}
+
+.app-main table th {
+  color: #334155 !important;
+}
+
+.app-main table td {
+  color: #475569 !important;
+}
+
+.app-main [class~="text-white"],
+.portfolio-page [class~="text-white"],
+.customer-portal-page [class~="text-white"],
+.auth-shell [class~="text-white"] {
+  color: #0f172a !important;
+}
+
+.app-main .btn-primary[class~="text-white"],
+.portfolio-page .btn-primary[class~="text-white"],
+.customer-portal-page .btn-primary[class~="text-white"],
+.auth-shell .btn-primary[class~="text-white"] {
+  color: #ffffff !important;
+}
+
+/* Enterprise theme v2: professional typography and theme-aware colors */
+:root,
+html[data-theme="light"] {
+  --ds-bg: #f4f7fb;
+  --ds-bg-soft: #eef3f8;
+  --ds-surface: #ffffff;
+  --ds-surface-soft: #f8fafc;
+  --ds-surface-muted: #f1f5f9;
+  --ds-border: #d8e2ee;
+  --ds-border-strong: #b8c7d9;
+  --ds-text: #1e293b;
+  --ds-heading: #0f172a;
+  --ds-muted: #64748b;
+  --ds-subtle: #94a3b8;
+  --ds-primary: #1d4ed8;
+  --ds-primary-strong: #1e40af;
+  --ds-primary-soft: #e8f1ff;
+  --ds-success: #047857;
+  --ds-warning: #b45309;
+  --ds-danger: #be123c;
+  --ds-shadow: 0 16px 42px rgba(15, 23, 42, 0.08);
+  --ds-shadow-soft: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+html[data-theme="dark"] {
+  --ds-bg: #0f172a;
+  --ds-bg-soft: #111c31;
+  --ds-surface: #162033;
+  --ds-surface-soft: #1d2a3f;
+  --ds-surface-muted: #243247;
+  --ds-border: #334155;
+  --ds-border-strong: #475569;
+  --ds-text: #dbe7f3;
+  --ds-heading: #f8fafc;
+  --ds-muted: #aab8c9;
+  --ds-subtle: #7f8ea3;
+  --ds-primary: #60a5fa;
+  --ds-primary-strong: #93c5fd;
+  --ds-primary-soft: rgba(96, 165, 250, 0.14);
+  --ds-success: #34d399;
+  --ds-warning: #fbbf24;
+  --ds-danger: #fb7185;
+  --ds-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+  --ds-shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.22);
+}
+
+html,
+body,
+#root {
+  color: var(--ds-text) !important;
+  background: var(--ds-bg) !important;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif !important;
+}
+
+.app-shell,
+.auth-shell,
+.customer-portal-page,
+.portfolio-page {
+  background:
+    linear-gradient(180deg, var(--ds-surface-soft) 0%, var(--ds-bg) 48%, var(--ds-bg-soft) 100%) !important;
+  color: var(--ds-text) !important;
+}
+
+html[data-theme="dark"] .app-shell,
+html[data-theme="dark"] .auth-shell,
+html[data-theme="dark"] .customer-portal-page,
+html[data-theme="dark"] .portfolio-page {
+  background:
+    linear-gradient(180deg, #111827 0%, var(--ds-bg) 48%, #0b1220 100%) !important;
+}
+
+.app-main,
+.auth-shell,
+.customer-portal-page,
+.portfolio-page,
+.app-main p,
+.auth-shell p,
+.customer-portal-page p,
+.portfolio-page p,
+.app-main span,
+.auth-shell span,
+.customer-portal-page span,
+.portfolio-page span,
+.app-main li,
+.auth-shell li,
+.customer-portal-page li,
+.portfolio-page li,
+.app-main td {
+  color: var(--ds-text) !important;
+}
+
+.app-main h1,
+.app-main h2,
+.app-main h3,
+.app-main h4,
+.auth-shell h1,
+.auth-shell h2,
+.auth-shell h3,
+.customer-portal-page h1,
+.customer-portal-page h2,
+.customer-portal-page h3,
+.portfolio-page h1,
+.portfolio-page h2,
+.portfolio-page h3,
+.portfolio-page h4,
+.text-ink {
+  color: var(--ds-heading) !important;
+}
+
+.app-main .text-slate-500,
+.app-main .text-slate-600,
+.app-main .text-white\/42,
+.app-main .text-white\/45,
+.app-main .text-white\/48,
+.app-main .text-white\/50,
+.app-main .text-white\/52,
+.app-main .text-white\/54,
+.app-main .text-white\/55,
+.app-main .text-white\/56,
+.app-main .text-white\/58,
+.app-main .text-white\/62,
+.app-main .text-white\/68,
+.portfolio-page [class*="text-white/"],
+.customer-portal-page [class*="text-white/"],
+.auth-shell [class*="text-white/"] {
+  color: var(--ds-muted) !important;
+}
+
+.label,
+.app-main .label,
+.portfolio-page .label,
+.customer-portal-page .label,
+.auth-shell .label,
+.app-main [class*="text-cyan"],
+.app-main [class*="text-purple"],
+.portfolio-page [class*="text-cyan"],
+.customer-portal-page [class*="text-cyan"] {
+  color: var(--ds-primary) !important;
+}
+
+.app-main a,
+.portfolio-page a,
+.customer-portal-page a,
+.auth-shell a {
+  color: var(--ds-primary) !important;
+}
+
+.app-sidebar,
+html[data-theme="light"] .app-sidebar,
+html[data-theme="dark"] .app-sidebar {
+  background: var(--ds-surface) !important;
+  border-right-color: var(--ds-border) !important;
+  box-shadow: var(--ds-shadow-soft) !important;
+}
+
+.app-sidebar p,
+.app-sidebar span,
+.app-sidebar a:not([class*="bg-blue-600"]),
+.app-sidebar button {
+  color: var(--ds-muted) !important;
+}
+
+.app-sidebar a:not([class*="bg-blue-600"]):hover,
+.app-sidebar button:hover {
+  background: var(--ds-surface-muted) !important;
+  color: var(--ds-heading) !important;
+}
+
+.app-sidebar a[class*="bg-blue-600"],
+.app-sidebar a[class*="bg-blue-600"] * {
+  color: #ffffff !important;
+}
+
+header,
+html[data-theme="light"] header,
+html[data-theme="dark"] header {
+  background: color-mix(in srgb, var(--ds-surface) 94%, transparent) !important;
+  border-bottom-color: var(--ds-border) !important;
+  box-shadow: var(--ds-shadow-soft) !important;
+}
+
+header h1,
+header p {
+  color: var(--ds-heading) !important;
+}
+
+header form {
+  background: var(--ds-surface-soft) !important;
+  border-color: var(--ds-border) !important;
+  color: var(--ds-muted) !important;
+}
+
+header input,
+header input::placeholder {
+  color: var(--ds-muted) !important;
+}
+
+header input {
+  color: var(--ds-heading) !important;
+}
+
+.panel,
+.reference-panel,
+.reference-metric,
+.ai-insight-card,
+.auth-card,
+.customer-glass,
+.portfolio-glass,
+.portfolio-module-card,
+.portfolio-small-card,
+.hero-panel,
+.hero-stat,
+.metric-tile,
+html[data-theme="light"] .panel,
+html[data-theme="dark"] .panel,
+html[data-theme="light"] .reference-panel,
+html[data-theme="dark"] .reference-panel {
+  background: var(--ds-surface) !important;
+  border-color: var(--ds-border) !important;
+  color: var(--ds-text) !important;
+  box-shadow: var(--ds-shadow) !important;
+}
+
+.reference-metric,
+.hero-stat,
+.metric-tile {
+  background: var(--ds-surface-soft) !important;
+}
+
+.btn-primary,
+.portfolio-page .btn-primary,
+.customer-portal-page .btn-primary,
+.auth-shell .btn-primary {
+  background: var(--ds-primary) !important;
+  border-color: var(--ds-primary) !important;
+  color: #ffffff !important;
+}
+
+.btn-primary *,
+.portfolio-page .btn-primary *,
+.customer-portal-page .btn-primary *,
+.auth-shell .btn-primary * {
+  color: #ffffff !important;
+}
+
+.btn-primary:hover {
+  background: var(--ds-primary-strong) !important;
+  border-color: var(--ds-primary-strong) !important;
+}
+
+.btn-secondary,
+header a,
+header button,
+.portfolio-page .btn-secondary,
+.customer-portal-page .btn-secondary,
+.auth-shell .btn-secondary {
+  background: var(--ds-surface) !important;
+  border-color: var(--ds-border) !important;
+  color: var(--ds-text) !important;
+}
+
+.btn-secondary *,
+header a *,
+header button *,
+.portfolio-page .btn-secondary *,
+.customer-portal-page .btn-secondary *,
+.auth-shell .btn-secondary * {
+  color: var(--ds-text) !important;
+}
+
+.btn-secondary:hover,
+header a:hover,
+header button:hover {
+  background: var(--ds-primary-soft) !important;
+  border-color: var(--ds-primary) !important;
+  color: var(--ds-primary) !important;
+}
+
+.btn-danger {
+  background: color-mix(in srgb, var(--ds-danger) 10%, var(--ds-surface)) !important;
+  border-color: color-mix(in srgb, var(--ds-danger) 28%, var(--ds-border)) !important;
+  color: var(--ds-danger) !important;
+}
+
+.field,
+form input,
+form select,
+form textarea,
+.customer-login-field,
+.customer-chat-input,
+html[data-theme="light"] .field,
+html[data-theme="dark"] .field {
+  background: var(--ds-surface) !important;
+  border-color: var(--ds-border) !important;
+  color: var(--ds-heading) !important;
+}
+
+.field::placeholder,
+form input::placeholder,
+form textarea::placeholder {
+  color: var(--ds-subtle) !important;
+}
+
+.field:focus,
+form input:focus,
+form select:focus,
+form textarea:focus {
+  border-color: var(--ds-primary) !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ds-primary) 16%, transparent) !important;
+}
+
+select.field option {
+  background: var(--ds-surface) !important;
+  color: var(--ds-heading) !important;
+}
+
+.app-main table,
+html[data-theme="light"] .app-main table,
+html[data-theme="dark"] .app-main table {
+  background: var(--ds-surface) !important;
+  border-color: var(--ds-border) !important;
+  color: var(--ds-text) !important;
+  box-shadow: var(--ds-shadow-soft) !important;
+}
+
+.app-main table thead,
+.app-main thead.bg-slate-100,
+.app-shell:not(.page-dashboard) table thead {
+  background: var(--ds-surface-muted) !important;
+}
+
+.app-main th,
+.app-main table th {
+  color: var(--ds-heading) !important;
+}
+
+.app-main td,
+.app-main table td {
+  color: var(--ds-text) !important;
+}
+
+.app-main table tbody tr:hover {
+  background: var(--ds-primary-soft) !important;
+}
+
+.app-main [class~="text-white"],
+.portfolio-page [class~="text-white"],
+.customer-portal-page [class~="text-white"],
+.auth-shell [class~="text-white"] {
+  color: var(--ds-heading) !important;
+}
+
+.btn-primary[class~="text-white"],
+.btn-primary [class~="text-white"],
+.app-sidebar a[class*="bg-blue-600"] [class~="text-white"] {
+  color: #ffffff !important;
+}
+
+.portfolio-title,
+.portfolio-title span {
+  color: var(--ds-heading) !important;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+}

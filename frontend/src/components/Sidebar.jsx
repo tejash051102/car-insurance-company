@@ -46,20 +46,20 @@ const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
       }`}
     >
       <div className="flex items-center gap-3 overflow-hidden">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-purple-500/25 text-white shadow-inner shadow-white/5 ring-1 ring-purple-300/25">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-blue-50 text-blue-700 ring-1 ring-blue-200">
           <img src="/favicon.svg" alt="DriveSure" className="h-8 w-8 object-contain" />
         </div>
         {isExpanded && (
           <div className="min-w-0 overflow-hidden">
-            <p className="truncate text-lg font-black tracking-tight text-white">DriveSure</p>
-            <p className="truncate text-[11px] font-medium text-purple-200/70">Insurance Command</p>
+            <p className="truncate text-lg font-black tracking-tight text-slate-950">DriveSure</p>
+            <p className="truncate text-[11px] font-medium text-slate-500">Company Operations</p>
           </div>
         )}
       </div>
 
       {isExpanded && (
         <button
-          className="ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-purple-200 transition hover:bg-white/10 hover:text-white lg:hidden"
+          className="ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 lg:hidden"
           type="button"
           onClick={onClose}
           aria-label="Close navigation"
@@ -83,8 +83,8 @@ const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
                 isExpanded ? "px-3 py-2.5" : "justify-center px-0 py-2.5"
               } ${
                 isActive
-                  ? "bg-gradient-to-r from-purple-600 to-violet-700 text-white shadow-md shadow-purple-950/30 ring-1 ring-purple-300/20"
-                  : "text-white/45 hover:bg-white/10 hover:text-white"
+                  ? "bg-blue-600 text-white shadow-sm ring-1 ring-blue-500"
+                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"
               }`
             }
           >
@@ -92,7 +92,7 @@ const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
               <>
 
                 {!isExpanded && isActive && (
-                  <span className="absolute left-0 h-5 w-0.5 rounded-r bg-purple-300" />
+                  <span className="absolute left-0 h-5 w-0.5 rounded-r bg-blue-600" />
                 )}
 
                 <item.icon
@@ -107,7 +107,7 @@ const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
                 )}
 
                 {!isExpanded && (
-                  <span className="pointer-events-none absolute left-full ml-3 z-50 whitespace-nowrap rounded-md bg-gray-900 px-2.5 py-1.5 text-xs font-semibold text-white opacity-0 shadow-lg ring-1 ring-white/10 transition-opacity group-hover:opacity-100">
+                  <span className="pointer-events-none absolute left-full ml-3 z-50 whitespace-nowrap rounded-md bg-slate-950 px-2.5 py-1.5 text-xs font-semibold text-white opacity-0 shadow-lg ring-1 ring-white/10 transition-opacity group-hover:opacity-100">
                     {item.label}
                   </span>
                 )}
@@ -121,7 +121,7 @@ const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
       <button
         type="button"
         onClick={onToggleExpand}
-        className={`flex items-center gap-2 rounded-lg px-3 py-2 text-purple-200/70 transition hover:bg-white/10 hover:text-white ${
+        className={`flex items-center gap-2 rounded-lg px-3 py-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-950 ${
           isExpanded ? "w-full" : "justify-center"
         }`}
         aria-label={isExpanded ? "Collapse sidebar" : "Expand sidebar"}
@@ -152,7 +152,7 @@ const Sidebar = ({ isOpen, onClose, isExpanded, onToggleExpand }) => {
       />
 
       <aside
-        className={`app-sidebar fixed inset-y-0 left-0 z-40 flex flex-col border-r border-white/10 shadow-xl shadow-black/20 transition-all duration-300 ease-in-out lg:z-30 lg:translate-x-0 ${
+        className={`app-sidebar fixed inset-y-0 left-0 z-40 flex flex-col border-r border-slate-200 shadow-sm transition-all duration-300 ease-in-out lg:z-30 lg:translate-x-0 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } ${isExpanded ? "w-64" : "w-[60px]"}`}
       >

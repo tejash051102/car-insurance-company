@@ -11,7 +11,7 @@ services:
       - key: PORT
         value: 10000
       - key: CLIENT_URL
-        value: https://car-insurance-frontend-4x9z.onrender.com
+        value: https://car-insurance-frontend-4x9z.onrender.com,https://car-insurance-company.vercel.app
       - key: MONGO_URI
         sync: false
       - key: JWT_SECRET

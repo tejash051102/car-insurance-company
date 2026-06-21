@@ -42,7 +42,7 @@ const Navbar = ({ onLogout, onMenuClick }) => {
   };
 
   return (
-    <header className="sticky top-0 z-20 flex min-h-20 flex-wrap items-center justify-between gap-3 border-b border-white/5 bg-[#211642]/90 px-3 py-3 shadow-lg shadow-black/20 backdrop-blur-xl sm:px-4 md:flex-nowrap lg:px-8">
+    <header className="sticky top-0 z-20 flex min-h-16 flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 bg-white/92 px-3 py-3 shadow-sm backdrop-blur-xl sm:px-4 md:flex-nowrap lg:px-8">
       <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3 md:flex-none">
         <button
           className="btn-secondary h-10 w-10 shrink-0 px-0 lg:hidden"
@@ -53,20 +53,20 @@ const Navbar = ({ onLogout, onMenuClick }) => {
           <Menu size={18} />
         </button>
         <div className="min-w-0 max-w-[170px] sm:block sm:max-w-[220px] xl:max-w-none">
-          <p className="hidden truncate text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-purple-200/80 sm:block">
-            DriveSure AI OS
+          <p className="hidden truncate text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-slate-500 sm:block">
+            DriveSure Insurance Suite
           </p>
-          <h1 className="truncate text-base font-black text-white sm:text-lg">Analytics Dashboard</h1>
+          <h1 className="truncate text-base font-black text-slate-900 sm:text-lg">Operations Console</h1>
         </div>
       </div>
 
       <form
-        className="relative z-30 order-3 flex min-w-0 flex-1 basis-full items-center gap-2 rounded-md border border-white/8 bg-white/[0.035] px-3 py-2.5 text-sm text-white/70 transition focus-within:border-purple-300/40 focus-within:bg-white/[0.055] md:order-none md:basis-auto lg:max-w-[420px] lg:gap-3 lg:px-4 lg:py-3"
+        className="relative z-30 order-3 flex min-w-0 flex-1 basis-full items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-500 transition focus-within:border-blue-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-500/10 md:order-none md:basis-auto lg:max-w-[420px] lg:gap-3 lg:px-4"
         onSubmit={submitSearch}
       >
         <Search size={18} className="shrink-0" />
         <input
-          className="relative z-40 w-full min-w-0 bg-transparent text-sm font-medium text-white outline-none placeholder:text-white/30"
+          className="relative z-40 w-full min-w-0 bg-transparent text-sm font-medium text-slate-800 outline-none placeholder:text-slate-400"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search pages"
@@ -76,7 +76,7 @@ const Navbar = ({ onLogout, onMenuClick }) => {
 
       <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:gap-3">
         <ThemeToggle
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/5 text-purple-200 shadow-sm transition hover:border-purple-300/40 hover:bg-purple-400/10 hover:text-white"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
         />
         <Link
           to="/customer-login"
@@ -92,8 +92,8 @@ const Navbar = ({ onLogout, onMenuClick }) => {
           aria-label="Open notifications"
           title="Notifications"
         >
-          <Bell size={18} className="text-purple-200" />
-          <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-amber-300 shadow-[0_0_12px_rgba(251,191,36,0.75)]" />
+          <Bell size={18} />
+          <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-amber-500" />
         </Link>
         <Link
           to="/app/profile"

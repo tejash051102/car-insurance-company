@@ -1,10 +1,10 @@
 export const THEME_KEY = "autosure-theme";
 
 export const getStoredTheme = () => {
-  if (typeof window === "undefined") return "dark";
+  if (typeof window === "undefined") return "light";
 
   const savedTheme = window.localStorage.getItem(THEME_KEY);
-  return savedTheme === "light" ? "light" : "dark";
+  return savedTheme === "dark" ? "dark" : "light";
 };
 
 export const applyTheme = (theme) => {

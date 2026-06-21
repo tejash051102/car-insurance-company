@@ -20,8 +20,11 @@ const hasSmtpConfig = () =>
   !isPlaceholder(process.env.SMTP_PASS);
 
 const hasBrevoConfig = () =>
-  process.env.BREVO_API_KEY &&
-  (process.env.BREVO_FROM_EMAIL || process.env.SMTP_FROM || process.env.SMTP_USER);
+  Boolean(process.env.BREVO_API_KEY?.trim()) &&
+  Boolean((process.env.BREVO_FROM_EMAIL || process.env.SMTP_FROM || process.env.SMTP_USER)?.trim());
+
+const isRenderProduction = () =>
+  process.env.NODE_ENV === "production" || Boolean(process.env.RENDER);
 
 export const validateSmtpConfig = () => {
   if (hasBrevoConfig()) {
@@ -181,6 +184,13 @@ export const sendEmail = async ({ to, subject, text }) => {
       console.error(`[email:brevo_failed] ${subject} -> ${to}: ${errorMessage}`);
       return { skipped: true, reason: errorMessage };
     }
+  }
+
+  if (isRenderProduction()) {
+    return {
+      skipped: true,
+      reason: "Production email API is not configured. Set BREVO_API_KEY and BREVO_FROM_EMAIL in Render backend environment variables."
+    };
   }
 
   if (!hasSmtpConfig()) {
