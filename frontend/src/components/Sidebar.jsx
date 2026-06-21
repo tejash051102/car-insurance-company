@@ -46,8 +46,12 @@ const SidebarContent = ({ onClose, isExpanded, onToggleExpand }) => (
       }`}
     >
       <div className="flex items-center gap-3 overflow-hidden">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-blue-50 text-blue-700 ring-1 ring-blue-200">
-          <img src="/drivesure-logo.png" alt="DriveSure" className="h-8 w-8 object-contain" />
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-blue-200/80">
+          <img
+            src="/drivesure-mark.png"
+            alt="DriveSure"
+            className="h-full w-full object-cover"
+          />
         </div>
         {isExpanded && (
           <div className="min-w-0 overflow-hidden">

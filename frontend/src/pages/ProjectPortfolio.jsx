@@ -181,8 +181,8 @@ const ProjectPortfolio = () => {
         <div className="absolute left-1/2 top-16 h-72 w-72 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
         <div className="portfolio-nav relative mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-5 md:px-8">
           <div className="flex items-center gap-3">
-            <span className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/25 bg-cyan-300/10 shadow-lg shadow-cyan-950/30">
-              <img src="/drivesure-logo.png" alt="DriveSure" className="h-10 w-10 object-contain" />
+            <span className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/25 bg-cyan-300/10 shadow-lg shadow-cyan-950/30 radius-2xl ring-1 ring-cyan-300/20 backdrop-blur">
+              <img src="/drivesure-logo.png" alt="DriveSure" className="h-12 w-12 object-contain radius-2xl" />
             </span>
             <div>
               <p className="text-base font-black tracking-tight text-black">DriveSure</p>
@@ -251,7 +251,7 @@ const ProjectPortfolio = () => {
             <div className="portfolio-glass ml-auto w-full max-w-xl rounded-3xl border border-white/10 bg-[#211b3f]/95 p-5 shadow-2xl shadow-black/35 backdrop-blur-xl">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                 <div className="flex h-16 w-20 items-center justify-center rounded-md bg-amber-400/15">
-                  <img src="/module-art/claims.svg" alt="Claims module" className="h-14 w-16 object-contain" />
+                  <img src="/module-art/claims.svg" alt="Claims module" className="h-16 w-20 object-contain" />
                 </div>
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.16em] text-purple-200/70">Claim Engine</p>
@@ -297,7 +297,7 @@ const ProjectPortfolio = () => {
                 <article key={module.title} className="portfolio-module-card group relative overflow-hidden rounded-2xl border border-white/10 bg-[#120b2b]/86 p-5 shadow-xl shadow-black/20 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-cyan-300/30 hover:bg-[#181039]">
                   <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-cyan-300/8 blur-2xl transition group-hover:bg-purple-300/10" />
                   <div className="absolute right-4 top-4 opacity-30 transition group-hover:scale-110 group-hover:opacity-45">
-                    <img src={module.art} alt="" className="h-24 w-24 object-contain" />
+                    <img src={module.art} alt="" className="h-26 w-26 object-contain" />
                   </div>
                   <div className="relative">
                     <div className="flex items-start justify-between gap-4">
