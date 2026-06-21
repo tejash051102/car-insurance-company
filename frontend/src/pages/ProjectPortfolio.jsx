@@ -13,7 +13,6 @@ import {
   MessageSquare,
   Moon,
   ShieldCheck,
-  Sparkles,
   Smartphone,
   UploadCloud,
   Users
@@ -24,42 +23,36 @@ const modules = [
   {
     title: "Customer Registry",
     detail: "Customer profiles, OTP verification, document uploads, and secure customer portal access.",
-    outcome: "Complete customer lifecycle",
     art: "/module-art/customers.svg",
     icon: Users
   },
   {
     title: "Vehicle & Policy Management",
     detail: "Vehicle records, policy creation, add-ons, premium calculator, quotation PDF, renewals, and cancellation refunds.",
-    outcome: "From quotation to renewal",
     art: "/module-art/policies.svg",
     icon: ShieldCheck
   },
   {
     title: "Claims Workflow",
     detail: "Claim registration, evidence uploads, approval stages, fraud score refresh, inspection scheduling, and repair tracking.",
-    outcome: "Traceable claim handling",
     art: "/module-art/claims.svg",
     icon: ClipboardCheck
   },
   {
     title: "Payments & EMI Plans",
     detail: "Premium payments, receipts, invoice PDFs, payment status tracking, and installment payment plans.",
-    outcome: "Receipts and installments",
     art: "/module-art/payments.svg",
     icon: BarChart3
   },
   {
     title: "Service Hub",
     detail: "Garage partners, customer feedback, internal messaging, live chat-style threads, and audit timelines.",
-    outcome: "After-sales operations",
     art: "/module-art/portal.svg",
     icon: MessageSquare
   },
   {
     title: "Security Center",
     detail: "JWT access control, RBAC reporting, activity logs, failed-login monitoring, and security alerts.",
-    outcome: "Protected operations",
     art: "/module-art/security.svg",
     icon: LockKeyhole
   }
@@ -207,10 +200,7 @@ const ProjectPortfolio = () => {
 
         <div className="portfolio-hero-grid relative mx-auto grid min-h-[calc(100vh-82px)] max-w-7xl gap-10 px-5 pb-14 pt-8 md:px-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:pb-20">
           <div className="portfolio-hero-copy max-w-3xl">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-cyan-100">
-              <Sparkles size={14} />
-              Full Stack Insurance Suite
-            </div>
+            
             <h1 className="portfolio-title max-w-4xl text-5xl font-black leading-[0.96] tracking-tight text-white sm:text-6xl xl:text-8xl">
               DriveSure<span className="block bg-gradient-to-r from-cyan-200 via-white to-purple-200 bg-clip-text text-transparent">Insurance OS</span>
             </h1>
